@@ -13,6 +13,9 @@
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7",
     "turbo": "^2.6.1"
   },
   "dependencies": {
@@ -21,5 +24,10 @@
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.5.0",
     "typescript-eslint": "^8.48.0"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
