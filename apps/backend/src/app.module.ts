@@ -4,6 +4,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import 'dotenv/config';
 
 @Module({
@@ -13,6 +14,7 @@ import 'dotenv/config';
     }),
     PrismaModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
