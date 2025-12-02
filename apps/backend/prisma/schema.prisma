@@ -1,0 +1,73 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  user
+  admin
+  landlord
+}
+
+enum ReceiptStatus {
+  pending
+  approved
+  rejected
+}
+
+model User {
+  id         String @id @default(uuid())
+  first_name String
+  last_name  String
+
+  email      String  @unique
+  password   String
+  address    String?
+  avatar_url String?
+
+  role           UserRole
+  points_balance Int      @default(0)
+  created_at     DateTime @default(now())
+
+  receipts Receipt[]
+}
+
+model Receipt {
+  id           String        @id @default(uuid())
+  receipt_url  String
+  status       ReceiptStatus @default(pending)
+  points_value Int?
+
+  created_at  DateTime  @default(now())
+  approved_at DateTime?
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String
+  image_url   String
+  description String?
+
+  gift_cards GiftCard[]
+}
+
+model GiftCard {
+  id         String   @id @default(uuid())
+  name       String
+  type       String?
+  amount     Int
+  gift_code  String?
+  pdf_url    String?
+  created_at DateTime @default(now())
+
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id])
+}
