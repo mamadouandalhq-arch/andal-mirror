@@ -1,6 +1,6 @@
-  {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -17,6 +17,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "strictPropertyInitialization": false
   }
 }
