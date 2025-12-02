@@ -51,7 +51,6 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const refreshTokenFromCookie = req.cookies.refreshToken as string | null;
-    console.log({ refreshTokenFromCookie });
 
     const { accessToken, refreshToken } = await this.authService.refresh(
       refreshTokenFromCookie,
@@ -60,6 +59,14 @@ export class AuthController {
     this.addRefreshTokenToResponse(res, refreshToken);
 
     return { accessToken };
+  }
+
+  @Post('logout')
+  @HttpCode(200)
+  logout(@Res({ passthrough: true }) res: Response) {
+    this.removeRefreshTokenFromResponse(res);
+
+    return 'Logged out';
   }
 
   private addRefreshTokenToResponse(res: Response, refreshToken: string) {
@@ -75,5 +82,9 @@ export class AuthController {
       secure: true,
       sameSite: 'lax',
     });
+  }
+
+  private removeRefreshTokenFromResponse(res: Response) {
+    res.clearCookie('refreshToken');
   }
 }

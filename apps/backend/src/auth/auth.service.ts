@@ -54,6 +54,4 @@ export class AuthService {
 
     return this.tokenService.signTokens(userDto);
   }
-
-  // TODO: logout
 }
