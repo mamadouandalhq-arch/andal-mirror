@@ -6,6 +6,7 @@ import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import 'dotenv/config';
+import { TokenModule } from './auth/token/token.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import 'dotenv/config';
     PrismaModule,
     AuthModule,
     UserModule,
+    TokenModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

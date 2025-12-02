@@ -30,7 +30,7 @@ model User {
   address    String?
   avatar_url String?
 
-  role           UserRole
+  role           UserRole @default(user)
   points_balance Int      @default(0)
   created_at     DateTime @default(now())
 
