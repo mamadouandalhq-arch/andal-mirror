@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserDto } from '../../dto';
+import { UserDtoWithExp } from '../types/user-dto-with-exp.type';
 
 @Injectable()
 export class TokenService {
@@ -20,11 +21,19 @@ export class TokenService {
     };
   }
 
-  async verifyToken(token: string) {
+  async verifyToken(token: string): Promise<UserDto> {
     try {
-      return await this.jwtService.verifyAsync<UserDto>(token, {
-        secret: this.configService.get('JWT_SECRET'),
-      });
+      const userDtoWithExp = await this.jwtService.verifyAsync<UserDtoWithExp>(
+        token,
+        {
+          secret: this.configService.get('JWT_SECRET'),
+        },
+      );
+
+      return {
+        sub: userDtoWithExp.sub,
+        email: userDtoWithExp.email,
+      };
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }

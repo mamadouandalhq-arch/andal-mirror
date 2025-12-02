@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { TokenService } from './token/token.service';
 import { LoginDto, RegisterDto } from './dto';
@@ -41,7 +45,15 @@ export class AuthService {
     return this.tokenService.signTokens(userDto);
   }
 
-  // TODO: refresh
+  async refresh(refreshToken: string | null) {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const userDto = await this.tokenService.verifyToken(refreshToken);
+
+    return this.tokenService.signTokens(userDto);
+  }
 
   // TODO: logout
 }
