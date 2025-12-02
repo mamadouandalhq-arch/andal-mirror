@@ -21,7 +21,7 @@ export class UserService {
     });
   }
 
-  private async getOneByEmail(email: string) {
+  async getOneByEmail(email: string) {
     return await this.prisma.user.findUnique({
       where: { email },
     });
