@@ -80,10 +80,12 @@ export class UserService {
     firstName,
     lastName,
     googleId,
+    avatar_url,
   }: GoogleProfileDto) {
     return await this.prisma.user.create({
       data: {
-        email: email,
+        email,
+        avatar_url,
         first_name: firstName,
         last_name: lastName,
         google_id: googleId,
