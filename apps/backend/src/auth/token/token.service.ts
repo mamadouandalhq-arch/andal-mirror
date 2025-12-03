@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UserDto } from '../../dto';
+import { UserDto } from '../../common';
 import { UserDtoWithExp } from '../types';
 
 @Injectable()
@@ -33,6 +33,7 @@ export class TokenService {
       return {
         sub: userDtoWithExp.sub,
         email: userDtoWithExp.email,
+        role: userDtoWithExp.role,
       };
     } catch {
       throw new UnauthorizedException('Invalid refresh token');

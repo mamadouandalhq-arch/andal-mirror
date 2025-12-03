@@ -1,4 +1,4 @@
-import { UserDto } from '../../dto';
+import { UserDto } from '../../common/dto';
 
 export type UserDtoWithExp = UserDto & {
   iat: number;
