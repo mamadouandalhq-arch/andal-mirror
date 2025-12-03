@@ -1,0 +1,17 @@
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { UpdateUserDto } from './dto';
+import { UserService } from './user.service';
+import { User } from './decorators';
+import { UserDto } from '../common';
+import { JwtGuard } from '../auth/guards';
+
+@UseGuards(JwtGuard)
+@Controller('user')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Post('/update')
+  async update(@User() user: UserDto, @Body() dto: UpdateUserDto) {
+    return this.userService.update(user.sub, dto);
+  }
+}
