@@ -1,33 +1,28 @@
 import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
-import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { RequestWithCookies } from './types';
+import { TokenService } from './token/token.service';
 
 @Controller('auth')
 export class AuthController {
-  private readonly EXPIRE_DAY_REFRESH_TOKEN: string;
-
   constructor(
     private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {
-    this.EXPIRE_DAY_REFRESH_TOKEN = configService.get<string>(
-      'JWT_REFRESH_EXPIRATION_DAYS',
-    )!;
-  }
+    private readonly tokenService: TokenService,
+  ) {}
 
   @Post('register')
   async register(
     @Body() registerDto: RegisterDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const tokens = await this.authService.register(registerDto);
+    const { accessToken, refreshToken } =
+      await this.authService.register(registerDto);
 
-    this.addRefreshTokenToResponse(res, tokens.refreshToken);
+    this.tokenService.addRefreshTokenToResponse(res, refreshToken);
 
-    return { accessToken: tokens.accessToken };
+    return { accessToken: accessToken };
   }
 
   @HttpCode(200)
@@ -39,7 +34,7 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.login(loginDto);
 
-    this.addRefreshTokenToResponse(res, refreshToken);
+    this.tokenService.addRefreshTokenToResponse(res, refreshToken);
 
     return { accessToken };
   }
@@ -56,7 +51,7 @@ export class AuthController {
       refreshTokenFromCookie,
     );
 
-    this.addRefreshTokenToResponse(res, refreshToken);
+    this.tokenService.addRefreshTokenToResponse(res, refreshToken);
 
     return { accessToken };
   }
@@ -64,27 +59,8 @@ export class AuthController {
   @Post('logout')
   @HttpCode(200)
   logout(@Res({ passthrough: true }) res: Response) {
-    this.removeRefreshTokenFromResponse(res);
+    this.tokenService.removeRefreshTokenFromResponse(res);
 
     return 'Logged out';
-  }
-
-  private addRefreshTokenToResponse(res: Response, refreshToken: string) {
-    const expiresIn = new Date();
-
-    expiresIn.setDate(
-      expiresIn.getDate() + parseInt(this.EXPIRE_DAY_REFRESH_TOKEN),
-    );
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      expires: expiresIn,
-      secure: true,
-      sameSite: 'lax',
-    });
-  }
-
-  private removeRefreshTokenFromResponse(res: Response) {
-    res.clearCookie('refreshToken');
   }
 }

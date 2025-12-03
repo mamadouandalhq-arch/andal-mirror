@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { UserDto } from '../../common/dto';
+import { UserDto } from '../../common';
 
 export const convertUserToDto = (user: User): UserDto => {
   return {

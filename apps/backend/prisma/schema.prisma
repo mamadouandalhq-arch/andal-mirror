@@ -26,13 +26,15 @@ model User {
   last_name  String
 
   email      String  @unique
-  password   String
+  password   String?
   address    String?
   avatar_url String?
 
   role           UserRole @default(user)
   points_balance Int      @default(0)
   created_at     DateTime @default(now())
+
+  google_id String? @unique
 
   receipts Receipt[]
 }

@@ -3,6 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserDto } from '../../common';
 import { UserDtoWithExp } from '../types';
+import { User } from '@prisma/client';
+import { convertUserToDto } from '../utils';
+import { Response } from 'express';
 
 @Injectable()
 export class TokenService {
@@ -10,6 +13,32 @@ export class TokenService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
+
+  removeRefreshTokenFromResponse(res: Response) {
+    res.clearCookie('refreshToken');
+  }
+
+  addRefreshTokenToResponse(res: Response, refreshToken: string) {
+    const expiresInDays = this.configService.get<string>(
+      'JWT_REFRESH_EXPIRATION_DAYS',
+    )!;
+    const expiresIn = new Date();
+
+    expiresIn.setDate(expiresIn.getDate() + parseInt(expiresInDays));
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      expires: expiresIn,
+      secure: true,
+      sameSite: 'lax',
+    });
+  }
+
+  signTokensForPrismaUser(user: User) {
+    const userDto = convertUserToDto(user);
+
+    return this.signTokens(userDto);
+  }
 
   signTokens(payload: UserDto) {
     const accessToken = this.signAccessToken(payload);

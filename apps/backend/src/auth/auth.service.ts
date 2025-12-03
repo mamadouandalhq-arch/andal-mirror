@@ -6,7 +6,6 @@ import {
 import { UserService } from '../user/user.service';
 import { TokenService } from './token/token.service';
 import { LoginDto, RegisterDto } from './dto';
-import { convertUserToDto } from './utils';
 import argon from 'argon2';
 
 @Injectable()
@@ -19,9 +18,7 @@ export class AuthService {
   async register(registerDto: RegisterDto) {
     const user = await this.userService.create(registerDto);
 
-    const userDto = convertUserToDto(user);
-
-    return this.tokenService.signTokens(userDto);
+    return this.tokenService.signTokensForPrismaUser(user);
   }
 
   async login(loginDto: LoginDto) {
@@ -29,6 +26,10 @@ export class AuthService {
 
     if (!existingUser) {
       throw new BadRequestException('Invalid credentials');
+    }
+
+    if (!existingUser.password || existingUser.google_id) {
+      throw new BadRequestException('User was created using Google!');
     }
 
     const isValidPassword = await argon.verify(
@@ -40,9 +41,7 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const userDto = convertUserToDto(existingUser);
-
-    return this.tokenService.signTokens(userDto);
+    return this.tokenService.signTokensForPrismaUser(existingUser);
   }
 
   async refresh(refreshToken: string | null) {

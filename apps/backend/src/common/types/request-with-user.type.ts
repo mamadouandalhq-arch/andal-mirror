@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { UserDto } from '../dto';
+import { GoogleProfileDto } from '../../auth/google/dto';
 
-export type RequestWithUser = Request & {
-  user?: UserDto | null;
+export type RequestWithUser<T = UserDto | GoogleProfileDto> = Request & {
+  user?: T | null;
 };

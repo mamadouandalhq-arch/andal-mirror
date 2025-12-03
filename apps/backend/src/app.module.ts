@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import 'dotenv/config';
 import { TokenModule } from './auth/token/token.module';
+import { GoogleModule } from './auth/google/google.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TokenModule } from './auth/token/token.module';
     AuthModule,
     UserModule,
     TokenModule,
+    GoogleModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
