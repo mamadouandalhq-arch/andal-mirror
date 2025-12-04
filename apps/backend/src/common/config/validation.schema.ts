@@ -10,4 +10,9 @@ export const validationSchema = Joi.object({
   GOOGLE_CLIENT_ID: Joi.string().required(),
   GOOGLE_CLIENT_SECRET: Joi.string().required(),
   GOOGLE_CALLBACK_URL: Joi.string().uri().required(),
+
+  AWS_REGION: Joi.string().required(),
+  AWS_S3_ACCESS_KEY: Joi.string().required(),
+  AWS_S3_SECRET_KEY: Joi.string().required(),
+  AWS_S3_BUCKET_NAME: Joi.string().required(),
 });

@@ -9,6 +9,7 @@ import 'dotenv/config';
 import { TokenModule } from './auth/token/token.module';
 import { GoogleModule } from './auth/google/google.module';
 import { validationSchema } from './common';
+import { ReceiptModule } from './receipt/receipt.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { validationSchema } from './common';
     UserModule,
     TokenModule,
     GoogleModule,
+    ReceiptModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
