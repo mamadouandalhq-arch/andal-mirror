@@ -1,23 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { S3Client } from '@aws-sdk/client-s3';
+import {
+  PutObjectCommand,
+  PutObjectCommandInput,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { ulid } from 'ulid';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ReceiptService {
   private readonly s3: S3Client;
   private readonly bucketName: string;
+  private readonly bucketRegion: string;
+  private readonly logger = new Logger('ReceiptService');
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly prismaService: PrismaService,
+  ) {
+    this.bucketRegion = configService.get<string>('AWS_REGION')!;
+
     this.s3 = new S3Client({
-      region: configService.get<string>('AWS_REGION')!,
+      region: this.bucketRegion,
       credentials: {
-        accessKeyId: configService.get<string>('AWS_ACCESS_ID')!,
-        secretAccessKey: configService.get<string>('AWS_SECRET_ACCESS_KEY')!,
+        accessKeyId: configService.get<string>('AWS_S3_ACCESS_KEY')!,
+        secretAccessKey: configService.get<string>('AWS_S3_SECRET_KEY')!,
       },
     });
 
-    this.bucketName = this.configService.get<string>('AWS_BUCKET_NAME')!;
+    this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME')!;
   }
 
-  async uploadFile(file: Express.Multer.File) {}
+  async saveAndUpload(userId: string, file: Express.Multer.File) {
+    const url = await this.upload(userId, file);
+
+    await this.prismaService.receipt.create({
+      data: {
+        receipt_url: url,
+        user_id: userId,
+      },
+    });
+
+    return { url };
+  }
+
+  private async upload(userId: string, file: Express.Multer.File) {
+    const fileName = `${userId}-${ulid()}`;
+
+    const params: PutObjectCommandInput = {
+      Bucket: this.bucketName,
+      Key: fileName,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+
+    const command = new PutObjectCommand(params);
+
+    try {
+      await this.s3.send(command);
+
+      return `https://${this.bucketName}.s3.${this.bucketRegion}.amazonaws.com/${fileName}`;
+    } catch (err) {
+      this.logger.error(err);
+      throw new InternalServerErrorException(
+        'Failed to upload file. Please, try again later.',
+      );
+    }
+  }
 }

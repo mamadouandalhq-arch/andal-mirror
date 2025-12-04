@@ -4,6 +4,6 @@ import { ReceiptService } from './receipt.service';
 
 @Module({
   controllers: [ReceiptController],
-  providers: [ReceiptService]
+  providers: [ReceiptService],
 })
 export class ReceiptModule {}
