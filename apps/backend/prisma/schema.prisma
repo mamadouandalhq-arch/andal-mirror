@@ -26,7 +26,6 @@ enum FeedbackType {
 }
 
 enum FeedbackStatus {
-  not_started
   in_progress
   completed
 }
@@ -102,9 +101,9 @@ model FeedbackQuestion {
 
 model FeedbackResult {
   id                 String         @id @default(uuid())
-  receipt_id         String
+  receipt_id         String         @unique()
   user_id            String
-  status             FeedbackStatus @default(not_started)
+  status             FeedbackStatus @default(in_progress)
   total_questions    Int
   answered_questions Int            @default(0)
   earned_cents       Int            @default(0)

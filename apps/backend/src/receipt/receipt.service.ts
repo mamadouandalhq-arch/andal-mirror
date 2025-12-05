@@ -12,7 +12,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { ulid } from 'ulid';
 import { PrismaService } from '../prisma/prisma.service';
-import { ReceiptStatus } from '@prisma/client';
+import { Prisma, ReceiptStatus } from '@prisma/client';
 
 @Injectable()
 export class ReceiptService {
@@ -39,11 +39,9 @@ export class ReceiptService {
   }
 
   async saveAndUpload(userId: string, file: Express.Multer.File) {
-    const currentPendingReceipts = await this.prismaService.receipt.findMany({
-      where: {
-        user_id: userId,
-        status: ReceiptStatus.pending,
-      },
+    const currentPendingReceipts = await this.getMany({
+      user_id: userId,
+      status: ReceiptStatus.pending,
     });
 
     if (currentPendingReceipts.length > 0) {
@@ -62,6 +60,14 @@ export class ReceiptService {
     });
 
     return { url };
+  }
+
+  async getFirst(where: Prisma.ReceiptWhereInput) {
+    return this.prismaService.receipt.findFirst({ where });
+  }
+
+  async getMany(where: Prisma.ReceiptWhereInput) {
+    return this.prismaService.receipt.findMany({ where });
   }
 
   private async upload(userId: string, file: Express.Multer.File) {
