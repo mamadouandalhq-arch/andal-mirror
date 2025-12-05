@@ -2,10 +2,11 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { FeedbackStatus, Receipt, ReceiptStatus } from '@prisma/client';
-import { FeedbackStateResponse } from './dto';
+import { FeedbackStatus, Prisma, Receipt, ReceiptStatus } from '@prisma/client';
+import { AnswerQuestionDto, FeedbackStateResponse } from './dto';
 import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
 
@@ -16,7 +17,101 @@ export class FeedbackService {
     private receiptService: ReceiptService,
   ) {}
 
-  async startFeedback(userId: string) {
+  async answerQuestion(
+    userId: string,
+    { answers }: AnswerQuestionDto,
+  ): Promise<FeedbackStateResponse> {
+    const currentFeedback = await this.prisma.feedbackResult.findFirst({
+      where: {
+        user_id: userId,
+        status: FeedbackStatus.in_progress,
+      },
+      include: { current_question: true },
+    });
+
+    if (!currentFeedback) {
+      throw new NotFoundException("You don't provide any feedback right now.");
+    }
+
+    const currentQuestion = currentFeedback.current_question;
+
+    if (!currentQuestion) {
+      throw new BadRequestException(
+        "You don't provide any feedback right now.",
+      );
+    }
+
+    const { options, type } = currentQuestion;
+
+    if (answers.some((answer) => !options.includes(answer))) {
+      throw new BadRequestException('You provided invalid answer option.');
+    }
+
+    if (type === 'single' && answers.length !== 1) {
+      throw new BadRequestException(
+        'Single-choice question must have exactly one answer',
+      );
+    }
+
+    if (new Set(answers).size !== answers.length) {
+      throw new BadRequestException('Duplicate answers are not allowed');
+    }
+
+    await this.prisma.feedbackAnswer.create({
+      data: {
+        feedback_result_id: currentFeedback.id,
+        question_id: currentQuestion.id,
+        answer: answers,
+      },
+    });
+
+    // TODO: change approach. It requires to store questions in a some kind of collection.
+    const isLastAnswer = currentQuestion.serial_number === 3;
+
+    const dataToChange: Prisma.FeedbackResultUpdateInput = {
+      earned_cents: currentFeedback.earned_cents + 100,
+    };
+
+    if (!isLastAnswer) {
+      const nextQuestion = await this.prisma.feedbackQuestion.findFirst({
+        where: {
+          serial_number: currentQuestion.serial_number + 1,
+        },
+      });
+
+      if (!nextQuestion) {
+        throw new NotFoundException('Could not find next question');
+      }
+
+      dataToChange.current_question = {
+        connect: {
+          id: nextQuestion.id,
+        },
+      };
+    }
+
+    if (isLastAnswer) {
+      dataToChange.status = FeedbackStatus.completed;
+      dataToChange.completed_at = new Date();
+      dataToChange.current_question = { disconnect: true };
+    }
+
+    dataToChange.answered_questions = currentFeedback.answered_questions + 1;
+
+    const newFeedback = await this.prisma.feedbackResult.update({
+      where: {
+        id: currentFeedback.id,
+      },
+      data: dataToChange,
+      include: {
+        current_question: true,
+      },
+    });
+
+    return this.convertFeedbackToResponse(newFeedback);
+  }
+
+  async startFeedback(userId: string): Promise<FeedbackStateResponse> {
     const pendingReceipt = await this.receiptService.getFirst({
       user_id: userId,
       status: ReceiptStatus.pending,
@@ -78,10 +173,7 @@ export class FeedbackService {
     }
 
     if (feedback.status === FeedbackStatus.completed) {
-      return {
-        status: 'unavailable',
-        reason: 'feedback_provided',
-      };
+      return this.convertFeedbackToResponse(feedback);
     }
 
     return this.convertFeedbackToResponse(feedback);
@@ -106,11 +198,17 @@ export class FeedbackService {
   private convertFeedbackToResponse(
     feedback: FeedbackResultWithCurrentQuestion,
   ): FeedbackStateResponse {
-    return {
+    const response: FeedbackStateResponse = {
       status: feedback.status,
       totalQuestions: feedback.total_questions,
-      current_question: feedback.current_question!,
       earnedCents: feedback.earned_cents,
+      answered_questions: feedback.answered_questions,
     };
+
+    if (feedback.status !== FeedbackStatus.completed) {
+      response.current_question = feedback.current_question!;
+    }
+
+    return response;
   }
 }
