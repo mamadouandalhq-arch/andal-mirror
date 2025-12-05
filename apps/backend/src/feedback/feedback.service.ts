@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { FeedbackStatus, Receipt, ReceiptStatus } from '@prisma/client';
 import { FeedbackStateResponse } from './dto';
@@ -11,6 +15,38 @@ export class FeedbackService {
     private prisma: PrismaService,
     private receiptService: ReceiptService,
   ) {}
+
+  async startFeedback(userId: string) {
+    const pendingReceipt = await this.receiptService.getFirst({
+      user_id: userId,
+      status: ReceiptStatus.pending,
+    });
+
+    if (!pendingReceipt) {
+      throw new BadRequestException('No pending receipt!');
+    }
+
+    const feedback = await this.prisma.feedbackResult.findUnique({
+      where: {
+        user_id_receipt_id: {
+          user_id: userId,
+          receipt_id: pendingReceipt.id,
+        },
+      },
+    });
+
+    if (feedback) {
+      if (feedback.status === FeedbackStatus.completed) {
+        throw new BadRequestException('Feedback already provided!');
+      }
+
+      throw new ConflictException('Feedback already in progress.');
+    }
+
+    const newFeedback = await this.createFeedback(userId, pendingReceipt);
+
+    return this.convertFeedbackToResponse(newFeedback);
+  }
 
   async getState(userId: string): Promise<FeedbackStateResponse> {
     const pendingReceipt = await this.receiptService.getFirst({
@@ -37,17 +73,15 @@ export class FeedbackService {
       },
     });
 
-    if (feedback && feedback.status === FeedbackStatus.completed) {
+    if (!feedback) {
+      return { status: 'not_started' };
+    }
+
+    if (feedback.status === FeedbackStatus.completed) {
       return {
         status: 'unavailable',
         reason: 'feedback_provided',
       };
-    }
-
-    if (!feedback) {
-      const newFeedback = await this.createFeedback(userId, pendingReceipt);
-
-      return this.convertFeedbackToResponse(newFeedback);
     }
 
     return this.convertFeedbackToResponse(feedback);

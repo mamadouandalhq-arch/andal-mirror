@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { JwtGuard } from '../auth/guards';
 import { User } from '../user/decorators';
@@ -8,6 +8,11 @@ import { UserDto } from '../common';
 @Controller('feedback')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
+
+  @Post('start')
+  start(@User() user: UserDto) {
+    return this.feedbackService.startFeedback(user.sub);
+  }
 
   @Get('state')
   getState(@User() user: UserDto) {
