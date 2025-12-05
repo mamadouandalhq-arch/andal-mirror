@@ -29,19 +29,14 @@ export class FeedbackService {
       include: { current_question: true },
     });
 
-    if (!currentFeedback) {
-      throw new NotFoundException("You don't provide any feedback right now.");
-    }
-
-    const currentQuestion = currentFeedback.current_question;
-
-    if (!currentQuestion) {
+    if (!currentFeedback || !currentFeedback.current_question) {
       throw new BadRequestException(
         "You don't provide any feedback right now.",
       );
     }
 
-    const { options, type } = currentQuestion;
+    const { current_question: currentQuestion } = currentFeedback;
+    const { options, type } = currentFeedback.current_question;
 
     if (answers.some((answer) => !options.includes(answer))) {
       throw new BadRequestException('You provided invalid answer option.');
@@ -65,8 +60,8 @@ export class FeedbackService {
       },
     });
 
-    // TODO: change approach. It requires to store questions in a some kind of collection.
-    const isLastAnswer = currentQuestion.serial_number === 3;
+    const isLastAnswer =
+      currentQuestion.serial_number === currentFeedback.total_questions;
 
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
       earned_cents: currentFeedback.earned_cents + 100,
