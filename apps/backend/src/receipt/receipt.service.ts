@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -11,6 +12,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { ulid } from 'ulid';
 import { PrismaService } from '../prisma/prisma.service';
+import { ReceiptStatus } from '@prisma/client';
 
 @Injectable()
 export class ReceiptService {
@@ -37,6 +39,19 @@ export class ReceiptService {
   }
 
   async saveAndUpload(userId: string, file: Express.Multer.File) {
+    const currentPendingReceipts = await this.prismaService.receipt.findMany({
+      where: {
+        user_id: userId,
+        status: ReceiptStatus.pending,
+      },
+    });
+
+    if (currentPendingReceipts.length > 0) {
+      throw new BadRequestException(
+        "You already have pending receipt! You can't create more than one pending receipt.",
+      );
+    }
+
     const url = await this.upload(userId, file);
 
     await this.prismaService.receipt.create({
