@@ -4,11 +4,15 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { FeedbackStatus, ReceiptStatus } from '@prisma/client';
-import { AnswerQuestionDto, FeedbackStateResponse } from './dto';
+import {
+  FeedbackStatus as PrismaFeedbackStatus,
+  ReceiptStatus,
+} from '@prisma/client';
+import { AnswerQuestionDto } from './dto';
 import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
 import { AnswerQuestionService, StartFeedbackService } from './services';
+import { FeedbackStateResponse } from '@shared/feedback';
 
 @Injectable()
 export class FeedbackService {
@@ -26,7 +30,7 @@ export class FeedbackService {
     const currentFeedback = await this.prisma.feedbackResult.findFirst({
       where: {
         user_id: userId,
-        status: FeedbackStatus.in_progress,
+        status: PrismaFeedbackStatus.in_progress,
       },
       include: { current_question: true },
     });
@@ -93,7 +97,7 @@ export class FeedbackService {
     });
 
     if (feedback) {
-      if (feedback.status === FeedbackStatus.completed) {
+      if (feedback.status === PrismaFeedbackStatus.completed) {
         throw new BadRequestException('Feedback already provided!');
       }
 
@@ -137,7 +141,7 @@ export class FeedbackService {
       return { status: 'not_started' };
     }
 
-    if (feedback.status === FeedbackStatus.completed) {
+    if (feedback.status === PrismaFeedbackStatus.completed) {
       return this.convertFeedbackToResponse(feedback);
     }
 
@@ -154,7 +158,7 @@ export class FeedbackService {
       answered_questions: feedback.answered_questions,
     };
 
-    if (feedback.status !== FeedbackStatus.completed) {
+    if (feedback.status !== PrismaFeedbackStatus.completed) {
       response.current_question = feedback.current_question!;
     }
 

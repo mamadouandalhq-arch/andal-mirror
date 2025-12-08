@@ -3,7 +3,8 @@ import { FeedbackService } from './feedback.service';
 import { JwtGuard } from '../auth/guards';
 import { User } from '../user/decorators';
 import { UserDto } from '../common';
-import { AnswerQuestionDto, FeedbackStateResponse } from './dto';
+import { AnswerQuestionDto } from './dto';
+import { FeedbackStateResponse } from '@shared/feedback';
 
 @UseGuards(JwtGuard)
 @Controller('feedback')
