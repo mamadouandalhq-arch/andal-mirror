@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import Link from 'next/link';
+import { Link } from '@/i18n';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
