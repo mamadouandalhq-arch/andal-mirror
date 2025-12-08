@@ -2,19 +2,21 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { FeedbackStatus, Prisma, Receipt, ReceiptStatus } from '@prisma/client';
+import { FeedbackStatus, ReceiptStatus } from '@prisma/client';
 import { AnswerQuestionDto, FeedbackStateResponse } from './dto';
 import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
+import { AnswerQuestionService, StartFeedbackService } from './services';
 
 @Injectable()
 export class FeedbackService {
   constructor(
     private prisma: PrismaService,
     private receiptService: ReceiptService,
+    private answerQuestionService: AnswerQuestionService,
+    private startFeedbackService: StartFeedbackService,
   ) {}
 
   async answerQuestion(
@@ -29,73 +31,33 @@ export class FeedbackService {
       include: { current_question: true },
     });
 
-    if (!currentFeedback || !currentFeedback.current_question) {
-      throw new BadRequestException(
-        "You don't provide any feedback right now.",
+    const { feedback: validatedFeedback, currentQuestion } =
+      this.answerQuestionService.validateAnswerOrThrow(
+        currentFeedback,
+        answers,
       );
-    }
 
-    const { current_question: currentQuestion } = currentFeedback;
-    const { options, type } = currentFeedback.current_question;
-
-    if (answers.some((answer) => !options.includes(answer))) {
-      throw new BadRequestException('You provided invalid answer option.');
-    }
-
-    if (type === 'single' && answers.length !== 1) {
-      throw new BadRequestException(
-        'Single-choice question must have exactly one answer',
-      );
-    }
-
-    if (new Set(answers).size !== answers.length) {
-      throw new BadRequestException('Duplicate answers are not allowed');
-    }
+    await this.answerQuestionService.getAnswerAndThrowIfAnswered(
+      validatedFeedback,
+      currentQuestion,
+    );
 
     await this.prisma.feedbackAnswer.create({
       data: {
-        feedback_result_id: currentFeedback.id,
+        feedback_result_id: validatedFeedback.id,
         question_id: currentQuestion.id,
         answer: answers,
       },
     });
 
-    const isLastAnswer =
-      currentQuestion.serial_number === currentFeedback.total_questions;
-
-    const dataToChange: Prisma.FeedbackResultUpdateInput = {
-      earned_cents: currentFeedback.earned_cents + 100,
-    };
-
-    if (!isLastAnswer) {
-      const nextQuestion = await this.prisma.feedbackQuestion.findFirst({
-        where: {
-          serial_number: currentQuestion.serial_number + 1,
-        },
-      });
-
-      if (!nextQuestion) {
-        throw new NotFoundException('Could not find next question');
-      }
-
-      dataToChange.current_question = {
-        connect: {
-          id: nextQuestion.id,
-        },
-      };
-    }
-
-    if (isLastAnswer) {
-      dataToChange.status = FeedbackStatus.completed;
-      dataToChange.completed_at = new Date();
-      dataToChange.current_question = { disconnect: true };
-    }
-
-    dataToChange.answered_questions = currentFeedback.answered_questions + 1;
+    const dataToChange = await this.answerQuestionService.getAnswerDataToChange(
+      validatedFeedback,
+      currentQuestion,
+    );
 
     const newFeedback = await this.prisma.feedbackResult.update({
       where: {
-        id: currentFeedback.id,
+        id: validatedFeedback.id,
       },
       data: dataToChange,
       include: {
@@ -133,7 +95,10 @@ export class FeedbackService {
       throw new ConflictException('Feedback already in progress.');
     }
 
-    const newFeedback = await this.createFeedback(userId, pendingReceipt);
+    const newFeedback = await this.startFeedbackService.createFeedback(
+      userId,
+      pendingReceipt,
+    );
 
     return this.convertFeedbackToResponse(newFeedback);
   }
@@ -172,22 +137,6 @@ export class FeedbackService {
     }
 
     return this.convertFeedbackToResponse(feedback);
-  }
-
-  private async createFeedback(userId: string, receipt: Receipt) {
-    const questions = await this.prisma.feedbackQuestion.findMany();
-
-    return await this.prisma.feedbackResult.create({
-      data: {
-        user_id: userId,
-        receipt_id: receipt.id,
-        total_questions: questions.length,
-        current_question_id: questions[0].id,
-      },
-      include: {
-        current_question: true,
-      },
-    });
   }
 
   private convertFeedbackToResponse(
