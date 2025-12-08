@@ -1,0 +1,49 @@
+{
+  "common": {
+    "appName": "Achat de Pouvoirs d'Achat",
+    "language": "Langue",
+    "welcome": "Bienvenue"
+  },
+  "home": {
+    "title": "Achat de Pouvoirs d'Achat",
+    "description": "Gagnez des points en téléchargeant des reçus et échangez-les contre des cartes-cadeaux",
+    "getStarted": "Commencer"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "forgotPassword": "Mot de passe oublié?",
+    "dontHaveAccount": "Vous n'avez pas de compte?",
+    "alreadyHaveAccount": "Vous avez déjà un compte?",
+    "signInWithGoogle": "Se connecter avec Google"
+  },
+  "receipt": {
+    "upload": "Télécharger un reçu",
+    "myReceipts": "Mes reçus",
+    "status": {
+      "pending": "En attente",
+      "approved": "Approuvé",
+      "rejected": "Rejeté"
+    },
+    "uploadNew": "Télécharger un nouveau reçu",
+    "points": "Points"
+  },
+  "profile": {
+    "myProfile": "Mon profil",
+    "pointsBalance": "Solde de points",
+    "editProfile": "Modifier le profil",
+    "address": "Adresse"
+  },
+  "giftCards": {
+    "title": "Cartes-cadeaux",
+    "categories": "Catégories",
+    "redeem": "Échanger",
+    "pointsRequired": "Points requis"
+  }
+}
+

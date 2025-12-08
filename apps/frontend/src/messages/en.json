@@ -1,0 +1,48 @@
+{
+  "common": {
+    "appName": "Buy Purchasing Powers",
+    "language": "Language",
+    "welcome": "Welcome"
+  },
+  "home": {
+    "title": "Buy Purchasing Powers",
+    "description": "Earn points by uploading receipts and redeem them for gift cards",
+    "getStarted": "Get Started"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInWithGoogle": "Sign in with Google"
+  },
+  "receipt": {
+    "upload": "Upload Receipt",
+    "myReceipts": "My Receipts",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "uploadNew": "Upload New Receipt",
+    "points": "Points"
+  },
+  "profile": {
+    "myProfile": "My Profile",
+    "pointsBalance": "Points Balance",
+    "editProfile": "Edit Profile",
+    "address": "Address"
+  },
+  "giftCards": {
+    "title": "Gift Cards",
+    "categories": "Categories",
+    "redeem": "Redeem",
+    "pointsRequired": "Points Required"
+  }
+}
