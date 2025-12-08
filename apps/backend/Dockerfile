@@ -14,4 +14,8 @@ RUN pnpm install --filter=backend
 
 RUN cd apps/backend && npx prisma generate
 
-CMD ["pnpm", "run", "dev", "--filter=backend"]
+ENV NODE_PATH=/usr/src/app/apps/backend/node_modules
+
+WORKDIR /usr/src/app/apps/backend
+
+CMD ["pnpm", "run", "dev"]
