@@ -42,7 +42,12 @@ export class FeedbackService {
       currentQuestion,
     );
 
-    await this.prisma.feedbackAnswer.create({
+    const dataToChange = await this.answerQuestionService.getAnswerDataToChange(
+      validatedFeedback,
+      currentQuestion,
+    );
+
+    const createAnswer = this.prisma.feedbackAnswer.create({
       data: {
         feedback_result_id: validatedFeedback.id,
         question_id: currentQuestion.id,
@@ -50,12 +55,7 @@ export class FeedbackService {
       },
     });
 
-    const dataToChange = await this.answerQuestionService.getAnswerDataToChange(
-      validatedFeedback,
-      currentQuestion,
-    );
-
-    const newFeedback = await this.prisma.feedbackResult.update({
+    const updateFeedback = this.prisma.feedbackResult.update({
       where: {
         id: validatedFeedback.id,
       },
@@ -65,7 +65,12 @@ export class FeedbackService {
       },
     });
 
-    return this.convertFeedbackToResponse(newFeedback);
+    const [, updatedFeedback] = await this.prisma.$transaction([
+      createAnswer,
+      updateFeedback,
+    ]);
+
+    return this.convertFeedbackToResponse(updatedFeedback);
   }
 
   async startFeedback(userId: string): Promise<FeedbackStateResponse> {
