@@ -20,7 +20,12 @@
     "forgotPassword": "Forgot Password?",
     "dontHaveAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
-    "signInWithGoogle": "Sign in with Google"
+    "signInWithGoogle": "Sign in with Google",
+    "confirmPassword": "Confirm Password",
+    "sendResetLink": "Send reset link",
+    "backToLogin": "Back to login",
+    "resetLinkSent": "If an account with that email exists, we've sent you a password reset link.",
+    "enterEmailForReset": "Enter your email address and we'll send you a link to reset your password."
   },
   "receipt": {
     "upload": "Upload Receipt",
@@ -44,5 +49,14 @@
     "categories": "Categories",
     "redeem": "Redeem",
     "pointsRequired": "Points Required"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to the dashboard",
+    "logout": "Logout",
+    "loading": "Loading...",
+    "userInfo": "User Information",
+    "email": "Email",
+    "role": "Role"
   }
 }

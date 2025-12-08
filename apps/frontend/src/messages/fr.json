@@ -20,7 +20,12 @@
     "forgotPassword": "Mot de passe oublié?",
     "dontHaveAccount": "Vous n'avez pas de compte?",
     "alreadyHaveAccount": "Vous avez déjà un compte?",
-    "signInWithGoogle": "Se connecter avec Google"
+    "signInWithGoogle": "Se connecter avec Google",
+    "confirmPassword": "Confirmer le mot de passe",
+    "sendResetLink": "Envoyer le lien de réinitialisation",
+    "backToLogin": "Retour à la connexion",
+    "resetLinkSent": "Si un compte avec cet e-mail existe, nous vous avons envoyé un lien de réinitialisation du mot de passe.",
+    "enterEmailForReset": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe."
   },
   "receipt": {
     "upload": "Télécharger un reçu",
@@ -44,6 +49,14 @@
     "categories": "Catégories",
     "redeem": "Échanger",
     "pointsRequired": "Points requis"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue sur votre tableau de bord",
+    "logout": "Déconnexion",
+    "loading": "Chargement...",
+    "userInfo": "Informations utilisateur",
+    "email": "E-mail",
+    "role": "Rôle"
   }
 }
-
