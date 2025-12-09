@@ -38,7 +38,11 @@ export class ReceiptService {
     this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME')!;
   }
 
-  async saveAndUpload(userId: string, file: Express.Multer.File) {
+  async saveAndUpload(userId: string, file?: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException('File is missing in the request');
+    }
+
     const currentPendingReceipts = await this.getMany({
       user_id: userId,
       status: ReceiptStatus.pending,

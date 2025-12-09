@@ -17,7 +17,6 @@ import { UploadReceiptDocs } from './docs';
 export class ReceiptController {
   constructor(private readonly receiptService: ReceiptService) {}
 
-  // TODO: handle no-file scenario
   @UploadReceiptDocs()
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
