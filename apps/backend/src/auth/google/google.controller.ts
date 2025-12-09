@@ -54,6 +54,10 @@ export class GoogleController {
 
     this.tokenService.addRefreshTokenToResponse(res, refreshToken);
 
-    return res.redirect(`${session.state}?accessToken=${accessToken}`);
+    res.redirect(`${session.state}?accessToken=${accessToken}`);
+
+    req.session.destroy(() => {});
+
+    return;
   }
 }
