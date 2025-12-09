@@ -61,7 +61,12 @@ export function ForgotPasswordForm() {
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <FormField label={t('email')} htmlFor="email" error={errors.email?.message}>
+      <FormField
+        label={t('email')}
+        htmlFor="email"
+        error={errors.email?.message}
+        t={t}
+      >
         <Input
           id="email"
           type="email"
@@ -71,7 +76,7 @@ export function ForgotPasswordForm() {
         />
       </FormField>
 
-      <FormError message={error || ''} />
+      <FormError message={error || ''} t={t} />
 
       <div>
         <Button
@@ -94,4 +99,3 @@ export function ForgotPasswordForm() {
     </form>
   );
 }
-

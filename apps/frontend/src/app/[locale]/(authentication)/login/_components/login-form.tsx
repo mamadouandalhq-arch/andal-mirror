@@ -54,6 +54,7 @@ export function LoginForm() {
           label={t('email')}
           htmlFor="email"
           error={errors.email?.message}
+          t={t}
         >
           <Input
             id="email"
@@ -68,6 +69,7 @@ export function LoginForm() {
           label={t('password')}
           htmlFor="password"
           error={errors.password?.message}
+          t={t}
         >
           <PasswordInput
             id="password"
@@ -80,7 +82,7 @@ export function LoginForm() {
         </FormField>
       </div>
 
-      <FormError message={error || ''} />
+      <FormError message={error || ''} t={t} />
 
       <div className="flex items-center justify-between">
         <div className="text-sm">

@@ -1,28 +1,31 @@
 import { z } from 'zod';
 
+// Use translation keys for error messages
 export const loginSchema = z.object({
-  email: z.email({ message: 'Invalid email address' }),
-  password: z.string().min(1, 'Password is required'),
+  email: z.email('validation.emailInvalid').min(1, 'validation.emailRequired'),
+  password: z.string().min(1, 'validation.passwordRequired'),
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
 export const registerSchema = z
   .object({
-    email: z.email({ message: 'Invalid email address' }),
-    first_name: z.string().min(1, 'First name is required'),
-    last_name: z.string().min(1, 'Last name is required'),
+    email: z
+      .email('validation.emailInvalid')
+      .min(1, 'validation.emailRequired'),
+    first_name: z.string().min(1, 'validation.firstNameRequired'),
+    last_name: z.string().min(1, 'validation.lastNameRequired'),
     password: z
       .string()
-      .min(8, 'Password must be at least 8 characters')
-      .max(20, 'Password must be at most 20 characters'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+      .min(8, 'validation.passwordMinLength')
+      .max(20, 'validation.passwordMaxLength'),
+    confirmPassword: z.string().min(1, 'validation.confirmPasswordRequired'),
   })
   .refine(
     (data: { password: string; confirmPassword: string }) =>
       data.password === data.confirmPassword,
     {
-      message: 'Passwords do not match',
+      message: 'validation.passwordsDoNotMatch',
       path: ['confirmPassword'],
     },
   );
@@ -30,7 +33,10 @@ export const registerSchema = z
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
 export const forgotPasswordSchema = z.object({
-  email: z.email({ message: 'Invalid email address' }),
+  email: z
+    .string()
+    .min(1, 'validation.emailRequired')
+    .email('validation.emailInvalid'),
 });
 
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;

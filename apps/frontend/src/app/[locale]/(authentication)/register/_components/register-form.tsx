@@ -58,6 +58,7 @@ export function RegisterForm() {
           label={t('email')}
           htmlFor="email"
           error={errors.email?.message}
+          t={t}
         >
           <Input
             id="email"
@@ -73,6 +74,7 @@ export function RegisterForm() {
             label={t('firstName')}
             htmlFor="first_name"
             error={errors.first_name?.message}
+            t={t}
           >
             <Input
               id="first_name"
@@ -87,6 +89,7 @@ export function RegisterForm() {
             label={t('lastName')}
             htmlFor="last_name"
             error={errors.last_name?.message}
+            t={t}
           >
             <Input
               id="last_name"
@@ -102,6 +105,7 @@ export function RegisterForm() {
           label={t('password')}
           htmlFor="password"
           error={errors.password?.message}
+          t={t}
         >
           <PasswordInput
             id="password"
@@ -117,6 +121,7 @@ export function RegisterForm() {
           label={t('confirmPassword')}
           htmlFor="confirmPassword"
           error={errors.confirmPassword?.message}
+          t={t}
         >
           <PasswordInput
             id="confirmPassword"
@@ -131,7 +136,7 @@ export function RegisterForm() {
         </FormField>
       </div>
 
-      <FormError message={error || ''} />
+      <FormError message={error || ''} t={t} />
 
       <div>
         <Button type="submit" className="w-full" disabled={register.isPending}>

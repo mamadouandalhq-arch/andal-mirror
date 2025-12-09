@@ -28,7 +28,28 @@
     "sendResetLink": "Envoyer le lien de réinitialisation",
     "backToLogin": "Retour à la connexion",
     "resetLinkSent": "Si un compte avec cet e-mail existe, nous vous avons envoyé un lien de réinitialisation du mot de passe.",
-    "enterEmailForReset": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe."
+    "enterEmailForReset": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+    "validation": {
+      "emailRequired": "L'e-mail est requis",
+      "emailInvalid": "Adresse e-mail invalide",
+      "passwordRequired": "Le mot de passe est requis",
+      "firstNameRequired": "Le prénom est requis",
+      "lastNameRequired": "Le nom est requis",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordMaxLength": "Le mot de passe doit contenir au maximum 20 caractères",
+      "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
+    },
+    "errors": {
+      "invalidCredentials": "Identifiants invalides",
+      "userCreatedWithGoogle": "L'utilisateur a été créé avec Google!",
+      "failedToFetch": "Échec de la connexion au serveur. Veuillez vérifier votre connexion Internet.",
+      "sessionExpired": "Session expirée. Veuillez vous reconnecter.",
+      "failedToRefreshToken": "Échec du rafraîchissement du token",
+      "genericError": "Une erreur s'est produite. Veuillez réessayer.",
+      "emailNotFound": "Aucun compte trouvé avec cette adresse e-mail.",
+      "networkError": "Erreur réseau. Veuillez vérifier votre connexion et réessayer."
+    }
   },
   "receipt": {
     "upload": "Télécharger un reçu",

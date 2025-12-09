@@ -28,7 +28,28 @@
     "sendResetLink": "Send reset link",
     "backToLogin": "Back to login",
     "resetLinkSent": "If an account with that email exists, we've sent you a password reset link.",
-    "enterEmailForReset": "Enter your email address and we'll send you a link to reset your password."
+    "enterEmailForReset": "Enter your email address and we'll send you a link to reset your password.",
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "passwordMaxLength": "Password must be at most 20 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsDoNotMatch": "Passwords do not match"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid credentials",
+      "userCreatedWithGoogle": "User was created using Google!",
+      "failedToFetch": "Failed to connect to server. Please check your internet connection.",
+      "sessionExpired": "Session expired. Please login again.",
+      "failedToRefreshToken": "Failed to refresh token",
+      "genericError": "An error occurred. Please try again.",
+      "emailNotFound": "No account found with this email address.",
+      "networkError": "Network error. Please check your connection and try again."
+    }
   },
   "receipt": {
     "upload": "Upload Receipt",

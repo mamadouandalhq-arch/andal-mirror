@@ -14,7 +14,7 @@ export default function Home() {
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">{t('title')}</h1>
           <p className="text-lg text-gray-600">{t('description')}</p>
-          <Button variant="default">
+          <Button variant="default" size="lg" asChild className="text-lg">
             <Link href="/login">{t('getStarted')}</Link>
           </Button>
         </div>
