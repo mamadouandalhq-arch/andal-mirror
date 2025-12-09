@@ -4,4 +4,5 @@ export type FeedbackQuestionDto = {
   text: string;
   type: 'single' | 'multiple';
   options: string[];
+  created_at: Date;
 };

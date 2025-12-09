@@ -7,6 +7,7 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { getBadRequestDocExample } from '../../common';
 
 export function UploadReceiptDocs() {
   return applyDecorators(
@@ -28,12 +29,9 @@ export function UploadReceiptDocs() {
       description: 'User already has pending receipt',
       content: {
         'application/json': {
-          example: {
-            message:
-              "You already have pending receipt! You can't create more than one pending receipt.",
-            error: 'Bad Request',
-            statusCode: 400,
-          },
+          example: getBadRequestDocExample(
+            "You already have pending receipt! You can't create more than one pending receipt.",
+          ),
         },
       },
     }),
