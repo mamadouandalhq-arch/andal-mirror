@@ -7,8 +7,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import {
-  currentQuestionExample,
   feedBackCompletedExample,
+  feedbackInProgressExample,
   feedbackNotStartedExample,
   feedbackUnavailableExample,
 } from '../consts';
@@ -36,13 +36,7 @@ export function GetStateDocs() {
           examples: {
             inProgress: {
               summary: 'Feedback session in progress',
-              value: {
-                status: 'in_progress',
-                totalQuestions: 3,
-                earnedCents: 0,
-                answered_questions: 0,
-                current_question: currentQuestionExample,
-              },
+              value: feedbackInProgressExample,
             },
 
             notStarted: {

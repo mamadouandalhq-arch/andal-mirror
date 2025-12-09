@@ -3,8 +3,8 @@ import { FeedbackResultSwaggerDto } from '../dto/feedback-result.swagger.dto';
 
 export const feedbackInProgressExample = {
   status: 'in_progress',
-  totalQuestions: 3,
-  earnedCents: 0,
+  total_questions: 3,
+  earned_cents: 0,
   answered_questions: 0,
   current_question: currentQuestionExample,
 } satisfies FeedbackResultSwaggerDto;

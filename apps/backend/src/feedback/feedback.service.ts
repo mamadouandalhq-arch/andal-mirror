@@ -153,8 +153,8 @@ export class FeedbackService {
   ): FeedbackStateResponse {
     const response: FeedbackStateResponse = {
       status: feedback.status,
-      totalQuestions: feedback.total_questions,
-      earnedCents: feedback.earned_cents,
+      total_questions: feedback.total_questions,
+      earned_cents: feedback.earned_cents,
       answered_questions: feedback.answered_questions,
     };
 

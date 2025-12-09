@@ -9,10 +9,10 @@ export class FeedbackResultSwaggerDto {
   status!: string;
 
   @ApiProperty({ type: Number, required: false })
-  totalQuestions?: number;
+  total_questions?: number;
 
   @ApiProperty({ type: Number, required: false })
-  earnedCents?: number;
+  earned_cents?: number;
 
   @ApiProperty({ type: Number, required: false })
   answered_questions?: number;
