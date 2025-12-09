@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { JwtGuard } from '../auth/guards';
 import { User } from '../user/decorators';
@@ -12,7 +20,7 @@ import { AnswerQuestionDocs, GetStateDocs, StartFeedbackDocs } from './swagger';
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  // TODO: change http-code to 200
+  @HttpCode(HttpStatus.OK)
   @AnswerQuestionDocs()
   @Post('answer-question')
   answerQuestion(
