@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 export function GoogleAuthDocs() {
   return applyDecorators(
@@ -10,6 +10,13 @@ export function GoogleAuthDocs() {
     ApiResponse({
       status: 302,
       description: 'Redirect to Google OAuth page',
+    }),
+    ApiQuery({
+      name: 'state',
+      description:
+        'Frontend URL. Should start with frontend_url variable defined in environment',
+      required: true,
+      type: String,
     }),
   );
 }
