@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 import { authStorage } from './auth-storage';
 
 export interface ApiError {
@@ -96,7 +96,33 @@ export async function apiRequest<T>(
     throw new Error(error.message || `HTTP error! status: ${response.status}`);
   }
 
-  return response.json();
+  // Check if response has content and is JSON
+  const contentType = response.headers.get('content-type');
+  const hasJsonContent =
+    contentType && contentType.includes('application/json');
+
+  // If no content or empty body, return null
+  const text = await response.text();
+  if (!text.trim()) {
+    return null as T;
+  }
+
+  // Try to parse as JSON if it looks like JSON or has JSON content type
+  if (
+    hasJsonContent ||
+    text.trim().startsWith('{') ||
+    text.trim().startsWith('[')
+  ) {
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      // If JSON parsing fails but we expected JSON, return null
+      return null as T;
+    }
+  }
+
+  // Return raw text if not JSON
+  return text as T;
 }
 
 export const apiClient = {

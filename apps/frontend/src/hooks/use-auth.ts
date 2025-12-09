@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useRouter } from '@/i18n';
 import { apiClient } from '@/lib/api-client';
 import { authStorage } from '@/lib/auth-storage';
+import { locales, defaultLocale } from '@/i18n/config';
 
 export interface LoginCredentials {
   email: string;
@@ -21,6 +23,51 @@ export interface ForgotPasswordCredentials {
 
 export interface AuthResponse {
   accessToken: string;
+}
+
+export function useGoogleLogin() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  return {
+    isLoading,
+    start: () => {
+      if (typeof window === 'undefined') return;
+      setIsLoading(true);
+
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+      if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not set');
+        setIsLoading(false);
+        return;
+      }
+
+      // Infer current locale from pathname
+      // For default locale (en), there's no prefix: /login
+      // For other locales: /fr/login
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const firstSegment = pathSegments[0];
+      // Check if first segment is a valid locale
+      const locale =
+        firstSegment && (locales as readonly string[]).includes(firstSegment)
+          ? firstSegment
+          : defaultLocale;
+
+      // Build callback path with locale prefix only if not default locale
+      // Use general /auth/google-callback path that works for both login and register
+      const callbackPath =
+        locale === defaultLocale
+          ? '/auth/google-callback'
+          : `/${locale}/auth/google-callback`;
+      const callbackUrl = `${window.location.origin}${callbackPath}`;
+
+      // Use the OAuth state param to tell the backend where to redirect after success
+      const loginUrl = `${API_BASE_URL}/auth/google?state=${encodeURIComponent(
+        callbackUrl,
+      )}`;
+
+      window.location.href = loginUrl;
+    },
+  };
 }
 
 export function useLogin() {

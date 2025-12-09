@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useSyncExternalStore,
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -128,6 +129,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Use API user data if available, otherwise fall back to token data
   const user = userFromApi ?? userFromToken;
 
+  // Track if we've already attempted to refresh token on mount
+  const hasAttemptedRefresh = useRef(false);
+
+  // Automatically refresh accessToken on mount if it's missing but refreshToken exists in cookies
+  useEffect(() => {
+    // Only attempt once per mount
+    if (hasAttemptedRefresh.current) return;
+    if (typeof window === 'undefined') return;
+
+    // If we already have an accessToken, no need to refresh
+    if (accessToken) {
+      hasAttemptedRefresh.current = true;
+      return;
+    }
+
+    // Attempt to refresh token using refreshToken from httpOnly cookie
+    // Use direct fetch to avoid circular dependency with apiClient
+    hasAttemptedRefresh.current = true;
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+    fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include', // Important: sends refreshToken cookie
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error('Failed to refresh token');
+        }
+        const data = await response.json();
+        // Successfully refreshed, token is now stored in sessionStorage
+        authStorage.setAccessToken(data.accessToken);
+        tokenStore.notify();
+      })
+      .catch(() => {
+        // Refresh failed - refreshToken might be expired or invalid
+        // User will need to login again, but we don't redirect here
+        // as they might be on a public page
+      });
+  }, [accessToken]);
+
   // Notify store when token changes (e.g., after login/logout)
   useEffect(() => {
     const handleStorageChange = () => {
@@ -139,7 +182,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       window.addEventListener('auth-storage-change', handleStorageChange);
 
-      // Also listen to storage events (for cross-tab synchronization)
+      // Also listen to storage events (for cross-tab synchronization with sessionStorage)
       window.addEventListener('storage', handleStorageChange);
 
       return () => {

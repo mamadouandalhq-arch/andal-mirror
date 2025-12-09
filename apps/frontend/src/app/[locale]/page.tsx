@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/language-switcher';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n';
 export default function Home() {

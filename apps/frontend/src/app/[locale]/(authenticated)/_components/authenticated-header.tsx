@@ -2,7 +2,7 @@
 
 import { useLogout } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/language-switcher';
 import { Button } from '@/components/ui/button';
 
 export function AuthenticatedHeader() {
