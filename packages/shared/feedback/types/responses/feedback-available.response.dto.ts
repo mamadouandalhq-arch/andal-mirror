@@ -1,8 +1,7 @@
-import { FeedbackQuestionDto } from '../feedback-question.dto';
-import { FeedbackStatusDto } from '@shared/feedback';
+import { FeedbackQuestionDto, FeedbackStatus } from '@shared/feedback';
 
 export type FeedbackAvailableResponse = {
-  status: FeedbackStatusDto;
+  status: FeedbackStatus;
   totalQuestions: number;
   answered_questions: number;
   earnedCents: number;

@@ -1,4 +1,4 @@
-export type FeedbackStatusDto =
+export type FeedbackStatus =
   | 'unavailable'
   | 'not_started'
   | 'in_progress'
