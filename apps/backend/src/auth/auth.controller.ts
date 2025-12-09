@@ -4,6 +4,7 @@ import { LoginDto, RegisterDto } from './dto';
 import { Response } from 'express';
 import { RequestWithCookies } from './types';
 import { TokenService } from './token/token.service';
+import { LoginDocs, LogoutDocs, RefreshDocs, RegisterDocs } from './docs';
 
 @Controller('auth')
 export class AuthController {
@@ -12,6 +13,7 @@ export class AuthController {
     private readonly tokenService: TokenService,
   ) {}
 
+  @RegisterDocs()
   @Post('register')
   async register(
     @Body() registerDto: RegisterDto,
@@ -25,6 +27,7 @@ export class AuthController {
     return { accessToken: accessToken };
   }
 
+  @LoginDocs()
   @HttpCode(200)
   @Post('login')
   async login(
@@ -39,6 +42,7 @@ export class AuthController {
     return { accessToken };
   }
 
+  @RefreshDocs()
   @HttpCode(200)
   @Post('refresh')
   async refresh(
@@ -56,6 +60,7 @@ export class AuthController {
     return { accessToken };
   }
 
+  @LogoutDocs()
   @Post('logout')
   @HttpCode(200)
   logout(@Res({ passthrough: true }) res: Response) {
