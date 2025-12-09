@@ -5,9 +5,13 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-export function LoginDocs() {
+export function GoogleAuthRedirectDocs() {
   return applyDecorators(
-    ApiOperation({ summary: 'Login user' }),
+    ApiOperation({
+      summary: 'Google OAuth callback',
+      description:
+        'Handles Google OAuth redirect. Will redirect you to google OAuth consent screen if called directly',
+    }),
     ApiOkResponse({
       description: 'User logged in successfully',
       content: {
@@ -24,12 +28,13 @@ export function LoginDocs() {
       },
     }),
     ApiUnauthorizedResponse({
-      description: 'Invalid credentials',
+      description: 'User payload not found',
       content: {
         'application/json': {
           example: {
+            message: 'Missing Google OAuth user payload',
+            error: 'Unauthorized',
             statusCode: 401,
-            message: 'Invalid credentials',
           },
         },
       },

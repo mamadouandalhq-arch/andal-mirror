@@ -12,6 +12,7 @@ import { RequestWithUser } from '../../common';
 import { GoogleProfileDto } from './dto';
 import { Response } from 'express';
 import { TokenService } from '../token/token.service';
+import { GoogleAuthDocs, GoogleAuthRedirectDocs } from './docs';
 
 @UseGuards(GoogleGuard)
 @Controller('auth/google')
@@ -21,11 +22,13 @@ export class GoogleController {
     private readonly tokenService: TokenService,
   ) {}
 
+  @GoogleAuthDocs()
   @Get()
   googleAuth() {
     return;
   }
 
+  @GoogleAuthRedirectDocs()
   @Get('redirect')
   async googleAuthRedirect(
     @Req() req: RequestWithUser<GoogleProfileDto>,
@@ -34,7 +37,7 @@ export class GoogleController {
     const user = req.user;
 
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException('Missing Google OAuth user payload');
     }
 
     const { accessToken, refreshToken } =
