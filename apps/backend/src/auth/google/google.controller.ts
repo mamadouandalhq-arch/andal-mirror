@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Req,
@@ -13,8 +14,9 @@ import { GoogleProfileDto } from './dto';
 import { Response } from 'express';
 import { TokenService } from '../token/token.service';
 import { GoogleAuthDocs, GoogleAuthRedirectDocs } from './docs';
+import { SessionWithState } from '../types';
+import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(GoogleGuard)
 @Controller('auth/google')
 export class GoogleController {
   constructor(
@@ -22,12 +24,14 @@ export class GoogleController {
     private readonly tokenService: TokenService,
   ) {}
 
+  @UseGuards(GoogleGuard)
   @GoogleAuthDocs()
   @Get()
   googleAuth() {
     return;
   }
 
+  @UseGuards(AuthGuard('google'))
   @GoogleAuthRedirectDocs()
   @Get('redirect')
   async googleAuthRedirect(
@@ -35,6 +39,11 @@ export class GoogleController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const user = req.user;
+    const session = req.session as SessionWithState;
+
+    if (!session.state) {
+      throw new BadRequestException('Invalid state');
+    }
 
     if (!user) {
       throw new UnauthorizedException('Missing Google OAuth user payload');
@@ -45,6 +54,6 @@ export class GoogleController {
 
     this.tokenService.addRefreshTokenToResponse(res, refreshToken);
 
-    return { accessToken };
+    return res.redirect(`${session.state}?accessToken=${accessToken}`);
   }
 }

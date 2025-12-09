@@ -52,21 +52,22 @@ export class UserService {
   }
 
   async getOrCreateGoogleUser(dto: GoogleProfileDto) {
-    const user = await this.getOneByGoogleId(dto.googleId);
+    const user = await this.getOneByEmail(dto.email);
 
     if (user) {
+      await this.prisma.user.update({
+        where: {
+          email: user.email,
+        },
+        data: {
+          google_id: dto.googleId,
+        },
+      });
+
       return user;
     }
 
     return await this.createGoogleUser(dto);
-  }
-
-  async getOneByGoogleId(googleId: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        google_id: googleId,
-      },
-    });
   }
 
   async getOneByEmail(email: string) {
