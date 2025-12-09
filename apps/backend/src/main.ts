@@ -11,10 +11,10 @@ async function bootstrap() {
   app.use(cookieParser());
 
   const config = new DocumentBuilder()
-    .setTitle('Vaulted')
-    .setDescription('Vaulted API description')
+    .setTitle('Buy purchasing powers')
+    .setDescription('Buy purchasing powers API description')
     .setVersion('0.0.1')
-    .addTag('vaulted')
+    .addTag('Buy purchasing powers')
     .addBearerAuth()
     .addCookieAuth()
     .build();
