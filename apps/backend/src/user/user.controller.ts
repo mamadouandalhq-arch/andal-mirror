@@ -1,10 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UpdateUserDto } from './dto';
 import { UserService } from './user.service';
 import { User } from './decorators';
 import { UserDto } from '../common';
 import { JwtGuard } from '../auth/guards';
-import { UpdateUserDocs } from './docs';
+import { GetMeDocs, UpdateUserDocs } from './swagger';
 
 @UseGuards(JwtGuard)
 @Controller('user')
@@ -15,5 +15,11 @@ export class UserController {
   @Post('/update')
   async update(@User() user: UserDto, @Body() dto: UpdateUserDto) {
     return this.userService.update(user.sub, dto);
+  }
+
+  @GetMeDocs()
+  @Get('/me')
+  async me(@User() user: UserDto) {
+    return this.userService.getMe(user.sub);
   }
 }

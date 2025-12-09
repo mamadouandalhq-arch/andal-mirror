@@ -14,6 +14,16 @@ import { User } from '@prisma/client';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getMe(userId: string) {
+    const user = await this.getUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return omit(user, 'password') as Omit<User, 'password'>;
+  }
+
   async update(userId: string, dto: UpdateUserDto) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -73,6 +83,14 @@ export class UserService {
   async getOneByEmail(email: string) {
     return await this.prisma.user.findUnique({
       where: { email },
+    });
+  }
+
+  private getUserById(userId: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
     });
   }
 
