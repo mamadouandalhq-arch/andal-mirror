@@ -4,12 +4,14 @@ import { UserService } from './user.service';
 import { User } from './decorators';
 import { UserDto } from '../common';
 import { JwtGuard } from '../auth/guards';
+import { UpdateUserDocs } from './docs';
 
 @UseGuards(JwtGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UpdateUserDocs()
   @Post('/update')
   async update(@User() user: UserDto, @Body() dto: UpdateUserDto) {
     return this.userService.update(user.sub, dto);
