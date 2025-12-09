@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormField } from '@/components/ui/form-field';
 import { FormError } from '@/components/ui/form-error';
+import { Spinner } from '@/components/ui/spinner';
 import { useForgotPassword } from '@/hooks/use-auth';
 import { useState } from 'react';
 import {
@@ -84,7 +85,14 @@ export function ForgotPasswordForm() {
           className="w-full"
           disabled={forgotPassword.isPending}
         >
-          {forgotPassword.isPending ? 'Loading...' : t('sendResetLink')}
+          {forgotPassword.isPending ? (
+            <>
+              <Spinner size="sm" className="mr-2" />
+              {t('sending')}
+            </>
+          ) : (
+            t('sendResetLink')
+          )}
         </Button>
       </div>
 

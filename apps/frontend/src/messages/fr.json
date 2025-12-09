@@ -10,6 +10,11 @@
     "getStarted": "Commencer"
   },
   "auth": {
+    "loading": "Chargement...",
+    "registering": "Inscription...",
+    "loggingIn": "Connexion...",
+    "sending": "Envoi...",
+    "loggingOut": "Déconnexion...",
     "login": "Connexion",
     "register": "S'inscrire",
     "logout": "Déconnexion",

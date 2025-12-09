@@ -22,7 +22,7 @@ export function AuthenticatedHeader() {
               onClick={() => logout.mutate()}
               disabled={logout.isPending}
             >
-              {logout.isPending ? t('loading') : tAuth('logout')}
+              {logout.isPending ? tAuth('loggingOut') : tAuth('logout')}
             </Button>
           </div>
         </div>

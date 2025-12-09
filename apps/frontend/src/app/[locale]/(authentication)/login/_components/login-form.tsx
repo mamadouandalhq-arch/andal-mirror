@@ -10,6 +10,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { FormField } from '@/components/ui/form-field';
 import { FormError } from '@/components/ui/form-error';
 import { GoogleButton } from '@/components/google-button';
+import { Spinner } from '@/components/ui/spinner';
 import { useLogin } from '@/hooks/use-auth';
 import { useState } from 'react';
 import { loginSchema, type LoginFormData } from '@/lib/validations/auth';
@@ -97,7 +98,14 @@ export function LoginForm() {
 
       <div>
         <Button type="submit" className="w-full" disabled={login.isPending}>
-          {login.isPending ? 'Loading...' : t('login')}
+          {login.isPending ? (
+            <>
+              <Spinner size="sm" className="mr-2" />
+              {t('loggingIn')}
+            </>
+          ) : (
+            t('login')
+          )}
         </Button>
       </div>
 

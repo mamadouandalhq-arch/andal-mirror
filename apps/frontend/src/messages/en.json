@@ -10,6 +10,11 @@
     "getStarted": "Get Started"
   },
   "auth": {
+    "loading": "Loading...",
+    "registering": "Registering...",
+    "loggingIn": "Logging in...",
+    "sending": "Sending...",
+    "loggingOut": "Logging out...",
     "login": "Login",
     "register": "Register",
     "logout": "Logout",

@@ -10,13 +10,19 @@ import {
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { authStorage } from '@/lib/auth-storage';
+import { apiClient } from '@/lib/api-client';
 
 interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
+  address?: string | null;
+  avatar_url?: string | null;
   role: string;
+  points_balance: number;
+  created_at: string;
+  google_id?: string | null;
 }
 
 interface AuthContextType {
@@ -102,25 +108,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return {
         id: tokenData.sub,
         email: tokenData.email,
-        firstName: '', // Will be populated when backend endpoint is added
-        lastName: '', // Will be populated when backend endpoint is added
+        first_name: '', // Will be populated when backend endpoint is added
+        last_name: '', // Will be populated when backend endpoint is added
         role: tokenData.role,
+        points_balance: 0,
+        created_at: new Date().toISOString(),
       } as User;
     }
 
     return null;
   }, [accessToken]);
 
-  // Use React Query only for fetching additional user data (when backend endpoint is ready)
-  // For now, we use token data, but keep the structure for future API calls
-  const { data: userFromApi, isLoading: isLoadingUser } = useQuery({
-    queryKey: ['user', accessToken],
+  const { data: userFromApi } = useQuery({
+    queryKey: ['user'],
     queryFn: async () => {
-      // TODO: Replace with actual API call when /user/me endpoint is ready
-      // return await apiClient.get<User>('/user/me');
-      return null;
+      return await apiClient.get<User>('/user/me');
     },
-    enabled: isAuthenticated && false, // Disabled until API endpoint is ready
+    enabled: isAuthenticated,
     retry: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

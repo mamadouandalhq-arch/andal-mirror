@@ -140,7 +140,7 @@ export function RegisterForm() {
 
       <div>
         <Button type="submit" className="w-full" disabled={register.isPending}>
-          {register.isPending ? 'Loading...' : t('register')}
+          {register.isPending ? t('registering') : t('register')}
         </Button>
       </div>
 
