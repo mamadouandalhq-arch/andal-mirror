@@ -1,2 +1,2 @@
 export * from './feedback-status.type';
-export * from './responses';
+export * from './feedback-state.response.type';

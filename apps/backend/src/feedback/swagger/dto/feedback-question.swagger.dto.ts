@@ -19,7 +19,4 @@ export class FeedbackQuestionSwaggerDto extends FeedbackQuestionDto {
 
   @ApiProperty({ type: [String], example: ['1', '2', '3'] })
   declare options: string[];
-
-  @ApiProperty({ format: 'date-time', example: '2025-12-05T10:41:37.290Z' })
-  declare created_at: Date;
 }

@@ -6,8 +6,13 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { FeedbackQuestionSwaggerDto } from '../dto';
-import { currentQuestionExample } from '../consts';
+import {
+  currentQuestionExample,
+  feedBackCompletedExample,
+  feedbackNotStartedExample,
+  feedbackUnavailableExample,
+} from '../consts';
+import { FeedbackResultSwaggerDto } from '../dto/feedback-result.swagger.dto';
 
 export function GetStateDocs() {
   return applyDecorators(
@@ -17,7 +22,7 @@ export function GetStateDocs() {
       description:
         'Returns current feedback session state. The response may vary depending on session status.',
     }),
-    ApiExtraModels(FeedbackQuestionSwaggerDto),
+    ApiExtraModels(FeedbackResultSwaggerDto),
     ApiOkResponse({
       description:
         'Returns feedback session state. Response shape depends on the session status. See examples for all possible variants.',
@@ -25,39 +30,7 @@ export function GetStateDocs() {
         'application/json': {
           schema: {
             type: 'object',
-            properties: {
-              status: {
-                type: 'string',
-                enum: [
-                  'in_progress',
-                  'not_started',
-                  'unavailable',
-                  'completed',
-                ],
-                description: 'Current state of the feedback session.',
-                example: 'in_progress',
-              },
-              totalQuestions: {
-                type: 'number',
-                description: 'Total questions in the feedback session.',
-              },
-              earnedCents: {
-                type: 'number',
-                description: 'Amount of US cents earned by a user this far.',
-              },
-              answered_questions: {
-                type: 'number',
-                description:
-                  'Amount of answered questions in the feedback session.',
-              },
-              current_question: {
-                type: 'object',
-                nullable: true,
-                description:
-                  'Current question that user has to answer. Being returned only if feedback session is in progress.',
-                $ref: getSchemaPath(FeedbackQuestionSwaggerDto),
-              },
-            },
+            $ref: getSchemaPath(FeedbackResultSwaggerDto),
           },
 
           examples: {
@@ -74,28 +47,18 @@ export function GetStateDocs() {
 
             notStarted: {
               summary: 'No session started yet',
-              value: {
-                status: 'not_started',
-              },
+              value: feedbackNotStartedExample,
             },
 
             unavailable: {
               summary:
                 'User cannot start feedback because he has no valid receipt',
-              value: {
-                status: 'unavailable',
-                reason: 'no_pending_receipt',
-              },
+              value: feedbackUnavailableExample,
             },
 
             completed: {
               summary: 'Feedback session was already completed',
-              value: {
-                status: 'completed',
-                totalQuestions: 3,
-                earnedCents: 300,
-                answered_questions: 3,
-              },
+              value: feedBackCompletedExample,
             },
           },
         },

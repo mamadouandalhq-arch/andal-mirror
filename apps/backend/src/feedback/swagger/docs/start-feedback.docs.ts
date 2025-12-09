@@ -8,8 +8,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { getBadRequestDocExample } from '../../../common';
-import { currentQuestionExample } from '../consts';
 import { BadRequestSwaggerDto } from '../dto';
+import { feedbackInProgressExample } from '../consts';
 
 export function StartFeedbackDocs() {
   return applyDecorators(
@@ -23,13 +23,7 @@ export function StartFeedbackDocs() {
         'Feedback session successfully started. Returns its current state.',
       content: {
         'application/json': {
-          example: {
-            status: 'in_progress',
-            totalQuestions: 3,
-            earnedCents: 0,
-            answered_questions: 0,
-            current_question: currentQuestionExample,
-          },
+          example: feedbackInProgressExample,
         },
       },
     }),
