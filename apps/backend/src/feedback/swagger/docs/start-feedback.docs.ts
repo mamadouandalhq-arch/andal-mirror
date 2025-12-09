@@ -2,10 +2,14 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
+  ApiExtraModels,
   ApiOkResponse,
   ApiOperation,
+  getSchemaPath,
 } from '@nestjs/swagger';
-import { getBadRequestDocExample } from '../../common';
+import { getBadRequestDocExample } from '../../../common';
+import { currentQuestionExample } from '../consts';
+import { BadRequestSwaggerDto } from '../dto';
 
 export function StartFeedbackDocs() {
   return applyDecorators(
@@ -24,18 +28,12 @@ export function StartFeedbackDocs() {
             totalQuestions: 3,
             earnedCents: 0,
             answered_questions: 0,
-            current_question: {
-              id: '56f51aa5-5cd3-443d-a99a-6ba9cb93a513',
-              serial_number: 1,
-              text: 'How would you rate your apartment condition?',
-              type: 'single',
-              options: ['1', '2', '3', '4', '5'],
-              created_at: '2025-12-05T10:41:37.290Z',
-            },
+            current_question: currentQuestionExample,
           },
         },
       },
     }),
+    ApiExtraModels(BadRequestSwaggerDto),
     ApiBadRequestResponse({
       description:
         'Bad Request exception — two possible validation errors: "Feedback already provided" or "No pending receipt!". See examples for details.',
@@ -43,11 +41,7 @@ export function StartFeedbackDocs() {
         'application/json': {
           schema: {
             type: 'object',
-            properties: {
-              message: { type: 'string' },
-              error: { type: 'string', example: 'Bad Request' },
-              statusCode: { type: 'number', example: 400 },
-            },
+            $ref: getSchemaPath(BadRequestSwaggerDto),
           },
           examples: {
             feedbackAlreadyProvided: {

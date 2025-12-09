@@ -4,4 +4,8 @@ export class FeedbackQuestionDto {
   text!: string;
   type!: 'single' | 'multiple';
   options!: string[];
+
+  static create(data: FeedbackQuestionDto): FeedbackQuestionDto {
+    return Object.assign(new FeedbackQuestionDto(), data);
+  }
 }

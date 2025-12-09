@@ -5,7 +5,7 @@ import { User } from '../user/decorators';
 import { UserDto } from '../common';
 import { AnswerQuestionDto } from './dto';
 import { FeedbackStateResponse } from '@shared/feedback';
-import { AnswerQuestionDocs, GetStateDocs, StartFeedbackDocs } from './docs';
+import { AnswerQuestionDocs, GetStateDocs, StartFeedbackDocs } from './swagger';
 
 @UseGuards(JwtGuard)
 @Controller('feedback')

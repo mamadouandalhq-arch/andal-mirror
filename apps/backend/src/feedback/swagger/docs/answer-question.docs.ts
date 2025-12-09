@@ -2,10 +2,14 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
+  ApiExtraModels,
   ApiOkResponse,
   ApiOperation,
+  getSchemaPath,
 } from '@nestjs/swagger';
-import { getBadRequestDocExample } from '../../common';
+import { getBadRequestDocExample } from '../../../common';
+import { BadRequestSwaggerDto, FeedbackQuestionSwaggerDto } from '../dto';
+import { currentQuestionExample } from '../consts';
 
 export function AnswerQuestionDocs() {
   return applyDecorators(
@@ -13,6 +17,7 @@ export function AnswerQuestionDocs() {
       summary: 'An endpoint to send an answer to a current question.',
       description: `An endpoint to send an answer to a current question. Current question is provided by /feedback/state endpoint or by previous response of /feedback/answer-question. Returns current feedback session state if OK, else throws an error. If OK, response.current_question becomes user's next question`,
     }),
+    ApiExtraModels(FeedbackQuestionSwaggerDto, BadRequestSwaggerDto),
     ApiOkResponse({
       description:
         'Question answered successfully. Response depends on whether the feedback session continues or has been completed.',
@@ -47,17 +52,7 @@ export function AnswerQuestionDocs() {
                 nullable: true,
                 description:
                   'Next question that user should answer. Returned only if status = in_progress.',
-                properties: {
-                  id: { type: 'string' },
-                  serial_number: { type: 'number' },
-                  text: { type: 'string' },
-                  type: { type: 'string', enum: ['single'] },
-                  options: {
-                    type: 'array',
-                    items: { type: 'string' },
-                  },
-                  created_at: { type: 'string', format: 'date-time' },
-                },
+                $ref: getSchemaPath(FeedbackQuestionSwaggerDto),
               },
             },
           },
@@ -70,14 +65,7 @@ export function AnswerQuestionDocs() {
                 totalQuestions: 3,
                 earnedCents: 100,
                 answered_questions: 1,
-                current_question: {
-                  id: '00341d1f-87f8-4ec9-8255-5503fc61e2bc',
-                  serial_number: 2,
-                  text: 'How would you rate your relationship with landlord?',
-                  type: 'single',
-                  options: ['1', '2', '3', '4', '5'],
-                  created_at: '2025-12-05T10:41:37.290Z',
-                },
+                current_question: currentQuestionExample,
               },
             },
 
@@ -101,11 +89,7 @@ export function AnswerQuestionDocs() {
         'application/json': {
           schema: {
             type: 'object',
-            properties: {
-              message: { type: 'string' },
-              error: { type: 'string', example: 'Bad Request' },
-              statusCode: { type: 'number', example: 400 },
-            },
+            $ref: getSchemaPath(BadRequestSwaggerDto),
           },
           examples: {
             noActiveFeedback: {

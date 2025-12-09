@@ -4,7 +4,10 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
+import { FeedbackQuestionSwaggerDto } from '../dto';
+import { currentQuestionExample } from '../consts';
 
 export function GetStateDocs() {
   return applyDecorators(
@@ -14,6 +17,7 @@ export function GetStateDocs() {
       description:
         'Returns current feedback session state. The response may vary depending on session status.',
     }),
+    ApiExtraModels(FeedbackQuestionSwaggerDto),
     ApiOkResponse({
       description:
         'Returns feedback session state. Response shape depends on the session status. See examples for all possible variants.',
@@ -51,17 +55,7 @@ export function GetStateDocs() {
                 nullable: true,
                 description:
                   'Current question that user has to answer. Being returned only if feedback session is in progress.',
-                properties: {
-                  id: { type: 'string' },
-                  serial_number: { type: 'number' },
-                  text: { type: 'string' },
-                  type: { type: 'string', enum: ['single'] },
-                  options: {
-                    type: 'array',
-                    items: { type: 'string' },
-                  },
-                  created_at: { type: 'string', format: 'date-time' },
-                },
+                $ref: getSchemaPath(FeedbackQuestionSwaggerDto),
               },
             },
           },
@@ -74,14 +68,7 @@ export function GetStateDocs() {
                 totalQuestions: 3,
                 earnedCents: 0,
                 answered_questions: 0,
-                current_question: {
-                  id: '56f51aa5-5cd3-443d-a99a-6ba9cb93a513',
-                  serial_number: 1,
-                  text: 'How would you rate your apartment condition?',
-                  type: 'single',
-                  options: ['1', '2', '3', '4', '5'],
-                  created_at: '2025-12-05T10:41:37.290Z',
-                },
+                current_question: currentQuestionExample,
               },
             },
 
