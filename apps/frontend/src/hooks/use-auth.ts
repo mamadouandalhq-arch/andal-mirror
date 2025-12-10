@@ -21,6 +21,17 @@ export interface ForgotPasswordCredentials {
   email: string;
 }
 
+export interface VerifyResetTokenCredentials {
+  token: string;
+  tokenId: string;
+}
+
+export interface ResetPasswordCredentials {
+  password: string;
+  token: string;
+  tokenId: string;
+}
+
 export interface AuthResponse {
   accessToken: string;
 }
@@ -117,6 +128,28 @@ export function useForgotPassword() {
     mutationFn: async (credentials: ForgotPasswordCredentials) => {
       return apiClient.post<{ message: string }>(
         '/auth/forgot-password',
+        credentials,
+      );
+    },
+  });
+}
+
+export function useVerifyResetToken() {
+  return useMutation({
+    mutationFn: async (credentials: VerifyResetTokenCredentials) => {
+      return apiClient.post<{ success: boolean }>(
+        '/auth/forgot-password/verify-token',
+        credentials,
+      );
+    },
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: async (credentials: ResetPasswordCredentials) => {
+      return apiClient.post<{ success: boolean }>(
+        '/auth/change-password',
         credentials,
       );
     },

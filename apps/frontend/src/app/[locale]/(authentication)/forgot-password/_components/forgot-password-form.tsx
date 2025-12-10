@@ -38,7 +38,14 @@ export function ForgotPasswordForm() {
       await forgotPassword.mutateAsync(data);
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred';
+      // Check if error is "User not found" from backend
+      if (errorMessage.toLowerCase().includes('user not found')) {
+        setError(t('userNotFound'));
+      } else {
+        setError(errorMessage);
+      }
     }
   };
 

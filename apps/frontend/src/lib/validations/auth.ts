@@ -40,3 +40,22 @@ export const forgotPasswordSchema = z.object({
 });
 
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, 'validation.passwordMinLength')
+      .max(20, 'validation.passwordMaxLength'),
+    confirmPassword: z.string().min(1, 'validation.confirmPasswordRequired'),
+  })
+  .refine(
+    (data: { password: string; confirmPassword: string }) =>
+      data.password === data.confirmPassword,
+    {
+      message: 'validation.passwordsDoNotMatch',
+      path: ['confirmPassword'],
+    },
+  );
+
+export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;

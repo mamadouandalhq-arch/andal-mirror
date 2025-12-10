@@ -143,7 +143,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setHasCheckedToken(true);
     });
 
-    if (!expired) return;
+    // Only attempt refresh if we have a token (even if expired)
+    // This prevents unnecessary refresh attempts on login/register pages
+    if (!token || !expired) return;
 
     startTransition(() => {
       setIsRefreshing(true);
@@ -156,9 +158,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(async (res) => {
-        if (!res.ok) throw new Error('Failed to refresh');
+        // 401 is expected when there's no refresh token (user not logged in)
+        if (res.status === 401) {
+          // Clear invalid access token
+          authStorage.clearAccessToken();
+          tokenStore.notify();
+          return;
+        }
+
+        if (!res.ok) {
+          // Only throw for unexpected errors
+          throw new Error('Failed to refresh');
+        }
+
         const data = await res.json();
         authStorage.setAccessToken(data.accessToken);
+        tokenStore.notify();
+      })
+      .catch((error) => {
+        // Silently handle refresh failures - they're expected when not logged in
+        // Only log unexpected errors
+        if (error.message !== 'Failed to refresh') {
+          console.error('Unexpected error during token refresh:', error);
+        }
+        // Clear invalid token on any error
+        authStorage.clearAccessToken();
         tokenStore.notify();
       })
       .finally(() => {
