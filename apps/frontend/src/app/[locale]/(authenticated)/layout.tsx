@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from '@/i18n';
 import { useAuth } from '@/contexts/auth-context';
 import { AuthenticatedHeader } from './_components/authenticated-header';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function AuthenticatedLayout({
   children,
@@ -20,9 +21,13 @@ export default function AuthenticatedLayout({
     }
   }, [isAuthenticated, isLoading, router]);
 
-  // Show nothing while loading or if not authenticated
+  // Show spinner while loading or if not authenticated
   if (isLoading || !isAuthenticated) {
-    return null;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner />
+      </div>
+    );
   }
 
   return (

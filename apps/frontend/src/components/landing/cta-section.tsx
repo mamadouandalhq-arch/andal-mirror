@@ -32,7 +32,7 @@ export function CTASection() {
                 asChild
                 className="text-base sm:text-lg"
               >
-                <Link href="/login">{t('secondaryButton')}</Link>
+                <Link href="#how-it-works">{t('secondaryButton')}</Link>
               </Button>
             </div>
           </div>
