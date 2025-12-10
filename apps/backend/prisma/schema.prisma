@@ -46,8 +46,21 @@ model User {
 
   googleId String? @unique
 
-  receipts        Receipt[]
-  feedbackResults FeedbackResult[]
+  receipts             Receipt[]
+  feedbackResults      FeedbackResult[]
+  forgotPasswordTokens ForgotPasswordToken[]
+}
+
+model ForgotPasswordToken {
+  id String @id @default(uuid())
+
+  userId String @unique()
+  user   User   @relation(fields: [userId], references: [id])
+
+  token String
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }
 
 model Receipt {
