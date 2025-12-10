@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate({ email }: UserDto) {
-    const user = await this.userService.getOneByEmail(email);
+    const user = await this.userService.getUniqueByEmail(email);
 
     if (!user) {
       return null;

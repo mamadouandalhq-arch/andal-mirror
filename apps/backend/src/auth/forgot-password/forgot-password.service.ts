@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ForgotPasswordDto, VerifyForgotPasswordTokenDto } from '../dto';
 import crypto from 'crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserService } from '../../user/user.service';
 import argon from 'argon2';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -13,36 +14,24 @@ export class ForgotPasswordService {
   ) {}
 
   async verifyToken({ token, tokenId }: VerifyForgotPasswordTokenDto) {
-    const tokenInDb = await this.prisma.forgotPasswordToken.findUnique({
-      where: {
-        id: tokenId,
-      },
-    });
-
-    const failedMessage = { success: false };
+    const tokenInDb = await this.findTokenById(tokenId);
 
     if (!tokenInDb) {
-      return failedMessage;
+      return false;
     }
 
     const isValidToken = await argon.verify(tokenInDb.token, token);
 
     const isExpired = tokenInDb.expiresAt < new Date();
 
-    if (isExpired || !isValidToken) {
-      return failedMessage;
-    }
-
-    return { success: true };
+    return !(isExpired || !isValidToken);
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
-    const user = await this.userService.getOneByEmail(dto.email);
-
-    const successMessage = { success: true };
+    const user = await this.userService.getUniqueByEmail(dto.email);
 
     if (!user) {
-      return successMessage;
+      return true;
     }
 
     const token = crypto.randomBytes(32).toString('base64url');
@@ -72,6 +61,32 @@ export class ForgotPasswordService {
     //   TODO: SEND email to dto.email
     // example: https://localhost:3001/forgot-password?token=long-string&tokenId=ch72gsb320000udocl363eofy
 
-    return successMessage;
+    return true;
+  }
+
+  async deleteTokenByIdOrThrow(tokenId: string) {
+    try {
+      return this.prisma.forgotPasswordToken.delete({
+        where: {
+          id: tokenId,
+        },
+      });
+    } catch (err) {
+      if (err instanceof PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException('Forgot password token not found');
+        }
+      }
+
+      throw err;
+    }
+  }
+
+  findTokenById(tokenId: string) {
+    return this.prisma.forgotPasswordToken.findUnique({
+      where: {
+        id: tokenId,
+      },
+    });
   }
 }

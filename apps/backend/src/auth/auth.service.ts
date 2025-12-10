@@ -5,15 +5,50 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { TokenService } from './token/token.service';
-import { LoginDto, RegisterDto } from './dto';
+import {
+  ChangePasswordDto,
+  LoginDto,
+  RegisterDto,
+  VerifyForgotPasswordTokenDto,
+} from './dto';
 import argon from 'argon2';
+import { ForgotPasswordService } from './forgot-password/forgot-password.service';
+import omit from 'lodash/omit';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
+    private readonly forgotPasswordService: ForgotPasswordService,
   ) {}
+
+  async changePassword(dto: ChangePasswordDto) {
+    const verifyTokenDto: VerifyForgotPasswordTokenDto = omit(dto, 'password');
+    const isValidToken =
+      await this.forgotPasswordService.verifyToken(verifyTokenDto);
+
+    if (!isValidToken) {
+      return false;
+    }
+
+    const tokenInDb = await this.forgotPasswordService.findTokenById(
+      verifyTokenDto.tokenId,
+    );
+
+    if (!tokenInDb) {
+      return false;
+    }
+
+    await this.userService.changePasswordOrThrow(
+      tokenInDb.userId,
+      dto.password,
+    );
+
+    await this.forgotPasswordService.deleteTokenByIdOrThrow(tokenInDb.id);
+
+    return true;
+  }
 
   async register(registerDto: RegisterDto) {
     const user = await this.userService.create(registerDto);
@@ -22,7 +57,9 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const existingUser = await this.userService.getOneByEmail(loginDto.email);
+    const existingUser = await this.userService.getUniqueByEmail(
+      loginDto.email,
+    );
 
     if (!existingUser) {
       throw new BadRequestException('Invalid credentials');

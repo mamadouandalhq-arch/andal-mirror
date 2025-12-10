@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto } from './dto';
+import { ChangePasswordDto, LoginDto, RegisterDto } from './dto';
 import { Response } from 'express';
 import { RequestWithCookies } from './types';
 import { TokenService } from './token/token.service';
@@ -12,6 +12,13 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
   ) {}
+
+  @Post('change-password')
+  async changePassword(@Body() dto: ChangePasswordDto) {
+    const result = await this.authService.changePassword(dto);
+
+    return { success: result };
+  }
 
   @RegisterDocs()
   @Post('register')

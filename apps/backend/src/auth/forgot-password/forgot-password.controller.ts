@@ -7,12 +7,15 @@ export class ForgotPasswordController {
   constructor(private readonly forgotPasswordService: ForgotPasswordService) {}
 
   @Post('verify-token')
-  verifyToken(@Body() dto: VerifyForgotPasswordTokenDto) {
-    return this.forgotPasswordService.verifyToken(dto);
+  async verifyToken(@Body() dto: VerifyForgotPasswordTokenDto) {
+    const isValid = await this.forgotPasswordService.verifyToken(dto);
+    return { success: isValid };
   }
 
   @Post()
-  forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.forgotPasswordService.forgotPassword(dto);
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    const result = await this.forgotPasswordService.forgotPassword(dto);
+
+    return { success: result };
   }
 }

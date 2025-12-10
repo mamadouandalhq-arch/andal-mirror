@@ -9,13 +9,14 @@ import { GoogleProfileDto } from '../auth/google/dto';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import omit from 'lodash/omit';
 import { User } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getMe(userId: string) {
-    const user = await this.getUserById(userId);
+    const user = await this.getUniqueById(userId);
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -48,7 +49,7 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const existingUser = await this.getOneByEmail(createUserDto.email);
+    const existingUser = await this.getUniqueByEmail(createUserDto.email);
 
     if (existingUser) {
       throw new BadRequestException('User already exists');
@@ -62,7 +63,7 @@ export class UserService {
   }
 
   async getOrCreateGoogleUser(dto: GoogleProfileDto) {
-    const user = await this.getOneByEmail(dto.email);
+    const user = await this.getUniqueByEmail(dto.email);
 
     if (user) {
       await this.prisma.user.update({
@@ -80,13 +81,34 @@ export class UserService {
     return await this.createGoogleUser(dto);
   }
 
-  async getOneByEmail(email: string) {
+  async changePasswordOrThrow(userId: string, password: string) {
+    try {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          password: await argon.hash(password),
+        },
+      });
+
+      return true;
+    } catch (err: unknown) {
+      if (err instanceof PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException('User not found');
+        }
+      }
+
+      throw err;
+    }
+  }
+
+  async getUniqueByEmail(email: string) {
     return await this.prisma.user.findUnique({
       where: { email },
     });
   }
 
-  private getUserById(userId: string) {
+  async getUniqueById(userId: string) {
     return this.prisma.user.findUnique({
       where: {
         id: userId,

@@ -7,5 +7,6 @@ import { UserModule } from '../../user/user.module';
   imports: [UserModule],
   controllers: [ForgotPasswordController],
   providers: [ForgotPasswordService],
+  exports: [ForgotPasswordService],
 })
 export class ForgotPasswordModule {}

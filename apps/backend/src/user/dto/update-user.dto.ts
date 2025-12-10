@@ -30,15 +30,6 @@ export class UpdateUserDto {
   lastName?: string;
 
   @ApiProperty({
-    description: 'password',
-    example: 'new-strong-password',
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
-  password?: string;
-
-  @ApiProperty({
     description: 'avatarUrl',
     example: 'https://cdn.example.com/avatar.png',
     required: false,
