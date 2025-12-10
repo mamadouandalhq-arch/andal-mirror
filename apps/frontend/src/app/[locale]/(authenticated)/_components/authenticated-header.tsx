@@ -1,29 +1,31 @@
 'use client';
 
-import { useLogout } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n';
 import { LanguageSwitcher } from '@/components/language-switcher';
-import { Button } from '@/components/ui/button';
+import { UserMenu } from '@/components/user-menu';
 
 export function AuthenticatedHeader() {
-  const logout = useLogout();
-  const t = useTranslations('dashboard');
-  const tAuth = useTranslations('auth');
+  const t = useTranslations('common');
 
   return (
-    <header className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
+    <header className="w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 sticky top-0 z-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            <Link
+              href="/dashboard"
+              className="flex flex-col items-center space-x-2"
+            >
+              <span className="text-xl font-bold text-primary">
+                {t('appName')}
+              </span>
+              <span className="text-sm text-muted-foreground">dashboard</span>
+            </Link>
+          </div>
           <div className="flex items-center gap-4">
             <LanguageSwitcher />
-            <Button
-              variant="destructive"
-              onClick={() => logout.mutate()}
-              disabled={logout.isPending}
-            >
-              {logout.isPending ? tAuth('loggingOut') : tAuth('logout')}
-            </Button>
+            <UserMenu />
           </div>
         </div>
       </div>

@@ -124,6 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     retry: false,
     staleTime: 5 * 60_000,
     gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   /* ---------------- Token refresh on mount ---------------- */

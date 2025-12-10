@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Globe } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function LanguageSwitcher() {
   const router = useRouter();
@@ -33,9 +34,14 @@ export function LanguageSwitcher() {
       onValueChange={onValueChange}
       disabled={isPending}
     >
-      <SelectTrigger className="w-[140px] h-9 gap-2 border-border/50 hover:border-border">
+      <SelectTrigger
+        className={cn(
+          'h-9 gap-2 border-border/50 hover:border-border',
+          'w-9 px-2 sm:w-[140px] sm:px-3',
+        )}
+      >
         <Globe className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <SelectValue />
+        <SelectValue className="hidden sm:inline" />
       </SelectTrigger>
       <SelectContent
         onCloseAutoFocus={(e) => {
@@ -45,7 +51,8 @@ export function LanguageSwitcher() {
       >
         {Object.entries(localeNames).map(([locale, name]) => (
           <SelectItem key={locale} value={locale}>
-            {name}
+            <span className="hidden sm:inline">{name}</span>
+            <span className="sm:hidden uppercase">{locale}</span>
           </SelectItem>
         ))}
       </SelectContent>
