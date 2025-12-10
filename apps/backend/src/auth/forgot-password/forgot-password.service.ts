@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ForgotPasswordDto } from '../dto';
+import { ForgotPasswordDto, VerifyForgotPasswordTokenDto } from '../dto';
 import crypto from 'crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserService } from '../../user/user.service';
@@ -11,6 +11,30 @@ export class ForgotPasswordService {
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
   ) {}
+
+  async verifyToken({ token, tokenId }: VerifyForgotPasswordTokenDto) {
+    const tokenInDb = await this.prisma.forgotPasswordToken.findUnique({
+      where: {
+        id: tokenId,
+      },
+    });
+
+    const failedMessage = { success: false };
+
+    if (!tokenInDb) {
+      return failedMessage;
+    }
+
+    const isValidToken = await argon.verify(tokenInDb.token, token);
+
+    const isExpired = tokenInDb.expiresAt < new Date();
+
+    if (isExpired || !isValidToken) {
+      return failedMessage;
+    }
+
+    return { success: true };
+  }
 
   async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.userService.getOneByEmail(dto.email);
@@ -43,7 +67,10 @@ export class ForgotPasswordService {
       },
     });
 
+    console.log({ token });
+
     //   TODO: SEND email to dto.email
+    // example: https://localhost:3001/forgot-password?token=long-string&tokenId=ch72gsb320000udocl363eofy
 
     return successMessage;
   }
