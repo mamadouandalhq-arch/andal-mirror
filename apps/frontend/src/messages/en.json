@@ -4,10 +4,119 @@
     "language": "Language",
     "welcome": "Welcome"
   },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or doesn't exist.",
+    "goHome": "Go Home",
+    "goBack": "Go Back"
+  },
+  "footer": {
+    "description": "Transform your rent payments into rewards. Earn points, provide feedback, and redeem gift cards or cash.",
+    "product": {
+      "title": "Product",
+      "howItWorks": "How It Works",
+      "features": "Features"
+    },
+    "company": {
+      "title": "Company",
+      "about": "About Us",
+      "contact": "Contact"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "copyright": "© {year} Buy Purchasing Powers. All rights reserved.",
+    "rights": "All rights reserved."
+  },
   "home": {
     "title": "Buy Purchasing Powers",
     "description": "Earn points by uploading receipts and redeem them for gift cards",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "hero": {
+      "headline": "Turn Your Rent Payments Into Rewards",
+      "subheadline": "Register as a tenant, upload your rent receipts, provide feedback, and earn money or gift cards for timely payments and valuable insights.",
+      "cta": "Start Earning Rewards",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "title": "Why Choose Us",
+      "subtitle": "Everything you need to turn rent payments into rewards",
+      "receiptUpload": {
+        "title": "Easy Receipt Upload",
+        "description": "Simply upload your rent receipts with our intuitive interface. Quick, secure, and hassle-free."
+      },
+      "feedbackRewards": {
+        "title": "Earn for Feedback",
+        "description": "Share your experience and get rewarded. Your feedback helps improve services and earns you points."
+      },
+      "onTimePayments": {
+        "title": "On-Time Payment Bonus",
+        "description": "Get extra rewards when you pay your rent on time. Consistent payments mean more points in your account."
+      },
+      "flexibleRewards": {
+        "title": "Flexible Rewards",
+        "description": "Choose how you want to be rewarded - cash or gift cards from your favorite stores. The choice is yours."
+      },
+      "simpleRegistration": {
+        "title": "Quick Registration",
+        "description": "Get started in minutes. Simple sign-up process designed for tenants who want to start earning immediately."
+      },
+      "securePlatform": {
+        "title": "Secure & Safe",
+        "description": "Your data is protected with bank-level security. Upload receipts and manage your account with confidence."
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Start earning rewards in just a few simple steps",
+      "step1": {
+        "title": "Register",
+        "description": "Create your account as a tenant. It only takes a few minutes to get started."
+      },
+      "step2": {
+        "title": "Upload Receipts",
+        "description": "Upload your rent receipts through our secure platform. We'll verify and process them quickly."
+      },
+      "step3": {
+        "title": "Pay On Time",
+        "description": "Make timely rent payments to earn bonus rewards. Consistency pays off with extra points."
+      },
+      "step4": {
+        "title": "Provide Feedback",
+        "description": "Share your feedback about your rental experience and earn additional rewards for your insights."
+      },
+      "step5": {
+        "title": "Redeem Rewards",
+        "description": "Choose cash or gift cards from various retailers. Redeem your points whenever you're ready."
+      }
+    },
+    "testimonials": {
+      "title": "What Our Tenants Say",
+      "subtitle": "Join thousands of satisfied tenants earning rewards",
+      "testimonial1": {
+        "name": "Sarah Johnson",
+        "role": "Tenant",
+        "text": "I've earned over $200 in gift cards just by uploading my receipts and paying on time. It's so easy!"
+      },
+      "testimonial2": {
+        "name": "Michael Chen",
+        "role": "Tenant",
+        "text": "The feedback rewards are a great incentive. I love that my opinions matter and I get rewarded for sharing them."
+      },
+      "testimonial3": {
+        "name": "Emily Rodriguez",
+        "role": "Tenant",
+        "text": "Best part is the flexibility - I can choose cash or gift cards. This platform has made rent payments rewarding!"
+      }
+    },
+    "cta": {
+      "title": "Ready to Start Earning?",
+      "description": "Join thousands of tenants who are already turning their rent payments into rewards.",
+      "button": "Get Started Now",
+      "secondaryButton": "Learn More"
+    }
   },
   "auth": {
     "loading": "Loading...",

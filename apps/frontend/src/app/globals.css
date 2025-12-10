@@ -89,4 +89,8 @@
     @apply bg-background text-foreground;
     font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   }
+  html body[data-scroll-locked] {
+    overflow: unset !important;
+    margin-right: unset !important;
+  }
 }

@@ -4,10 +4,119 @@
     "language": "Langue",
     "welcome": "Bienvenue"
   },
+  "notFound": {
+    "title": "Page Non Trouvée",
+    "description": "Désolé, nous n'avons pas pu trouver la page que vous recherchez. Elle a peut-être été déplacée, supprimée ou n'existe pas.",
+    "goHome": "Retour à l'Accueil",
+    "goBack": "Retour"
+  },
+  "footer": {
+    "description": "Transformez vos paiements de loyer en récompenses. Gagnez des points, donnez votre avis et échangez des cartes-cadeaux ou de l'argent.",
+    "product": {
+      "title": "Produit",
+      "howItWorks": "Comment Ça Marche",
+      "features": "Fonctionnalités"
+    },
+    "company": {
+      "title": "Entreprise",
+      "about": "À Propos",
+      "contact": "Contact"
+    },
+    "legal": {
+      "title": "Légal",
+      "privacy": "Politique de Confidentialité",
+      "terms": "Conditions d'Utilisation"
+    },
+    "copyright": "© {year} Achat de Pouvoirs d'Achat. Tous droits réservés.",
+    "rights": "Tous droits réservés."
+  },
   "home": {
     "title": "Achat de Pouvoirs d'Achat",
     "description": "Gagnez des points en téléchargeant des reçus et échangez-les contre des cartes-cadeaux",
-    "getStarted": "Commencer"
+    "getStarted": "Commencer",
+    "hero": {
+      "headline": "Transformez Vos Paiements de Loyer en Récompenses",
+      "subheadline": "Inscrivez-vous en tant que locataire, téléchargez vos reçus de loyer, donnez votre avis et gagnez de l'argent ou des cartes-cadeaux pour vos paiements ponctuels et vos précieux retours.",
+      "cta": "Commencer à Gagner",
+      "learnMore": "En Savoir Plus"
+    },
+    "features": {
+      "title": "Pourquoi Nous Choisir",
+      "subtitle": "Tout ce dont vous avez besoin pour transformer vos paiements de loyer en récompenses",
+      "receiptUpload": {
+        "title": "Téléchargement Facile des Reçus",
+        "description": "Téléchargez simplement vos reçus de loyer avec notre interface intuitive. Rapide, sécurisé et sans tracas."
+      },
+      "feedbackRewards": {
+        "title": "Gagnez pour Vos Avis",
+        "description": "Partagez votre expérience et soyez récompensé. Vos retours aident à améliorer les services et vous rapportent des points."
+      },
+      "onTimePayments": {
+        "title": "Bonus de Paiement Ponctuel",
+        "description": "Obtenez des récompenses supplémentaires lorsque vous payez votre loyer à temps. Des paiements réguliers signifient plus de points sur votre compte."
+      },
+      "flexibleRewards": {
+        "title": "Récompenses Flexibles",
+        "description": "Choisissez comment vous voulez être récompensé - espèces ou cartes-cadeaux de vos magasins préférés. Le choix vous appartient."
+      },
+      "simpleRegistration": {
+        "title": "Inscription Rapide",
+        "description": "Commencez en quelques minutes. Processus d'inscription simple conçu pour les locataires qui veulent commencer à gagner immédiatement."
+      },
+      "securePlatform": {
+        "title": "Sécurisé et Fiable",
+        "description": "Vos données sont protégées par une sécurité de niveau bancaire. Téléchargez des reçus et gérez votre compte en toute confiance."
+      }
+    },
+    "howItWorks": {
+      "title": "Comment Ça Marche",
+      "subtitle": "Commencez à gagner des récompenses en quelques étapes simples",
+      "step1": {
+        "title": "S'inscrire",
+        "description": "Créez votre compte en tant que locataire. Il ne faut que quelques minutes pour commencer."
+      },
+      "step2": {
+        "title": "Télécharger les Reçus",
+        "description": "Téléchargez vos reçus de loyer via notre plateforme sécurisée. Nous les vérifierons et les traiterons rapidement."
+      },
+      "step3": {
+        "title": "Payer à Temps",
+        "description": "Effectuez des paiements de loyer ponctuels pour gagner des récompenses bonus. La régularité paie avec des points supplémentaires."
+      },
+      "step4": {
+        "title": "Donner son Avis",
+        "description": "Partagez votre avis sur votre expérience locative et gagnez des récompenses supplémentaires pour vos retours."
+      },
+      "step5": {
+        "title": "Échanger les Récompenses",
+        "description": "Choisissez entre espèces ou cartes-cadeaux de divers détaillants. Échangez vos points quand vous êtes prêt."
+      }
+    },
+    "testimonials": {
+      "title": "Ce Que Disent Nos Locataires",
+      "subtitle": "Rejoignez des milliers de locataires satisfaits qui gagnent des récompenses",
+      "testimonial1": {
+        "name": "Sarah Johnson",
+        "role": "Locataire",
+        "text": "J'ai gagné plus de 200 $ en cartes-cadeaux rien qu'en téléchargeant mes reçus et en payant à temps. C'est si facile !"
+      },
+      "testimonial2": {
+        "name": "Michael Chen",
+        "role": "Locataire",
+        "text": "Les récompenses pour les avis sont une excellente incitation. J'aime que mes opinions comptent et que je sois récompensé pour les partager."
+      },
+      "testimonial3": {
+        "name": "Emily Rodriguez",
+        "role": "Locataire",
+        "text": "Le meilleur, c'est la flexibilité - je peux choisir entre espèces ou cartes-cadeaux. Cette plateforme a rendu les paiements de loyer gratifiants !"
+      }
+    },
+    "cta": {
+      "title": "Prêt à Commencer à Gagner ?",
+      "description": "Rejoignez des milliers de locataires qui transforment déjà leurs paiements de loyer en récompenses.",
+      "button": "Commencer Maintenant",
+      "secondaryButton": "En Savoir Plus"
+    }
   },
   "auth": {
     "loading": "Chargement...",

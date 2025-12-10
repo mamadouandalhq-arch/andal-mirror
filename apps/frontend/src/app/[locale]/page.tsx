@@ -1,24 +1,23 @@
-import { useTranslations } from 'next-intl';
-import { LanguageSwitcher } from '@/components/language-switcher';
-import { Button } from '@/components/ui/button';
-import { Link } from '@/i18n';
-export default function Home() {
-  const t = useTranslations('home');
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
+import { HeroSection } from '@/components/landing/hero-section';
+import { FeaturesSection } from '@/components/landing/features-section';
+import { HowItWorksSection } from '@/components/landing/how-it-works-section';
+import { TestimonialsSection } from '@/components/landing/testimonials-section';
+import { CTASection } from '@/components/landing/cta-section';
 
+export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center font-sans">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 sm:items-start">
-        <div className="w-full flex justify-end mb-8">
-          <LanguageSwitcher />
-        </div>
-        <div className="space-y-4">
-          <h1 className="text-3xl font-bold">{t('title')}</h1>
-          <p className="text-lg text-gray-600">{t('description')}</p>
-          <Button variant="default" size="lg" asChild className="text-lg">
-            <Link href="/login">{t('getStarted')}</Link>
-          </Button>
-        </div>
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">
+        <HeroSection />
+        <FeaturesSection />
+        <HowItWorksSection />
+        <TestimonialsSection />
+        <CTASection />
       </main>
+      <Footer />
     </div>
   );
 }
