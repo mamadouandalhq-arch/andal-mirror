@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ForgotPasswordDto, VerifyForgotPasswordTokenDto } from '../dto';
 import crypto from 'crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserService } from '../../user/user.service';
 import argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ForgotPasswordDto, VerifyForgotPasswordTokenDto } from './dto';
 
 @Injectable()
 export class ForgotPasswordService {
