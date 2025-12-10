@@ -15,14 +15,14 @@ import { apiClient } from '@/lib/api-client';
 interface User {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   address?: string | null;
-  avatar_url?: string | null;
+  avatarUrl?: string | null;
   role: string;
-  points_balance: number;
-  created_at: string;
-  google_id?: string | null;
+  pointsBalance: number;
+  createdAt: string;
+  googleId?: string | null;
 }
 
 interface AuthContextType {
@@ -91,12 +91,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => null, // Server snapshot (not used in client component)
   );
 
-  // Determine authentication status synchronously based on token presence
-  // This is stable and doesn't depend on async queries
-  const isAuthenticated = useMemo(() => {
-    return !!accessToken;
-  }, [accessToken]);
-
   // Decode user info from token synchronously
   const userFromToken = useMemo(() => {
     if (!accessToken) {
@@ -108,30 +102,66 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return {
         id: tokenData.sub,
         email: tokenData.email,
-        first_name: '', // Will be populated when backend endpoint is added
-        last_name: '', // Will be populated when backend endpoint is added
+        firstName: '', // Will be populated when backend endpoint is added
+        lastName: '', // Will be populated when backend endpoint is added
         role: tokenData.role,
-        points_balance: 0,
-        created_at: new Date().toISOString(),
+        pointsBalance: 0,
+        createdAt: new Date().toISOString(),
       } as User;
     }
 
     return null;
   }, [accessToken]);
 
-  const { data: userFromApi } = useQuery({
+  const {
+    data: userFromApi,
+    error: userError,
+    isLoading: isLoadingUser,
+  } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
       return await apiClient.get<User>('/user/me');
     },
-    enabled: isAuthenticated,
+    enabled: !!accessToken, // Only fetch if token exists (not dependent on isAuthenticated to avoid circular dependency)
     retry: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 
+  // Determine authentication status
+  // Consider authenticated if:
+  // 1. We have a token AND
+  // 2. Either: API call succeeded OR API call is still loading (optimistic)
+  // 3. NOT authenticated if: API call failed (user doesn't exist or token invalid)
+  const isAuthenticated = useMemo(() => {
+    // No token = not authenticated
+    if (!accessToken) {
+      return false;
+    }
+
+    // If API call failed (404, 401, etc.), user doesn't exist or token invalid
+    if (userError) {
+      return false;
+    }
+
+    // If we have token and either:
+    // - API call succeeded (userFromApi exists), OR
+    // - API call is still loading (optimistic - assume valid until proven otherwise)
+    return !!userFromApi || isLoadingUser;
+  }, [accessToken, userFromApi, userError, isLoadingUser]);
+
+  // Clear token if API call failed (user doesn't exist)
+  useEffect(() => {
+    if (userError && accessToken) {
+      // User doesn't exist in DB but has token - clear it
+      authStorage.clearAccessToken();
+      tokenStore.notify();
+    }
+  }, [userError, accessToken]);
+
   // Use API user data if available, otherwise fall back to token data
-  const user = userFromApi ?? userFromToken;
+  // But only if API call hasn't failed
+  const user = userError ? null : userFromApi ?? userFromToken;
 
   // Track if we've already attempted to refresh token on mount
   const hasAttemptedRefresh = useRef(false);
@@ -200,7 +230,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        isLoading: false, // No loading state needed since we decode token synchronously
+        isLoading: isLoadingUser && !!accessToken, // Loading only if we have token and checking user
         isAuthenticated,
       }}
     >

@@ -13,8 +13,8 @@ export const registerSchema = z
     email: z
       .email('validation.emailInvalid')
       .min(1, 'validation.emailRequired'),
-    first_name: z.string().min(1, 'validation.firstNameRequired'),
-    last_name: z.string().min(1, 'validation.lastNameRequired'),
+    firstName: z.string().min(1, 'validation.firstNameRequired'),
+    lastName: z.string().min(1, 'validation.lastNameRequired'),
     password: z
       .string()
       .min(8, 'validation.passwordMinLength')

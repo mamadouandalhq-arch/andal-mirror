@@ -36,8 +36,8 @@ export function RegisterForm() {
     try {
       await register.mutateAsync({
         email: data.email,
-        first_name: data.first_name,
-        last_name: data.last_name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         password: data.password,
       });
     } catch (err) {
@@ -72,30 +72,30 @@ export function RegisterForm() {
         <div className="grid grid-cols-2 gap-4">
           <FormField
             label={t('firstName')}
-            htmlFor="first_name"
-            error={errors.first_name?.message}
+            htmlFor="firstName"
+            error={errors.firstName?.message}
             t={t}
           >
             <Input
-              id="first_name"
+              id="firstName"
               type="text"
               autoComplete="given-name"
-              {...registerField('first_name')}
+              {...registerField('firstName')}
               className="mt-1"
             />
           </FormField>
 
           <FormField
             label={t('lastName')}
-            htmlFor="last_name"
-            error={errors.last_name?.message}
+            htmlFor="lastName"
+            error={errors.lastName?.message}
             t={t}
           >
             <Input
-              id="last_name"
+              id="lastName"
               type="text"
               autoComplete="family-name"
-              {...registerField('last_name')}
+              {...registerField('lastName')}
               className="mt-1"
             />
           </FormField>

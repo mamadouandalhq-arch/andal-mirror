@@ -13,7 +13,7 @@ export default function AuthenticationLayout({
 }) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
-  const t = useTranslations('auth.loading');
+  const t = useTranslations('auth');
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       // If user is already authenticated, redirect to dashboard
