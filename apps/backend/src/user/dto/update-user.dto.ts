@@ -12,22 +12,22 @@ export class UpdateUserDto {
   email?: string;
 
   @ApiProperty({
-    description: 'first_name',
+    description: 'firstName',
     example: 'John',
     required: false,
   })
   @IsString()
   @IsOptional()
-  first_name?: string;
+  firstName?: string;
 
   @ApiProperty({
-    description: 'last_name',
+    description: 'lastName',
     example: 'Smith',
     required: false,
   })
   @IsString()
   @IsOptional()
-  last_name?: string;
+  lastName?: string;
 
   @ApiProperty({
     description: 'password',
@@ -39,13 +39,13 @@ export class UpdateUserDto {
   password?: string;
 
   @ApiProperty({
-    description: 'avatar_url',
+    description: 'avatarUrl',
     example: 'https://cdn.example.com/avatar.png',
     required: false,
   })
   @IsString()
   @IsOptional()
-  avatar_url?: string;
+  avatarUrl?: string;
 
   @ApiProperty({
     description: 'address',

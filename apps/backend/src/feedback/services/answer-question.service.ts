@@ -18,9 +18,9 @@ export class AnswerQuestionService {
   ) {
     const existingAnswer = await this.prisma.feedbackAnswer.findUnique({
       where: {
-        feedback_result_id_question_id: {
-          feedback_result_id: feedback.id,
-          question_id: currentQuestion.id,
+        feedbackResultId_questionId: {
+          feedbackResultId: feedback.id,
+          questionId: currentQuestion.id,
         },
       },
     });
@@ -35,10 +35,10 @@ export class AnswerQuestionService {
     currentQuestion: FeedbackQuestion,
   ) {
     const isLastAnswer =
-      currentQuestion.serial_number === validatedFeedback.total_questions;
+      currentQuestion.serialNumber === validatedFeedback.totalQuestions;
 
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
-      earned_cents: validatedFeedback.earned_cents + 100,
+      earnedCents: validatedFeedback.earnedCents + 100,
     };
 
     if (!isLastAnswer) {
@@ -49,7 +49,7 @@ export class AnswerQuestionService {
       this.modifyChangeDataIfLastAnswer(dataToChange);
     }
 
-    dataToChange.answered_questions = validatedFeedback.answered_questions + 1;
+    dataToChange.answeredQuestions = validatedFeedback.answeredQuestions + 1;
     return dataToChange;
   }
 
@@ -59,7 +59,7 @@ export class AnswerQuestionService {
   ) {
     const nextQuestion = await this.prisma.feedbackQuestion.findFirst({
       where: {
-        serial_number: currentQuestion.serial_number + 1,
+        serialNumber: currentQuestion.serialNumber + 1,
       },
     });
 
@@ -67,7 +67,7 @@ export class AnswerQuestionService {
       throw new NotFoundException('Could not find next question');
     }
 
-    dataToChange.current_question = {
+    dataToChange.currentQuestion = {
       connect: {
         id: nextQuestion.id,
       },
@@ -76,20 +76,20 @@ export class AnswerQuestionService {
 
   modifyChangeDataIfLastAnswer(dataToChange: Prisma.FeedbackResultUpdateInput) {
     dataToChange.status = FeedbackStatus.completed;
-    dataToChange.completed_at = new Date();
-    dataToChange.current_question = { disconnect: true };
+    dataToChange.completedAt = new Date();
+    dataToChange.currentQuestion = { disconnect: true };
   }
 
   validateAnswerOrThrow(
     feedback: FeedbackResultWithCurrentQuestion | null,
     answers: string[],
   ) {
-    if (!feedback || !feedback.current_question) {
+    if (!feedback || !feedback.currentQuestion) {
       throw new BadRequestException(
         "You don't provide any feedback right now.",
       );
     }
-    const currentQuestion = feedback.current_question;
+    const currentQuestion = feedback.currentQuestion;
     const { options, type } = currentQuestion;
 
     if (answers.some((answer) => !options.includes(answer))) {

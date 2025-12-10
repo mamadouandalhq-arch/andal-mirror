@@ -2,7 +2,7 @@ import { FeedbackResultSwaggerDto } from '../dto/feedback-result.swagger.dto';
 
 export const feedBackCompletedExample = {
   status: 'completed',
-  total_questions: 3,
-  earned_cents: 300,
-  answered_questions: 3,
+  totalQuestions: 3,
+  earnedCents: 300,
+  answeredQuestions: 3,
 } satisfies FeedbackResultSwaggerDto;

@@ -4,25 +4,25 @@ import { FeedbackQuestionSwaggerDto } from './feedback-question.swagger.dto';
 export class FeedbackResultSwaggerDto {
   @ApiProperty({
     description: 'Current state of the feedback session.',
-    enum: ['in_progress', 'not_started', 'unavailable', 'completed'],
+    enum: ['inProgress', 'notStarted', 'unavailable', 'completed'],
   })
   status!: string;
 
   @ApiProperty({ type: Number, required: false })
-  total_questions?: number;
+  totalQuestions?: number;
 
   @ApiProperty({ type: Number, required: false })
-  earned_cents?: number;
+  earnedCents?: number;
 
   @ApiProperty({ type: Number, required: false })
-  answered_questions?: number;
+  answeredQuestions?: number;
 
   @ApiProperty({
     type: FeedbackQuestionSwaggerDto,
     required: false,
     nullable: true,
   })
-  current_question?: FeedbackQuestionSwaggerDto;
+  currentQuestion?: FeedbackQuestionSwaggerDto;
 
   @ApiProperty({ type: String, required: false })
   reason?: string;

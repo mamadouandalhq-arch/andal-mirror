@@ -28,7 +28,7 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    if (!existingUser.password || existingUser.google_id) {
+    if (!existingUser.password || existingUser.googleId) {
       throw new BadRequestException('User was created using Google!');
     }
 

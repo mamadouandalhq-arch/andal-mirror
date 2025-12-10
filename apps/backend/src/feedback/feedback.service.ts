@@ -29,10 +29,10 @@ export class FeedbackService {
   ): Promise<FeedbackStateResponse> {
     const currentFeedback = await this.prisma.feedbackResult.findFirst({
       where: {
-        user_id: userId,
-        status: PrismaFeedbackStatus.in_progress,
+        userId: userId,
+        status: PrismaFeedbackStatus.inProgress,
       },
-      include: { current_question: true },
+      include: { currentQuestion: true },
     });
 
     const { feedback: validatedFeedback, currentQuestion } =
@@ -53,8 +53,8 @@ export class FeedbackService {
 
     const createAnswer = this.prisma.feedbackAnswer.create({
       data: {
-        feedback_result_id: validatedFeedback.id,
-        question_id: currentQuestion.id,
+        feedbackResultId: validatedFeedback.id,
+        questionId: currentQuestion.id,
         answer: answers,
       },
     });
@@ -65,7 +65,7 @@ export class FeedbackService {
       },
       data: dataToChange,
       include: {
-        current_question: true,
+        currentQuestion: true,
       },
     });
 
@@ -79,7 +79,7 @@ export class FeedbackService {
 
   async startFeedback(userId: string): Promise<FeedbackStateResponse> {
     const pendingReceipt = await this.receiptService.getFirst({
-      user_id: userId,
+      userId: userId,
       status: ReceiptStatus.pending,
     });
 
@@ -89,9 +89,9 @@ export class FeedbackService {
 
     const feedback = await this.prisma.feedbackResult.findUnique({
       where: {
-        user_id_receipt_id: {
-          user_id: userId,
-          receipt_id: pendingReceipt.id,
+        userId_receiptId: {
+          userId: userId,
+          receiptId: pendingReceipt.id,
         },
       },
     });
@@ -114,31 +114,31 @@ export class FeedbackService {
 
   async getState(userId: string): Promise<FeedbackStateResponse> {
     const pendingReceipt = await this.receiptService.getFirst({
-      user_id: userId,
+      userId: userId,
       status: ReceiptStatus.pending,
     });
 
     if (!pendingReceipt) {
       return {
         status: 'unavailable',
-        reason: 'no_pending_receipt',
+        reason: 'noPendingReceipt',
       };
     }
 
     const feedback = await this.prisma.feedbackResult.findUnique({
       where: {
-        user_id_receipt_id: {
-          user_id: userId,
-          receipt_id: pendingReceipt.id,
+        userId_receiptId: {
+          userId: userId,
+          receiptId: pendingReceipt.id,
         },
       },
       include: {
-        current_question: true,
+        currentQuestion: true,
       },
     });
 
     if (!feedback) {
-      return { status: 'not_started' };
+      return { status: 'notStarted' };
     }
 
     if (feedback.status === PrismaFeedbackStatus.completed) {
@@ -153,13 +153,13 @@ export class FeedbackService {
   ): FeedbackStateResponse {
     const response: FeedbackStateResponse = {
       status: feedback.status,
-      total_questions: feedback.total_questions,
-      earned_cents: feedback.earned_cents,
-      answered_questions: feedback.answered_questions,
+      totalQuestions: feedback.totalQuestions,
+      earnedCents: feedback.earnedCents,
+      answeredQuestions: feedback.answeredQuestions,
     };
 
     if (feedback.status !== PrismaFeedbackStatus.completed) {
-      response.current_question = feedback.current_question!;
+      response.currentQuestion = feedback.currentQuestion;
     }
 
     return response;

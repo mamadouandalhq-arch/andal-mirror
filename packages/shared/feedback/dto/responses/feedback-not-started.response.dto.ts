@@ -1,3 +1,3 @@
 export class FeedbackNotStartedResponse {
-  status!: 'not_started';
+  status!: 'notStarted';
 }

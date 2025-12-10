@@ -1,5 +1,5 @@
 export type FeedbackStatus =
   | 'unavailable'
-  | 'not_started'
-  | 'in_progress'
+  | 'notStarted'
+  | 'inProgress'
   | 'completed';

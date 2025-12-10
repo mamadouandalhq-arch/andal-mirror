@@ -7,13 +7,13 @@ export class RegisterDto {
   @IsString()
   email: string;
 
-  @ApiProperty({ description: 'first_name', example: 'John' })
+  @ApiProperty({ description: 'firstName', example: 'John' })
   @IsString()
-  first_name: string;
+  firstName: string;
 
-  @ApiProperty({ description: 'last_name', example: 'Smith' })
+  @ApiProperty({ description: 'lastName', example: 'Smith' })
   @IsString()
-  last_name: string;
+  lastName: string;
 
   @ApiProperty({
     description: 'password',

@@ -70,7 +70,7 @@ export class UserService {
           email: user.email,
         },
         data: {
-          google_id: dto.googleId,
+          googleId: dto.googleId,
         },
       });
 
@@ -94,21 +94,9 @@ export class UserService {
     });
   }
 
-  private async createGoogleUser({
-    email,
-    firstName,
-    lastName,
-    googleId,
-    avatar_url,
-  }: GoogleProfileDto) {
+  private async createGoogleUser(dto: GoogleProfileDto) {
     return await this.prisma.user.create({
-      data: {
-        email,
-        avatar_url,
-        first_name: firstName,
-        last_name: lastName,
-        google_id: googleId,
-      },
+      data: dto,
     });
   }
 }

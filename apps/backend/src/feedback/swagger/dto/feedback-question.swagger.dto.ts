@@ -9,7 +9,7 @@ export class FeedbackQuestionSwaggerDto extends FeedbackQuestionDto {
   declare id: string;
 
   @ApiProperty({ example: 1 })
-  declare serial_number: number;
+  declare serialNumber: number;
 
   @ApiProperty({ example: '...' })
   declare text: string;

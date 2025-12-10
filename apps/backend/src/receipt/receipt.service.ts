@@ -44,7 +44,7 @@ export class ReceiptService {
     }
 
     const currentPendingReceipts = await this.getMany({
-      user_id: userId,
+      userId: userId,
       status: ReceiptStatus.pending,
     });
 
@@ -58,8 +58,8 @@ export class ReceiptService {
 
     await this.prismaService.receipt.create({
       data: {
-        receipt_url: url,
-        user_id: userId,
+        receiptUrl: url,
+        userId: userId,
       },
     });
 

@@ -1,6 +1,6 @@
 export class FeedbackQuestionDto {
   id!: string;
-  serial_number!: number;
+  serialNumber!: number;
   text!: string;
   type!: 'single' | 'multiple';
   options!: string[];

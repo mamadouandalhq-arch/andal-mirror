@@ -26,111 +26,111 @@ enum FeedbackType {
 }
 
 enum FeedbackStatus {
-  in_progress
+  inProgress
   completed
 }
 
 model User {
-  id         String @id @default(uuid())
-  first_name String
-  last_name  String
+  id        String @id @default(uuid())
+  firstName String
+  lastName  String
 
-  email      String  @unique
-  password   String?
-  address    String?
-  avatar_url String?
+  email     String  @unique
+  password  String?
+  address   String?
+  avatarUrl String?
 
-  role           UserRole @default(user)
-  points_balance Int      @default(0)
-  created_at     DateTime @default(now())
+  role          UserRole @default(user)
+  pointsBalance Int      @default(0)
+  createdAt     DateTime @default(now())
 
-  google_id String? @unique
+  googleId String? @unique
 
-  receipts         Receipt[]
-  feedback_results FeedbackResult[]
+  receipts        Receipt[]
+  feedbackResults FeedbackResult[]
 }
 
 model Receipt {
-  id           String        @id @default(uuid())
-  receipt_url  String
-  status       ReceiptStatus @default(pending)
-  points_value Int?
+  id          String        @id @default(uuid())
+  receiptUrl  String
+  status      ReceiptStatus @default(pending)
+  pointsValue Int?
 
-  created_at  DateTime  @default(now())
-  approved_at DateTime?
+  createdAt  DateTime  @default(now())
+  approvedAt DateTime?
 
-  user_id String
-  user    User   @relation(fields: [user_id], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-  feedback_results FeedbackResult[]
+  feedbackResults FeedbackResult[]
 }
 
 model Category {
   id          String  @id @default(uuid())
   name        String
-  image_url   String
+  imageUrl    String
   description String?
 
-  gift_cards GiftCard[]
+  giftCards GiftCard[]
 }
 
 model GiftCard {
-  id         String   @id @default(uuid())
-  name       String
-  type       String?
-  amount     Int
-  gift_code  String?
-  pdf_url    String?
-  created_at DateTime @default(now())
+  id        String   @id @default(uuid())
+  name      String
+  type      String?
+  amount    Int
+  giftCode  String?
+  pdfUrl    String?
+  createdAt DateTime @default(now())
 
-  category_id String
-  category    Category @relation(fields: [category_id], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model FeedbackQuestion {
-  id            String       @id @default(uuid())
-  serial_number Int
-  text          String
-  type          FeedbackType
-  options       String[]
-  created_at    DateTime     @default(now())
+  id           String       @id @default(uuid())
+  serialNumber Int
+  text         String
+  type         FeedbackType
+  options      String[]
+  createdAt    DateTime     @default(now())
 
-  feedback_answers FeedbackAnswer[]
-  feedback_result  FeedbackResult[]
+  feedbackAnswers FeedbackAnswer[]
+  feedbackResults FeedbackResult[]
 }
 
 model FeedbackResult {
-  id                 String         @id @default(uuid())
-  receipt_id         String         @unique()
-  user_id            String
-  status             FeedbackStatus @default(in_progress)
-  total_questions    Int
-  answered_questions Int            @default(0)
-  earned_cents       Int            @default(0)
+  id                String         @id @default(uuid())
+  receiptId         String
+  userId            String
+  status            FeedbackStatus @default(inProgress)
+  totalQuestions    Int
+  answeredQuestions Int            @default(0)
+  earnedCents       Int            @default(0)
 
-  current_question_id String?
-  current_question    FeedbackQuestion? @relation(fields: [current_question_id], references: [id])
+  currentQuestionId String?
+  currentQuestion   FeedbackQuestion? @relation(fields: [currentQuestionId], references: [id])
 
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  completed_at DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
 
-  user    User             @relation(fields: [user_id], references: [id])
-  receipt Receipt          @relation(fields: [receipt_id], references: [id])
+  user    User             @relation(fields: [userId], references: [id])
+  receipt Receipt          @relation(fields: [receiptId], references: [id])
   answers FeedbackAnswer[]
 
-  @@unique([user_id, receipt_id])
+  @@unique([userId, receiptId])
 }
 
 model FeedbackAnswer {
-  id                 String   @id @default(uuid())
-  feedback_result_id String
-  question_id        String
-  answer             String[]
-  created_at         DateTime @default(now())
+  id               String   @id @default(uuid())
+  feedbackResultId String
+  questionId       String
+  answer           String[]
+  createdAt        DateTime @default(now())
 
-  feedback_result FeedbackResult   @relation(fields: [feedback_result_id], references: [id])
-  question        FeedbackQuestion @relation(fields: [question_id], references: [id])
+  feedbackResult FeedbackResult   @relation(fields: [feedbackResultId], references: [id])
+  question       FeedbackQuestion @relation(fields: [questionId], references: [id])
 
-  @@unique([feedback_result_id, question_id])
+  @@unique([feedbackResultId, questionId])
 }

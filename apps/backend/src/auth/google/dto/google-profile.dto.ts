@@ -3,5 +3,5 @@ export class GoogleProfileDto {
   email: string;
   firstName: string;
   lastName: string;
-  avatar_url: string;
+  avatarUrl: string;
 }
