@@ -36,16 +36,14 @@ export function ForgotPasswordForm() {
     setSuccess(false);
     try {
       await forgotPassword.mutateAsync(data);
+      // Always show success message to prevent user enumeration
+      // Backend always returns success regardless of whether user exists
       setSuccess(true);
     } catch (err) {
+      // Only show error for actual network/server errors, not for user not found
       const errorMessage =
         err instanceof Error ? err.message : 'An error occurred';
-      // Check if error is "User not found" from backend
-      if (errorMessage.toLowerCase().includes('user not found')) {
-        setError(t('userNotFound'));
-      } else {
-        setError(errorMessage);
-      }
+      setError(errorMessage);
     }
   };
 
