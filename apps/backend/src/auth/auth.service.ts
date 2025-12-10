@@ -5,15 +5,11 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { TokenService } from './token/token.service';
-import {
-  ChangePasswordDto,
-  LoginDto,
-  RegisterDto,
-  VerifyForgotPasswordTokenDto,
-} from './dto';
+import { ChangePasswordDto, LoginDto, RegisterDto } from './dto';
 import argon from 'argon2';
 import { ForgotPasswordService } from './forgot-password/forgot-password.service';
 import omit from 'lodash/omit';
+import { VerifyForgotPasswordTokenDto } from './forgot-password/dto';
 
 @Injectable()
 export class AuthService {

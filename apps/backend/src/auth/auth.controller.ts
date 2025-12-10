@@ -4,7 +4,13 @@ import { ChangePasswordDto, LoginDto, RegisterDto } from './dto';
 import { Response } from 'express';
 import { RequestWithCookies } from './types';
 import { TokenService } from './token/token.service';
-import { LoginDocs, LogoutDocs, RefreshDocs, RegisterDocs } from './docs';
+import {
+  ChangePasswordDocs,
+  LoginDocs,
+  LogoutDocs,
+  RefreshDocs,
+  RegisterDocs,
+} from './docs';
 
 @Controller('auth')
 export class AuthController {
@@ -13,6 +19,7 @@ export class AuthController {
     private readonly tokenService: TokenService,
   ) {}
 
+  @ChangePasswordDocs()
   @Post('change-password')
   async changePassword(@Body() dto: ChangePasswordDto) {
     const result = await this.authService.changePassword(dto);
