@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import crypto from 'crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserService } from '../../user/user.service';
@@ -17,14 +21,18 @@ export class ForgotPasswordService {
     const tokenInDb = await this.findTokenById(tokenId);
 
     if (!tokenInDb) {
-      return false;
+      throw new BadRequestException('Invalid or expired token');
     }
 
     const isValidToken = await argon.verify(tokenInDb.token, token);
 
     const isExpired = tokenInDb.expiresAt < new Date();
 
-    return !(isExpired || !isValidToken);
+    if (!isValidToken || isExpired) {
+      throw new BadRequestException('Invalid or expired token');
+    }
+
+    return true;
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
