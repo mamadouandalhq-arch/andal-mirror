@@ -22,4 +22,6 @@ export const validationSchema = Joi.object({
   FRONTEND_FORGOT_PASSWORD_PATH: Joi.string().required(),
 
   RESEND_API_KEY: Joi.string().required(),
+
+  CORS_ORIGIN: Joi.string().required(), // one or multiple urls separated by a comma
 });

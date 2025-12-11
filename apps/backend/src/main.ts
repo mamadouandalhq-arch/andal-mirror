@@ -7,9 +7,12 @@ import session from 'express-session';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
+  const corsOriginsRaw = process.env.CORS_ORIGIN!;
+  const corsOrigins = corsOriginsRaw.split(',');
+
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: process.env.FRONTEND_URL,
+      origin: corsOrigins,
       credentials: true,
     },
   });
