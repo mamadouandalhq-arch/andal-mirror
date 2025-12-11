@@ -1,8 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
@@ -16,7 +18,12 @@ import { FeedbackResultSwaggerDto } from '../dto/feedback-result.swagger.dto';
 
 export function GetStateDocs() {
   return applyDecorators(
-    ApiExtraModels(),
+    ApiQuery({
+      name: 'language',
+      required: true,
+      description: 'Language code as string',
+      example: 'en',
+    }),
     ApiOperation({
       summary: 'Get feedback session state',
       description:
@@ -54,6 +61,17 @@ export function GetStateDocs() {
               summary: 'Feedback session was already completed',
               value: feedBackCompletedExample,
             },
+          },
+        },
+      },
+    }),
+    ApiNotFoundResponse({
+      description: 'Invalid current question or translation',
+      content: {
+        'application/json': {
+          example: {
+            statusCode: 404,
+            message: 'Invalid current question or translation',
           },
         },
       },

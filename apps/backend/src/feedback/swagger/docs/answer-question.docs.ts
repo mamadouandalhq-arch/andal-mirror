@@ -3,6 +3,7 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiExtraModels,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   getSchemaPath,
@@ -75,6 +76,18 @@ export function AnswerQuestionDocs() {
                 'Duplicate answers are not allowed',
               ),
             },
+          },
+        },
+      },
+    }),
+    ApiNotFoundResponse({
+      description: 'No translation was found for this question',
+      content: {
+        'application/json': {
+          example: {
+            statusCode: 404,
+            message:
+              'Unable to answer question. No translation was found for selected language.',
           },
         },
       },

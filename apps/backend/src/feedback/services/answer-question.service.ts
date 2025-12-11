@@ -90,7 +90,17 @@ export class AnswerQuestionService {
       );
     }
     const currentQuestion = feedback.currentQuestion;
-    const { options, type } = currentQuestion;
+    const { type } = currentQuestion;
+
+    const translation = currentQuestion.translations[0];
+
+    if (!translation) {
+      throw new NotFoundException(
+        'Unable to answer question. No translation was found for selected language.',
+      );
+    }
+
+    const options = translation.options;
 
     if (answers.some((answer) => !options.includes(answer))) {
       throw new BadRequestException('You provided invalid answer option.');

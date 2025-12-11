@@ -2,13 +2,14 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   FeedbackStatus as PrismaFeedbackStatus,
   ReceiptStatus,
 } from '@prisma/client';
-import { AnswerQuestionDto } from './dto';
+import { AnswerQuestionDto, StartFeedbackDto } from './dto';
 import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
 import { AnswerQuestionService, StartFeedbackService } from './services';
@@ -25,14 +26,23 @@ export class FeedbackService {
 
   async answerQuestion(
     userId: string,
-    { answers }: AnswerQuestionDto,
+    { answers, language }: AnswerQuestionDto,
   ): Promise<FeedbackStateResponse> {
     const currentFeedback = await this.prisma.feedbackResult.findFirst({
       where: {
         userId: userId,
         status: PrismaFeedbackStatus.inProgress,
       },
-      include: { currentQuestion: true },
+      include: {
+        currentQuestion: {
+          include: {
+            translations: {
+              where: { lang: language },
+              take: 1,
+            },
+          },
+        },
+      },
     });
 
     const { feedback: validatedFeedback, currentQuestion } =
@@ -65,7 +75,14 @@ export class FeedbackService {
       },
       data: dataToChange,
       include: {
-        currentQuestion: true,
+        currentQuestion: {
+          include: {
+            translations: {
+              where: { lang: language },
+              take: 1,
+            },
+          },
+        },
       },
     });
 
@@ -77,7 +94,10 @@ export class FeedbackService {
     return this.convertFeedbackToResponse(updatedFeedback);
   }
 
-  async startFeedback(userId: string): Promise<FeedbackStateResponse> {
+  async startFeedback(
+    userId: string,
+    dto: StartFeedbackDto,
+  ): Promise<FeedbackStateResponse> {
     const pendingReceipt = await this.receiptService.getFirst({
       userId: userId,
       status: ReceiptStatus.pending,
@@ -94,6 +114,16 @@ export class FeedbackService {
           receiptId: pendingReceipt.id,
         },
       },
+      include: {
+        currentQuestion: {
+          include: {
+            translations: {
+              where: { lang: dto.language },
+              take: 1,
+            },
+          },
+        },
+      },
     });
 
     if (feedback) {
@@ -106,13 +136,17 @@ export class FeedbackService {
 
     const newFeedback = await this.startFeedbackService.createFeedback(
       userId,
+      dto.language,
       pendingReceipt,
     );
 
     return this.convertFeedbackToResponse(newFeedback);
   }
 
-  async getState(userId: string): Promise<FeedbackStateResponse> {
+  async getState(
+    userId: string,
+    language: string,
+  ): Promise<FeedbackStateResponse> {
     const pendingReceipt = await this.receiptService.getFirst({
       userId: userId,
       status: ReceiptStatus.pending,
@@ -128,12 +162,19 @@ export class FeedbackService {
     const feedback = await this.prisma.feedbackResult.findUnique({
       where: {
         userId_receiptId: {
-          userId: userId,
+          userId,
           receiptId: pendingReceipt.id,
         },
       },
       include: {
-        currentQuestion: true,
+        currentQuestion: {
+          include: {
+            translations: {
+              where: { lang: language },
+              take: 1,
+            },
+          },
+        },
       },
     });
 
@@ -159,7 +200,19 @@ export class FeedbackService {
     };
 
     if (feedback.status !== PrismaFeedbackStatus.completed) {
-      response.currentQuestion = feedback.currentQuestion;
+      const currentQuestion = feedback.currentQuestion;
+
+      if (!currentQuestion || currentQuestion.translations.length < 1) {
+        throw new NotFoundException('Invalid current question or translation');
+      }
+
+      response.currentQuestion = {
+        id: currentQuestion.id,
+        serialNumber: currentQuestion.serialNumber,
+        type: currentQuestion.type,
+        text: currentQuestion.translations[0].text,
+        options: currentQuestion.translations[0].options,
+      };
     }
 
     return response;

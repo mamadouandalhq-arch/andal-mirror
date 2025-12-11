@@ -6,11 +6,25 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class StartFeedbackService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createFeedback(userId: string, receipt: Receipt) {
+  async createFeedback(userId: string, language: string, receipt: Receipt) {
     const questions = await this.prisma.feedbackQuestion.findMany();
 
     if (!questions || questions.length < 1) {
       throw new NotFoundException('No questions were found');
+    }
+
+    const translation = await this.prisma.feedbackQuestionTranslation.findFirst(
+      {
+        where: {
+          lang: language,
+        },
+      },
+    );
+
+    if (!translation) {
+      throw new NotFoundException(
+        `Unable to create question. No translations were found for '${language}'`,
+      );
     }
 
     return await this.prisma.feedbackResult.create({
@@ -21,7 +35,14 @@ export class StartFeedbackService {
         currentQuestionId: questions[0].id,
       },
       include: {
-        currentQuestion: true,
+        currentQuestion: {
+          include: {
+            translations: {
+              where: { lang: language },
+              take: 1,
+            },
+          },
+        },
       },
     });
   }

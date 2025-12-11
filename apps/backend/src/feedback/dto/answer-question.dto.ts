@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AnswerQuestionDto {
@@ -10,4 +10,9 @@ export class AnswerQuestionDto {
   @ArrayNotEmpty()
   @IsString({ each: true })
   answers: string[];
+
+  @ApiProperty({ description: 'Language code', example: 'fr' })
+  @IsString()
+  @IsNotEmpty()
+  language: string;
 }

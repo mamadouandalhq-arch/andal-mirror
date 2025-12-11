@@ -101,14 +101,26 @@ model GiftCard {
 
 model FeedbackQuestion {
   id           String       @id @default(uuid())
-  serialNumber Int
-  text         String
+  serialNumber Int          @unique()
   type         FeedbackType
-  options      String[]
   createdAt    DateTime     @default(now())
 
+  translations    FeedbackQuestionTranslation[]
   feedbackAnswers FeedbackAnswer[]
   feedbackResults FeedbackResult[]
+}
+
+model FeedbackQuestionTranslation {
+  id        String   @id @default(uuid())
+  lang      String
+  text      String
+  options   String[]
+  createdAt DateTime @default(now())
+
+  questionId String
+  question   FeedbackQuestion @relation(fields: [questionId], references: [id])
+
+  @@unique([questionId, lang])
 }
 
 model FeedbackResult {

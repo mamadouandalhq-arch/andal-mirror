@@ -3,6 +3,7 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiExtraModels,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   getSchemaPath,
@@ -46,6 +47,18 @@ export function StartFeedbackDocs() {
               summary: 'No pending receipt',
               value: getBadRequestDocExample('No pending receipt!'),
             },
+          },
+        },
+      },
+    }),
+    ApiNotFoundResponse({
+      description: 'Translation not found for the provided language',
+      content: {
+        'application/json': {
+          example: {
+            statusCode: 404,
+            message:
+              "Unable to create question. No translations were found for 'en'",
           },
         },
       },
