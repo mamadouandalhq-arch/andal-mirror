@@ -9,6 +9,7 @@ import { GoogleModule } from './auth/google/google.module';
 import { validationSchema } from './common';
 import { ReceiptModule } from './receipt/receipt.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FeedbackModule } from './feedback/feedback.module';
     GoogleModule,
     ReceiptModule,
     FeedbackModule,
+    EmailModule,
   ],
   controllers: [],
   providers: [],

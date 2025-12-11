@@ -9,12 +9,14 @@ import { UserService } from '../../user/user.service';
 import argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ForgotPasswordDto, VerifyForgotPasswordTokenDto } from './dto';
+import { EmailService } from '../../email/email.service';
 
 @Injectable()
 export class ForgotPasswordService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
+    private readonly emailService: EmailService,
   ) {}
 
   async verifyToken({ token, tokenId }: VerifyForgotPasswordTokenDto) {
@@ -56,7 +58,7 @@ export class ForgotPasswordService {
       },
     });
 
-    await this.prisma.forgotPasswordToken.create({
+    const createdToken = await this.prisma.forgotPasswordToken.create({
       data: {
         token: hashedToken,
         userId: user.id,
@@ -64,10 +66,11 @@ export class ForgotPasswordService {
       },
     });
 
-    console.log({ token });
-
-    //   TODO: SEND email to dto.email
-    // example: https://localhost:3001/forgot-password?token=long-string&tokenId=ch72gsb320000udocl363eofy
+    await this.emailService.sendForgotPassword({
+      email: dto.email,
+      token: token,
+      tokenId: createdToken.id,
+    });
 
     return true;
   }
