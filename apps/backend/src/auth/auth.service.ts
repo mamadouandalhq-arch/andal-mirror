@@ -57,12 +57,8 @@ export class AuthService {
       loginDto.email,
     );
 
-    if (!existingUser) {
+    if (!existingUser || !existingUser.password) {
       throw new BadRequestException('Invalid credentials');
-    }
-
-    if (!existingUser.password || existingUser.googleId) {
-      throw new BadRequestException('User was created using Google!');
     }
 
     const isValidPassword = await argon.verify(
