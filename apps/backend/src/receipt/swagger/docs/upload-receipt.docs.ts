@@ -7,7 +7,7 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { getBadRequestDocExample } from '../../common';
+import { getBadRequestDocExample } from '../../../common';
 
 export function UploadReceiptDocs() {
   return applyDecorators(
