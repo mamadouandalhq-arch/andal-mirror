@@ -154,7 +154,7 @@ export class FeedbackService {
     const response: FeedbackStateResponse = {
       status: feedback.status,
       totalQuestions: feedback.totalQuestions,
-      earnedCents: feedback.earnedCents,
+      pointsValue: feedback.pointsValue,
       answeredQuestions: feedback.answeredQuestions,
     };
 

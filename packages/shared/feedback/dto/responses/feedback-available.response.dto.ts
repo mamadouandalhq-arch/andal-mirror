@@ -4,6 +4,6 @@ export class FeedbackAvailableResponse {
   status!: FeedbackStatus;
   totalQuestions!: number;
   answeredQuestions!: number;
-  earnedCents!: number;
+  pointsValue!: number;
   currentQuestion?: FeedbackQuestionDto | null;
 }

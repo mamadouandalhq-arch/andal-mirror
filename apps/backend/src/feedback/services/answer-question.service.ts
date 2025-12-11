@@ -38,7 +38,7 @@ export class AnswerQuestionService {
       currentQuestion.serialNumber === validatedFeedback.totalQuestions;
 
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
-      earnedCents: validatedFeedback.earnedCents + 100,
+      pointsValue: validatedFeedback.pointsValue + 10,
     };
 
     if (!isLastAnswer) {

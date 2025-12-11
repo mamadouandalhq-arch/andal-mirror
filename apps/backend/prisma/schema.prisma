@@ -64,10 +64,9 @@ model ForgotPasswordToken {
 }
 
 model Receipt {
-  id          String        @id @default(uuid())
-  receiptUrl  String
-  status      ReceiptStatus @default(pending)
-  pointsValue Int?
+  id         String        @id @default(uuid())
+  receiptUrl String
+  status     ReceiptStatus @default(pending)
 
   createdAt  DateTime  @default(now())
   approvedAt DateTime?
@@ -119,7 +118,7 @@ model FeedbackResult {
   status            FeedbackStatus @default(inProgress)
   totalQuestions    Int
   answeredQuestions Int            @default(0)
-  earnedCents       Int            @default(0)
+  pointsValue       Int            @default(0)
 
   currentQuestionId String?
   currentQuestion   FeedbackQuestion? @relation(fields: [currentQuestionId], references: [id])
