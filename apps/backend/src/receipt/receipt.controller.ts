@@ -1,5 +1,7 @@
 import {
   Controller,
+  Get,
+  Param,
   Post,
   UploadedFile,
   UseGuards,
@@ -16,6 +18,16 @@ import { UploadReceiptDocs } from './docs';
 @Controller('receipt')
 export class ReceiptController {
   constructor(private readonly receiptService: ReceiptService) {}
+
+  @Get('/list')
+  getAll(@User() user: UserDto) {
+    return this.receiptService.getAll(user.sub);
+  }
+
+  @Get('/:id')
+  getOne(@Param('id') receiptId: string, @User() user: UserDto) {
+    return this.receiptService.getOneOrThrow(receiptId, user.sub);
+  }
 
   @UploadReceiptDocs()
   @Post('upload')

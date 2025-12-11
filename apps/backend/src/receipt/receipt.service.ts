@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -23,7 +24,7 @@ export class ReceiptService {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly prismaService: PrismaService,
+    private readonly prisma: PrismaService,
   ) {
     this.bucketRegion = configService.get<string>('AWS_REGION')!;
 
@@ -36,6 +37,29 @@ export class ReceiptService {
     });
 
     this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME')!;
+  }
+
+  async getOneOrThrow(receiptId: string, userId: string) {
+    const receipt = await this.prisma.receipt.findUnique({
+      where: {
+        id: receiptId,
+        userId: userId,
+      },
+    });
+
+    if (!receipt) {
+      throw new NotFoundException('Receipt could not be found');
+    }
+
+    return receipt;
+  }
+
+  async getAll(userId: string) {
+    return this.prisma.receipt.findMany({
+      where: {
+        userId,
+      },
+    });
   }
 
   async saveAndUpload(userId: string, file?: Express.Multer.File) {
@@ -56,7 +80,7 @@ export class ReceiptService {
 
     const url = await this.upload(userId, file);
 
-    await this.prismaService.receipt.create({
+    await this.prisma.receipt.create({
       data: {
         receiptUrl: url,
         userId: userId,
@@ -67,11 +91,11 @@ export class ReceiptService {
   }
 
   async getFirst(where: Prisma.ReceiptWhereInput) {
-    return this.prismaService.receipt.findFirst({ where });
+    return this.prisma.receipt.findFirst({ where });
   }
 
   async getMany(where: Prisma.ReceiptWhereInput) {
-    return this.prismaService.receipt.findMany({ where });
+    return this.prisma.receipt.findMany({ where });
   }
 
   private async upload(userId: string, file: Express.Multer.File) {
