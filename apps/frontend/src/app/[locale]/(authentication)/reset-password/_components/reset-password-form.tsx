@@ -71,10 +71,8 @@ export function ResetPasswordForm({ token, tokenId }: ResetPasswordFormProps) {
         err instanceof Error ? err.message : 'An error occurred';
       // Map backend error messages to localized translations
       if (
-        errorMessage.toLowerCase().includes('invalid token') ||
-        errorMessage.toLowerCase().includes('invalid or expired') ||
-        errorMessage.toLowerCase().includes('token not found') ||
-        errorMessage.toLowerCase().includes('forgot password token not found')
+        errorMessage.toLowerCase().includes('invalid or expired token') ||
+        errorMessage.toLowerCase().includes('invalid or expired')
       ) {
         setError(t('invalidOrExpiredToken'));
       } else {

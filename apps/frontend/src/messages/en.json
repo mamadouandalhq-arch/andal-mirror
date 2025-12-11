@@ -200,10 +200,114 @@
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome to the dashboard",
+    "welcomeMessage": "Welcome back, {name}!",
+    "subtitle": "Manage your receipts and track your rewards",
+    "recentReceipts": "Recent Receipts",
     "logout": "Logout",
     "loading": "Loading...",
     "userInfo": "User Information",
     "email": "Email",
-    "role": "Role"
+    "role": "Role",
+    "stats": {
+      "pointsBalance": "Points Balance",
+      "pointsBalanceDesc": "Total available points",
+      "pending": "Pending",
+      "pendingDesc": "Awaiting review",
+      "approved": "Approved",
+      "approvedDesc": "Successfully processed",
+      "rejected": "Rejected",
+      "rejectedDesc": "Not approved",
+      "error": "Failed to load statistics"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "uploadReceipt": "Upload Receipt",
+      "uploading": "Uploading...",
+      "pendingReceiptWarning": "You already have a pending receipt. Please wait for it to be processed before uploading another.",
+      "uploadError": "Failed to upload receipt. Please try again."
+    },
+    "receipts": {
+      "receipt": "Receipt",
+      "empty": "No receipts yet. Upload your first receipt to get started!",
+      "uploadFirst": "Upload Receipt",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "pointsEarned": "Points Earned",
+      "points": "points",
+      "feedbackStatus": "Feedback Status",
+      "feedbackCompleted": "Completed",
+      "feedbackInProgress": "In Progress",
+      "feedbackNotStarted": "Not Started",
+      "questionsAnswered": "questions answered",
+      "viewDetails": "View Details",
+      "continueFeedback": "Continue Feedback",
+      "startFeedback": "Start Feedback",
+      "viewFeedback": "View Feedback",
+      "details": {
+        "loading": "Loading receipt...",
+        "error": "Failed to load receipt details.",
+        "backToDashboard": "Back to Dashboard",
+        "receipt": "Receipt",
+        "uploadedOn": "Uploaded on",
+        "approvedOn": "Approved on",
+        "receiptId": "Receipt ID",
+        "statusLabel": "Status",
+        "pointsEarned": "Points Earned",
+        "points": "points",
+        "openInNewTab": "Open in New Tab",
+        "status": {
+          "pending": "Pending",
+          "approved": "Approved",
+          "rejected": "Rejected"
+        }
+      }
+    },
+    "feedback": {
+      "title": "Feedback Session",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "completedDescription": "You've completed the feedback session for this receipt.",
+      "inProgressDescription": "Continue providing feedback to earn rewards.",
+      "progress": "Progress",
+      "earned": "Earned",
+      "points": "points",
+      "currentQuestion": "Current Question",
+      "continue": "Continue",
+      "start": "Start Feedback"
+    }
+  },
+  "feedback": {
+    "title": "Feedback Session",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "completedDescription": "You've completed the feedback session for this receipt.",
+    "inProgressDescription": "Continue providing feedback to earn rewards.",
+    "progress": "Progress",
+    "earned": "Earned",
+    "currentQuestion": "Current Question",
+    "continue": "Continue",
+    "start": "Start Feedback",
+    "loading": "Loading feedback...",
+    "question": "Question",
+    "submitAnswer": "Submit Answer",
+    "submitting": "Submitting...",
+    "backToDashboard": "Back to Dashboard",
+    "points": "points",
+    "completedState": {
+      "title": "Feedback Completed!",
+      "description": "Thank you for providing your feedback.",
+      "earned": "You've earned",
+      "message": "Your feedback has been submitted successfully.",
+      "backToDashboard": "Back to Dashboard"
+    },
+    "unavailable": {
+      "title": "Feedback Unavailable",
+      "message": "Feedback is not available at this time.",
+      "noPendingReceipt": "You need to have a pending receipt to provide feedback.",
+      "backToDashboard": "Back to Dashboard"
+    }
   }
 }

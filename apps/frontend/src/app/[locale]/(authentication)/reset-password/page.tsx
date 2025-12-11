@@ -46,11 +46,7 @@ export default function ResetPasswordPage() {
         const errorMessage =
           err instanceof Error ? err.message : 'An error occurred';
         // Map backend error messages to localized translations
-        if (
-          errorMessage.toLowerCase().includes('invalid token') ||
-          errorMessage.toLowerCase().includes('invalid or expired') ||
-          errorMessage.toLowerCase().includes('token not found')
-        ) {
+        if (errorMessage.toLowerCase().includes('invalid or expired')) {
           setError(t('invalidOrExpiredToken'));
         } else {
           // For other errors, use the translation key or fallback

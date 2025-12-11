@@ -47,9 +47,14 @@ export async function apiRequest<T>(
 
   // Add Authorization header if token exists
   const headers: HeadersInit = {
-    'Content-Type': 'application/json',
     ...options.headers,
   };
+
+  // Don't set Content-Type for FormData - browser will set it with boundary
+  // Only set Content-Type for non-FormData requests
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   if (accessToken) {
     (headers as Record<string, string>)[
@@ -129,13 +134,13 @@ export const apiClient = {
   post: <T>(endpoint: string, data: unknown) =>
     apiRequest<T>(endpoint, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: data instanceof FormData ? data : JSON.stringify(data),
     }),
   get: <T>(endpoint: string) => apiRequest<T>(endpoint, { method: 'GET' }),
   put: <T>(endpoint: string, data: unknown) =>
     apiRequest<T>(endpoint, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: data instanceof FormData ? data : JSON.stringify(data),
     }),
   delete: <T>(endpoint: string) =>
     apiRequest<T>(endpoint, { method: 'DELETE' }),

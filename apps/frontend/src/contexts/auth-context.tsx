@@ -143,9 +143,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setHasCheckedToken(true);
     });
 
-    // Only attempt refresh if we have a token (even if expired)
-    // This prevents unnecessary refresh attempts on login/register pages
-    if (!token || !expired) return;
+    // Attempt refresh if:
+    // 1. We have no token but might have a refresh token cookie (new tab scenario)
+    // 2. We have a token but it's expired
+    // This allows refreshing in new tabs even when accessToken isn't in localStorage yet
+    const shouldRefresh = !token || expired;
+
+    if (!shouldRefresh) return;
 
     startTransition(() => {
       setIsRefreshing(true);

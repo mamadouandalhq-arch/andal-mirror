@@ -1,4 +1,4 @@
-// Store accessToken in memory and sessionStorage
+// Store accessToken in memory and localStorage
 // RefreshToken is stored in httpOnly cookies by backend
 
 class AuthStorage {
@@ -13,25 +13,25 @@ class AuthStorage {
 
   setAccessToken(token: string) {
     this.accessToken = token;
-    // Store in sessionStorage for persistence during session (cleared on tab close)
+    // Store in localStorage for persistence across tabs and sessions
     if (typeof window !== 'undefined') {
-      sessionStorage.setItem('accessToken', token);
+      localStorage.setItem('accessToken', token);
       this.notifyListeners();
     }
   }
 
   getAccessToken(): string | null {
-    // Check sessionStorage first to ensure we have the latest value
+    // Check localStorage first to ensure we have the latest value
     // This is important for useSyncExternalStore to work correctly
     if (typeof window !== 'undefined') {
-      const token = sessionStorage.getItem('accessToken');
+      const token = localStorage.getItem('accessToken');
       if (token) {
-        // Sync memory with sessionStorage
+        // Sync memory with localStorage
         this.accessToken = token;
         return token;
       }
     }
-    // Clear memory if no token in sessionStorage
+    // Clear memory if no token in localStorage
     this.accessToken = null;
     return null;
   }
@@ -39,7 +39,7 @@ class AuthStorage {
   clearAccessToken() {
     this.accessToken = null;
     if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('accessToken');
+      localStorage.removeItem('accessToken');
       this.notifyListeners();
     }
   }

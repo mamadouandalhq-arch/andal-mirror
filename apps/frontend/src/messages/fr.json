@@ -200,10 +200,114 @@
   "dashboard": {
     "title": "Tableau de bord",
     "welcome": "Bienvenue sur votre tableau de bord",
+    "welcomeMessage": "Bon retour, {name} !",
+    "subtitle": "Gérez vos reçus et suivez vos récompenses",
+    "recentReceipts": "Reçus récents",
     "logout": "Déconnexion",
     "loading": "Chargement...",
     "userInfo": "Informations utilisateur",
     "email": "E-mail",
-    "role": "Rôle"
+    "role": "Rôle",
+    "stats": {
+      "pointsBalance": "Solde de points",
+      "pointsBalanceDesc": "Total des points disponibles",
+      "pending": "En attente",
+      "pendingDesc": "En attente d'examen",
+      "approved": "Approuvé",
+      "approvedDesc": "Traité avec succès",
+      "rejected": "Rejeté",
+      "rejectedDesc": "Non approuvé",
+      "error": "Échec du chargement des statistiques"
+    },
+    "quickActions": {
+      "title": "Actions rapides",
+      "uploadReceipt": "Télécharger un reçu",
+      "uploading": "Téléchargement...",
+      "pendingReceiptWarning": "Vous avez déjà un reçu en attente. Veuillez attendre qu'il soit traité avant d'en télécharger un autre.",
+      "uploadError": "Échec du téléchargement du reçu. Veuillez réessayer."
+    },
+    "receipts": {
+      "receipt": "Reçu",
+      "empty": "Aucun reçu pour le moment. Téléchargez votre premier reçu pour commencer !",
+      "uploadFirst": "Télécharger un reçu",
+      "status": {
+        "pending": "En attente",
+        "approved": "Approuvé",
+        "rejected": "Rejeté"
+      },
+      "pointsEarned": "Points gagnés",
+      "points": "points",
+      "feedbackStatus": "Statut du retour",
+      "feedbackCompleted": "Terminé",
+      "feedbackInProgress": "En cours",
+      "feedbackNotStarted": "Non commencé",
+      "questionsAnswered": "questions répondues",
+      "viewDetails": "Voir les détails",
+      "continueFeedback": "Continuer le retour",
+      "startFeedback": "Commencer le retour",
+      "viewFeedback": "Voir le retour",
+      "details": {
+        "loading": "Chargement du reçu...",
+        "error": "Échec du chargement des détails du reçu.",
+        "backToDashboard": "Retour au tableau de bord",
+        "receipt": "Reçu",
+        "uploadedOn": "Téléchargé le",
+        "approvedOn": "Approuvé le",
+        "receiptId": "ID du reçu",
+        "statusLabel": "Statut",
+        "pointsEarned": "Points gagnés",
+        "points": "points",
+        "openInNewTab": "Ouvrir dans un nouvel onglet",
+        "status": {
+          "pending": "En attente",
+          "approved": "Approuvé",
+          "rejected": "Rejeté"
+        }
+      }
+    },
+    "feedback": {
+      "title": "Session de retour",
+      "completed": "Terminé",
+      "inProgress": "En cours",
+      "completedDescription": "Vous avez terminé la session de retour pour ce reçu.",
+      "inProgressDescription": "Continuez à fournir des retours pour gagner des récompenses.",
+      "progress": "Progression",
+      "earned": "Gagné",
+      "points": "points",
+      "currentQuestion": "Question actuelle",
+      "continue": "Continuer",
+      "start": "Commencer le retour"
+    }
+  },
+  "feedback": {
+    "title": "Session de retour",
+    "completed": "Terminé",
+    "inProgress": "En cours",
+    "completedDescription": "Vous avez terminé la session de retour pour ce reçu.",
+    "inProgressDescription": "Continuez à fournir des retours pour gagner des récompenses.",
+    "progress": "Progression",
+    "earned": "Gagné",
+    "currentQuestion": "Question actuelle",
+    "continue": "Continuer",
+    "start": "Commencer le retour",
+    "loading": "Chargement du retour...",
+    "question": "Question",
+    "submitAnswer": "Soumettre la réponse",
+    "submitting": "Soumission...",
+    "backToDashboard": "Retour au tableau de bord",
+    "points": "points",
+    "completedState": {
+      "title": "Retour terminé !",
+      "description": "Merci d'avoir fourni votre retour.",
+      "earned": "Vous avez gagné",
+      "message": "Votre retour a été soumis avec succès.",
+      "backToDashboard": "Retour au tableau de bord"
+    },
+    "unavailable": {
+      "title": "Retour indisponible",
+      "message": "Le retour n'est pas disponible pour le moment.",
+      "noPendingReceipt": "Vous devez avoir un reçu en attente pour fournir un retour.",
+      "backToDashboard": "Retour au tableau de bord"
+    }
   }
 }
