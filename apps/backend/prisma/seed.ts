@@ -2,7 +2,7 @@ import { FeedbackType, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function seedFeedbackQuestions() {
+export async function seed() {
   const coreQuestions = [
     { serialNumber: 1, type: FeedbackType.single },
     { serialNumber: 2, type: FeedbackType.single },
@@ -103,6 +103,6 @@ export async function seedFeedbackQuestions() {
   }
 }
 
-seedFeedbackQuestions()
+seed()
   .catch((err) => console.error(err))
   .finally(async () => prisma.$disconnect());
