@@ -2,7 +2,13 @@
   "common": {
     "appName": "Buy Purchasing Powers",
     "language": "Language",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "points": "points",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    }
   },
   "notFound": {
     "title": "Page Not Found",
@@ -177,13 +183,7 @@
   "receipt": {
     "upload": "Upload Receipt",
     "myReceipts": "My Receipts",
-    "status": {
-      "pending": "Pending",
-      "approved": "Approved",
-      "rejected": "Rejected"
-    },
-    "uploadNew": "Upload New Receipt",
-    "points": "Points"
+    "uploadNew": "Upload New Receipt"
   },
   "profile": {
     "myProfile": "My Profile",
@@ -235,13 +235,7 @@
       "receipt": "Receipt",
       "empty": "No receipts yet. Upload your first receipt to get started!",
       "uploadFirst": "Upload Receipt",
-      "status": {
-        "pending": "Pending",
-        "approved": "Approved",
-        "rejected": "Rejected"
-      },
       "pointsEarned": "Points Earned",
-      "points": "points",
       "feedbackStatus": "Feedback Status",
       "feedbackCompleted": "Completed",
       "feedbackInProgress": "In Progress",
@@ -261,27 +255,8 @@
         "receiptId": "Receipt ID",
         "statusLabel": "Status",
         "pointsEarned": "Points Earned",
-        "points": "points",
-        "openInNewTab": "Open in New Tab",
-        "status": {
-          "pending": "Pending",
-          "approved": "Approved",
-          "rejected": "Rejected"
-        }
+        "openInNewTab": "Open in New Tab"
       }
-    },
-    "feedback": {
-      "title": "Feedback Session",
-      "completed": "Completed",
-      "inProgress": "In Progress",
-      "completedDescription": "You've completed the feedback session for this receipt.",
-      "inProgressDescription": "Continue providing feedback to earn rewards.",
-      "progress": "Progress",
-      "earned": "Earned",
-      "points": "points",
-      "currentQuestion": "Current Question",
-      "continue": "Continue",
-      "start": "Start Feedback"
     }
   },
   "feedback": {
@@ -299,10 +274,10 @@
     "question": "Question",
     "submitAnswer": "Submit Answer",
     "submitting": "Submitting...",
+    "completeFeedback": "Complete Feedback",
     "previous": "Previous",
     "skip": "Skip",
     "backToDashboard": "Back to Dashboard",
-    "points": "points",
     "completedState": {
       "title": "Feedback Completed!",
       "description": "Thank you for providing your feedback.",

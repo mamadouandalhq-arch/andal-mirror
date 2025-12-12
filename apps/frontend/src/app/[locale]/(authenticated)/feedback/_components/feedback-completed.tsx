@@ -12,6 +12,7 @@ interface FeedbackCompletedProps {
 
 export function FeedbackCompleted({ points }: FeedbackCompletedProps) {
   const t = useTranslations('feedback');
+  const tCommon = useTranslations('common');
   const router = useRouter();
 
   return (
@@ -33,7 +34,7 @@ export function FeedbackCompleted({ points }: FeedbackCompletedProps) {
         <div className="text-center p-6 bg-primary/5 rounded-lg">
           <p className="text-sm text-muted-foreground mb-2">{t('completedState.earned')}</p>
           <p className="text-3xl sm:text-4xl font-bold text-primary">
-            {points.toLocaleString()} {t('points', { defaultValue: 'points' })}
+            {points.toLocaleString()} {tCommon('points')}
           </p>
         </div>
 

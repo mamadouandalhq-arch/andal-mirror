@@ -2,7 +2,13 @@
   "common": {
     "appName": "Achat de Pouvoirs d'Achat",
     "language": "Langue",
-    "welcome": "Bienvenue"
+    "welcome": "Bienvenue",
+    "points": "points",
+    "status": {
+      "pending": "En attente",
+      "approved": "Approuvé",
+      "rejected": "Rejeté"
+    }
   },
   "notFound": {
     "title": "Page Non Trouvée",
@@ -177,13 +183,7 @@
   "receipt": {
     "upload": "Télécharger un reçu",
     "myReceipts": "Mes reçus",
-    "status": {
-      "pending": "En attente",
-      "approved": "Approuvé",
-      "rejected": "Rejeté"
-    },
-    "uploadNew": "Télécharger un nouveau reçu",
-    "points": "Points"
+    "uploadNew": "Télécharger un nouveau reçu"
   },
   "profile": {
     "myProfile": "Mon profil",
@@ -235,13 +235,7 @@
       "receipt": "Reçu",
       "empty": "Aucun reçu pour le moment. Téléchargez votre premier reçu pour commencer !",
       "uploadFirst": "Télécharger un reçu",
-      "status": {
-        "pending": "En attente",
-        "approved": "Approuvé",
-        "rejected": "Rejeté"
-      },
       "pointsEarned": "Points gagnés",
-      "points": "points",
       "feedbackStatus": "Statut du retour",
       "feedbackCompleted": "Terminé",
       "feedbackInProgress": "En cours",
@@ -261,27 +255,8 @@
         "receiptId": "ID du reçu",
         "statusLabel": "Statut",
         "pointsEarned": "Points gagnés",
-        "points": "points",
-        "openInNewTab": "Ouvrir dans un nouvel onglet",
-        "status": {
-          "pending": "En attente",
-          "approved": "Approuvé",
-          "rejected": "Rejeté"
-        }
+        "openInNewTab": "Ouvrir dans un nouvel onglet"
       }
-    },
-    "feedback": {
-      "title": "Session de retour",
-      "completed": "Terminé",
-      "inProgress": "En cours",
-      "completedDescription": "Vous avez terminé la session de retour pour ce reçu.",
-      "inProgressDescription": "Continuez à fournir des retours pour gagner des récompenses.",
-      "progress": "Progression",
-      "earned": "Gagné",
-      "points": "points",
-      "currentQuestion": "Question actuelle",
-      "continue": "Continuer",
-      "start": "Commencer le retour"
     }
   },
   "feedback": {
@@ -299,10 +274,10 @@
     "question": "Question",
     "submitAnswer": "Soumettre la réponse",
     "submitting": "Soumission...",
+    "completeFeedback": "Terminer le retour",
     "previous": "Précédent",
     "skip": "Passer",
     "backToDashboard": "Retour au tableau de bord",
-    "points": "points",
     "completedState": {
       "title": "Retour terminé !",
       "description": "Merci d'avoir fourni votre retour.",

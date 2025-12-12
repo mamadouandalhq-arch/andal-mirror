@@ -66,10 +66,13 @@ export function FeedbackQuestionForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedAnswers.length === 0) return;
+    // Allow submit without answer only on last question (to complete feedback)
+    if (selectedAnswers.length === 0 && !isLastQuestion) return;
 
     try {
-      await answerMutation.mutateAsync({ answers: selectedAnswers });
+      await answerMutation.mutateAsync(
+        selectedAnswers.length > 0 ? { answers: selectedAnswers } : {},
+      );
       // Don't clear selectedAnswers here - let the backend response update it
       onAnswerSubmitted();
     } catch (error) {
@@ -163,7 +166,9 @@ export function FeedbackQuestionForm({
           <div className="flex flex-col gap-3">
             <Button
               type="submit"
-              disabled={selectedAnswers.length === 0 || isLoading}
+              disabled={
+                (selectedAnswers.length === 0 && !isLastQuestion) || isLoading
+              }
               className="w-full min-h-[44px]"
               size="lg"
             >
@@ -172,6 +177,8 @@ export function FeedbackQuestionForm({
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                   {t('submitting')}
                 </>
+              ) : isLastQuestion && selectedAnswers.length === 0 ? (
+                t('completeFeedback')
               ) : (
                 t('submitAnswer')
               )}

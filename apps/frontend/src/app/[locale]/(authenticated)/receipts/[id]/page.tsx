@@ -32,6 +32,7 @@ function formatDate(dateString: string) {
 
 export default function ReceiptDetailsPage() {
   const t = useTranslations('dashboard.receipts.details');
+  const tCommon = useTranslations('common');
   const params = useParams();
   const router = useRouter();
   const receiptId = params.id as string;
@@ -125,7 +126,7 @@ export default function ReceiptDetailsPage() {
                   variant={statusBadge.variant}
                   className={statusBadge.badgeClass}
                 >
-                  {t(`status.${receipt.status}`)}
+                  {tCommon(`status.${receipt.status}`)}
                 </Badge>
               </div>
               {/* Note: Points come from FeedbackResult.pointsValue, not from receipt */}

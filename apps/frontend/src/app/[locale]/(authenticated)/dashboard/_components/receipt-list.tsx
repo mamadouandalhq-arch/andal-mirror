@@ -30,6 +30,7 @@ function formatDate(dateString: string) {
 
 export function ReceiptList() {
   const t = useTranslations('dashboard.receipts');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   const router = useRouter();
   const { data: receipts, isLoading } = useReceipts();
@@ -163,7 +164,7 @@ export function ReceiptList() {
                   variant={statusBadge.variant}
                   className={statusBadge.badgeClass}
                 >
-                  {t(`status.${receipt.status}`)}
+                  {tCommon(`status.${receipt.status}`)}
                 </Badge>
               </div>
             </CardHeader>

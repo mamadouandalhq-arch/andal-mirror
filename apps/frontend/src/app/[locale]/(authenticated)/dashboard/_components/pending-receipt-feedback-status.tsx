@@ -17,7 +17,8 @@ import { MessageSquare, Play, ArrowRight } from 'lucide-react';
 import { useRouter } from '@/i18n';
 
 export function PendingReceiptFeedbackStatus() {
-  const t = useTranslations('dashboard.feedback');
+  const t = useTranslations('feedback');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   const router = useRouter();
   const { data: feedbackState, isLoading } = useFeedbackState(locale);
@@ -110,7 +111,7 @@ export function PendingReceiptFeedbackStatus() {
               <span className="text-muted-foreground">{t('earned')}:</span>
               <span className="font-semibold text-primary">
                 {feedbackState.pointsValue.toLocaleString()}{' '}
-                {t('points', { defaultValue: 'points' })}
+                {tCommon('points')}
               </span>
             </div>
           )}
