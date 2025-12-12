@@ -70,7 +70,7 @@ export class FeedbackService {
       include: this.getCurrentQuestionIncludeFilter(dto.language),
     });
 
-    return this.convertFeedbackToResponse(updatedFeedback);
+    return await this.convertFeedbackToResponse(updatedFeedback);
   }
 
   async answerQuestion(
@@ -127,12 +127,12 @@ export class FeedbackService {
         upsertAnswer,
       ]);
 
-      return this.convertFeedbackToResponse(updatedFeedback);
+      return await this.convertFeedbackToResponse(updatedFeedback);
     }
 
     const updatedFeedback = await updateFeedback;
 
-    return this.convertFeedbackToResponse(updatedFeedback);
+    return await this.convertFeedbackToResponse(updatedFeedback);
   }
 
   async startFeedback(
@@ -168,7 +168,7 @@ export class FeedbackService {
       pendingReceipt,
     );
 
-    return this.convertFeedbackToResponse(newFeedback);
+    return await this.convertFeedbackToResponse(newFeedback);
   }
 
   async getState(
@@ -198,10 +198,10 @@ export class FeedbackService {
     }
 
     if (feedback.status === PrismaFeedbackStatus.completed) {
-      return this.convertFeedbackToResponse(feedback);
+      return await this.convertFeedbackToResponse(feedback);
     }
 
-    return this.convertFeedbackToResponse(feedback);
+    return await this.convertFeedbackToResponse(feedback);
   }
 
   private async getUnique(dto: GetUniqueFeedbackDto) {
@@ -229,9 +229,9 @@ export class FeedbackService {
     };
   }
 
-  private convertFeedbackToResponse(
+  private async convertFeedbackToResponse(
     feedback: FeedbackResultWithCurrentQuestion,
-  ): FeedbackStateResponse {
+  ): Promise<FeedbackStateResponse> {
     const response: FeedbackStateResponse = {
       status: feedback.status,
       totalQuestions: feedback.totalQuestions,
@@ -246,6 +246,15 @@ export class FeedbackService {
         throw new NotFoundException('Invalid current question or translation');
       }
 
+      const existingAnswer = await this.prisma.feedbackAnswer.findUnique({
+        where: {
+          feedbackResultId_questionId: {
+            feedbackResultId: feedback.id,
+            questionId: currentQuestion.id,
+          },
+        },
+      });
+
       response.currentQuestion = {
         id: currentQuestion.id,
         serialNumber: currentQuestion.serialNumber,
@@ -253,6 +262,10 @@ export class FeedbackService {
         text: currentQuestion.translations[0].text,
         options: currentQuestion.translations[0].options,
       };
+
+      if (existingAnswer) {
+        response.currentQuestion.currentAnswer = existingAnswer.answer;
+      }
     }
 
     return response;
