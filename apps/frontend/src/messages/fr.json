@@ -224,7 +224,12 @@
       "uploadReceipt": "Télécharger un reçu",
       "uploading": "Téléchargement...",
       "pendingReceiptWarning": "Vous avez déjà un reçu en attente. Veuillez attendre qu'il soit traité avant d'en télécharger un autre.",
-      "uploadError": "Échec du téléchargement du reçu. Veuillez réessayer."
+      "uploadError": "Échec du téléchargement du reçu. Veuillez réessayer.",
+      "dragAndDropOrClick": "Glissez-déposez votre reçu ici, ou cliquez pour parcourir",
+      "dropFileHere": "Déposez votre fichier ici",
+      "supportedFormats": "Prend en charge les images et les fichiers PDF",
+      "selectFile": "Sélectionner un fichier",
+      "invalidFileType": "Type de fichier invalide. Veuillez télécharger une image ou un fichier PDF."
     },
     "receipts": {
       "receipt": "Reçu",
@@ -294,6 +299,8 @@
     "question": "Question",
     "submitAnswer": "Soumettre la réponse",
     "submitting": "Soumission...",
+    "previous": "Précédent",
+    "skip": "Passer",
     "backToDashboard": "Retour au tableau de bord",
     "points": "points",
     "completedState": {

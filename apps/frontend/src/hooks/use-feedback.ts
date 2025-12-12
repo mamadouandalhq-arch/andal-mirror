@@ -43,7 +43,7 @@ export function useAnswerQuestion(locale: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (dto: Omit<AnswerQuestionDto, 'language'>) => {
+    mutationFn: (dto: Partial<Omit<AnswerQuestionDto, 'language'>>) => {
       return apiClient.post<FeedbackStateResponse>(
         '/feedback/answer-question',
         {
@@ -51,6 +51,22 @@ export function useAnswerQuestion(locale: string) {
           language: locale,
         },
       );
+    },
+    onSuccess: () => {
+      // Invalidate feedback state to refetch
+      queryClient.invalidateQueries({ queryKey: ['feedback', 'state'] });
+    },
+  });
+}
+
+export function useReturnBack(locale: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => {
+      return apiClient.post<FeedbackStateResponse>('/feedback/back', {
+        language: locale,
+      });
     },
     onSuccess: () => {
       // Invalidate feedback state to refetch

@@ -224,7 +224,12 @@
       "uploadReceipt": "Upload Receipt",
       "uploading": "Uploading...",
       "pendingReceiptWarning": "You already have a pending receipt. Please wait for it to be processed before uploading another.",
-      "uploadError": "Failed to upload receipt. Please try again."
+      "uploadError": "Failed to upload receipt. Please try again.",
+      "dragAndDropOrClick": "Drag and drop your receipt here, or click to browse",
+      "dropFileHere": "Drop your file here",
+      "supportedFormats": "Supports images and PDF files",
+      "selectFile": "Select File",
+      "invalidFileType": "Invalid file type. Please upload an image or PDF file."
     },
     "receipts": {
       "receipt": "Receipt",
@@ -294,6 +299,8 @@
     "question": "Question",
     "submitAnswer": "Submit Answer",
     "submitting": "Submitting...",
+    "previous": "Previous",
+    "skip": "Skip",
     "backToDashboard": "Back to Dashboard",
     "points": "points",
     "completedState": {

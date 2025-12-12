@@ -56,11 +56,8 @@ export function ReceiptList() {
   if (!receipts || receipts.length === 0) {
     return (
       <Card>
-        <CardContent className="p-3 sm:p-6 flex flex-col items-center justify-center py-12">
-          <p className="text-muted-foreground mb-4">{t('empty')}</p>
-          <Button onClick={() => router.push('/dashboard')}>
-            {t('uploadFirst')}
-          </Button>
+        <CardContent className="p-3 sm:p-6 flex flex-col items-center justify-center py-6 ">
+          <p className="text-muted-foreground">{t('empty')}</p>
         </CardContent>
       </Card>
     );

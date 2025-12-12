@@ -13,21 +13,18 @@ export function QuickActions() {
   const uploadMutation = useReceiptUpload();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const hasPendingReceipt = stats?.hasPendingReceipt ?? false;
+  const isDisabled = hasPendingReceipt || uploadMutation.isPending;
 
   const handleUploadClick = () => {
-    if (!hasPendingReceipt && fileInputRef.current) {
+    if (!isDisabled && fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  const handleFileUpload = async (file: File) => {
     setUploadError(null);
 
     try {
@@ -43,6 +40,58 @@ export function QuickActions() {
     }
   };
 
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    await handleFileUpload(file);
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isDisabled) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Only set isDragging to false if we're leaving the drop zone
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    if (isDisabled) return;
+
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const isValidType =
+      file.type.startsWith('image/') || file.type === 'application/pdf';
+    if (!isValidType) {
+      setUploadError(t('invalidFileType'));
+      return;
+    }
+
+    await handleFileUpload(file);
+  };
+
   return (
     <div className="space-y-2">
       <input
@@ -51,26 +100,68 @@ export function QuickActions() {
         accept="image/*,.pdf"
         className="hidden"
         onChange={handleFileChange}
-        disabled={hasPendingReceipt || uploadMutation.isPending}
+        disabled={isDisabled}
       />
-      <Button
-        onClick={handleUploadClick}
-        disabled={hasPendingReceipt || uploadMutation.isPending}
-        className="w-full sm:w-auto min-h-[44px]"
-        size="lg"
+      <div
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`
+          relative border-2 border-dashed rounded-lg p-6 transition-all
+          ${
+            isDragging
+              ? 'border-primary bg-primary/5 scale-[1.02]'
+              : 'border-border hover:border-primary/50'
+          }
+          ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+        `}
       >
-        {uploadMutation.isPending ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            {t('uploading')}
-          </>
-        ) : (
-          <>
-            <Upload className="h-4 w-4" />
-            {t('uploadReceipt')}
-          </>
-        )}
-      </Button>
+        <div className="flex flex-col items-center justify-center gap-4 text-center">
+          {uploadMutation.isPending ? (
+            <>
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-sm font-medium">{t('uploading')}</p>
+            </>
+          ) : (
+            <>
+              <div
+                className={`
+                  p-3 rounded-full transition-colors
+                  ${
+                    isDragging
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted'
+                  }
+                `}
+              >
+                <Upload
+                  className={`h-6 w-6 ${
+                    isDragging ? 'text-primary-foreground' : ''
+                  }`}
+                />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-medium">
+                  {isDragging ? t('dropFileHere') : t('dragAndDropOrClick')}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t('supportedFormats')}
+                </p>
+              </div>
+              <Button
+                onClick={handleUploadClick}
+                disabled={isDisabled}
+                variant={isDragging ? 'default' : 'outline'}
+                size="sm"
+                className="mt-2"
+              >
+                {t('selectFile')}
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
       {hasPendingReceipt && (
         <p className="text-sm text-muted-foreground">
           {t('pendingReceiptWarning')}
