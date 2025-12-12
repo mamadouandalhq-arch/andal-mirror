@@ -33,12 +33,13 @@ export class AnswerQuestionService {
   async getAnswerDataToChange(
     validatedFeedback: FeedbackResultWithCurrentQuestion,
     currentQuestion: FeedbackQuestion,
+    answers?: string[],
   ) {
     const isLastAnswer =
       currentQuestion.serialNumber === validatedFeedback.totalQuestions;
 
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
-      pointsValue: validatedFeedback.pointsValue + 10,
+      pointsValue: answers && validatedFeedback.pointsValue + 10,
     };
 
     if (!isLastAnswer) {
@@ -49,7 +50,9 @@ export class AnswerQuestionService {
       this.modifyChangeDataIfLastAnswer(dataToChange);
     }
 
-    dataToChange.answeredQuestions = validatedFeedback.answeredQuestions + 1;
+    if (answers) {
+      dataToChange.answeredQuestions = validatedFeedback.answeredQuestions + 1;
+    }
     return dataToChange;
   }
 
@@ -82,7 +85,7 @@ export class AnswerQuestionService {
 
   validateAnswerOrThrow(
     feedback: FeedbackResultWithCurrentQuestion | null,
-    answers: string[],
+    answers?: string[],
   ) {
     if (!feedback || !feedback.currentQuestion) {
       throw new BadRequestException(
@@ -101,6 +104,10 @@ export class AnswerQuestionService {
     }
 
     const options = translation.options;
+
+    if (!answers) {
+      return { feedback, currentQuestion };
+    }
 
     if (answers.some((answer) => !options.includes(answer))) {
       throw new BadRequestException('You provided invalid answer option.');

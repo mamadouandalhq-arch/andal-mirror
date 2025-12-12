@@ -9,7 +9,11 @@ import {
   FeedbackStatus as PrismaFeedbackStatus,
   ReceiptStatus,
 } from '@prisma/client';
-import { AnswerQuestionDto, StartFeedbackDto } from './dto';
+import {
+  AnswerQuestionDto,
+  GetUniqueFeedbackDto,
+  StartFeedbackDto,
+} from './dto';
 import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
 import { AnswerQuestionService, StartFeedbackService } from './services';
@@ -33,16 +37,7 @@ export class FeedbackService {
         userId: userId,
         status: PrismaFeedbackStatus.inProgress,
       },
-      include: {
-        currentQuestion: {
-          include: {
-            translations: {
-              where: { lang: language },
-              take: 1,
-            },
-          },
-        },
-      },
+      include: this.getCurrentQuestionIncludeFilter(language),
     });
 
     const { feedback: validatedFeedback, currentQuestion } =
@@ -59,6 +54,7 @@ export class FeedbackService {
     const dataToChange = await this.answerQuestionService.getAnswerDataToChange(
       validatedFeedback,
       currentQuestion,
+      answers,
     );
 
     const createAnswer = this.prisma.feedbackAnswer.create({
@@ -74,16 +70,7 @@ export class FeedbackService {
         id: validatedFeedback.id,
       },
       data: dataToChange,
-      include: {
-        currentQuestion: {
-          include: {
-            translations: {
-              where: { lang: language },
-              take: 1,
-            },
-          },
-        },
-      },
+      include: this.getCurrentQuestionIncludeFilter(language),
     });
 
     const [, updatedFeedback] = await this.prisma.$transaction([
@@ -107,23 +94,10 @@ export class FeedbackService {
       throw new BadRequestException('No pending receipt!');
     }
 
-    const feedback = await this.prisma.feedbackResult.findUnique({
-      where: {
-        userId_receiptId: {
-          userId: userId,
-          receiptId: pendingReceipt.id,
-        },
-      },
-      include: {
-        currentQuestion: {
-          include: {
-            translations: {
-              where: { lang: dto.language },
-              take: 1,
-            },
-          },
-        },
-      },
+    const feedback = await this.getUnique({
+      userId,
+      receiptId: pendingReceipt.id,
+      language: dto.language,
     });
 
     if (feedback) {
@@ -159,23 +133,10 @@ export class FeedbackService {
       };
     }
 
-    const feedback = await this.prisma.feedbackResult.findUnique({
-      where: {
-        userId_receiptId: {
-          userId,
-          receiptId: pendingReceipt.id,
-        },
-      },
-      include: {
-        currentQuestion: {
-          include: {
-            translations: {
-              where: { lang: language },
-              take: 1,
-            },
-          },
-        },
-      },
+    const feedback = await this.getUnique({
+      userId,
+      receiptId: pendingReceipt.id,
+      language,
     });
 
     if (!feedback) {
@@ -187,6 +148,31 @@ export class FeedbackService {
     }
 
     return this.convertFeedbackToResponse(feedback);
+  }
+
+  private async getUnique(dto: GetUniqueFeedbackDto) {
+    return await this.prisma.feedbackResult.findUnique({
+      where: {
+        userId_receiptId: {
+          userId: dto.userId,
+          receiptId: dto.receiptId,
+        },
+      },
+      include: this.getCurrentQuestionIncludeFilter(dto.language),
+    });
+  }
+
+  private getCurrentQuestionIncludeFilter(language: string) {
+    return {
+      currentQuestion: {
+        include: {
+          translations: {
+            where: { lang: language },
+            take: 1,
+          },
+        },
+      },
+    };
   }
 
   private convertFeedbackToResponse(

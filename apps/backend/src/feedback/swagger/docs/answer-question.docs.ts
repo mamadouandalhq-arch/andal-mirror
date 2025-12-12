@@ -16,7 +16,7 @@ export function AnswerQuestionDocs() {
   return applyDecorators(
     ApiOperation({
       summary: 'An endpoint to send an answer to a current question.',
-      description: `An endpoint to send an answer to a current question. Current question is provided by /feedback/state endpoint or by previous response of /feedback/answer-question. Returns current feedback session state if OK, else throws an error. If OK, response.current_question becomes user's next question`,
+      description: `An endpoint to send an answer to a current question. Current question is provided by /feedback/state endpoint or by previous response of /feedback/answer-question. Returns current feedback session state if OK, else throws an error. If OK, response.current_question becomes user's next question. Please note, that answers array is optional. If answers = undefined, a question is being skipped and no points will be earned for the the skipped question.`,
     }),
     ApiExtraModels(FeedbackResultInAnswerSwaggerDto, BadRequestSwaggerDto),
     ApiOkResponse({
