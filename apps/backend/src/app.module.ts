@@ -10,6 +10,7 @@ import { validationSchema } from './common';
 import { ReceiptModule } from './receipt/receipt.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { EmailModule } from './email/email.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { EmailModule } from './email/email.module';
     ReceiptModule,
     FeedbackModule,
     EmailModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [],

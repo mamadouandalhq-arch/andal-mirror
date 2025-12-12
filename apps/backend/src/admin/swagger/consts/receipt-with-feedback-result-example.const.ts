@@ -1,0 +1,22 @@
+export const receiptWithFeedbackResultExample = {
+  id: 'da964c80-1119-4b59-8893-74645b87a3be',
+  receiptUrl: 'https://example.com/receipt.png',
+  status: 'approved',
+  createdAt: '2025-12-12T11:36:25.738Z',
+  approvedAt: null,
+  userId: '157f77af-ae79-41f3-b9f8-edc1599bf215',
+  feedbackResult: {
+    id: '0924828d-47d3-4af4-8cd2-0ea096665170',
+    receiptId: 'da964c80-1119-4b59-8893-74645b87a3be',
+    userId: '157f77af-ae79-41f3-b9f8-edc1599bf215',
+    status: 'inProgress',
+    totalQuestions: 3,
+    comment: null,
+    answeredQuestions: 1,
+    pointsValue: 10,
+    currentQuestionId: '3c3bfc50-d3c2-4499-8edb-499dbe5f7f52',
+    createdAt: '2025-12-12T11:36:29.435Z',
+    updatedAt: '2025-12-12T11:39:47.830Z',
+    completedAt: null,
+  },
+};

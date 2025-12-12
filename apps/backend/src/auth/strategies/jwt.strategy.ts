@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { convertUserToDto } from '../utils';
-import { UserDto } from '../../common/dto';
+import { UserDto } from '../../common';
 import { UserService } from '../../user/user.service';
 
 @Injectable()

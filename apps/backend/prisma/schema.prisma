@@ -74,7 +74,7 @@ model Receipt {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  feedbackResults FeedbackResult[]
+  feedbackResult FeedbackResult?
 }
 
 model Category {
@@ -125,7 +125,7 @@ model FeedbackQuestionTranslation {
 
 model FeedbackResult {
   id                String         @id @default(uuid())
-  receiptId         String
+  receiptId         String         @unique()
   userId            String
   status            FeedbackStatus @default(inProgress)
   totalQuestions    Int
