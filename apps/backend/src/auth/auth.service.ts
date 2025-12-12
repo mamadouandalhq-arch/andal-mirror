@@ -10,6 +10,7 @@ import argon from 'argon2';
 import { ForgotPasswordService } from './forgot-password/forgot-password.service';
 import omit from 'lodash/omit';
 import { VerifyForgotPasswordTokenDto } from './forgot-password/dto';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly forgotPasswordService: ForgotPasswordService,
+    private readonly emailService: EmailService,
   ) {}
 
   async changePassword(dto: ChangePasswordDto) {
@@ -48,6 +50,11 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const user = await this.userService.create(registerDto);
+
+    await this.emailService.sendWelcomeEmail({
+      email: registerDto.email,
+      firstName: registerDto.firstName,
+    });
 
     return this.tokenService.signTokensForPrismaUser(user);
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SendForgotPasswordEmailDto } from './dto';
+import { SendForgotPasswordEmailDto, SendWelcomeEmailDto } from './dto';
 import { InjectResend } from 'nest-resend';
 import { Resend } from 'resend';
 import { ConfigService } from '@nestjs/config';
@@ -11,6 +11,18 @@ export class EmailService {
     private readonly configService: ConfigService,
   ) {}
 
+  sendWelcomeEmail(dto: SendWelcomeEmailDto) {
+    return this.resendClient.emails.send({
+      to: dto.email,
+      template: {
+        id: 'welcome-email',
+        variables: {
+          USER_FIRST_NAME: dto.firstName,
+        },
+      },
+    });
+  }
+
   async sendForgotPassword(dto: SendForgotPasswordEmailDto) {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL')!;
     const forgotPasswordPath = this.configService.get<string>(
@@ -21,7 +33,6 @@ export class EmailService {
 
     return this.resendClient.emails.send({
       to: dto.email,
-      subject: 'Forgot password link',
       template: {
         id: 'forgot-password',
         variables: {
