@@ -53,7 +53,7 @@ export async function apiRequest<T>(
   // Don't set Content-Type for FormData - browser will set it with boundary
   // Only set Content-Type for non-FormData requests
   if (!(options.body instanceof FormData)) {
-    headers['Content-Type'] = 'application/json';
+    (headers as Record<string, string>)['Content-Type'] = 'application/json';
   }
 
   if (accessToken) {

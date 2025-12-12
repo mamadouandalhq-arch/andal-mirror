@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDashboardStats } from '@/hooks/use-dashboard-stats';
 import {
@@ -51,6 +51,7 @@ function StatsCard({
 
 export function StatsCards() {
   const t = useTranslations('dashboard.stats');
+  const locale = useLocale();
   const { stats, isLoading, error } = useDashboardStats();
 
   if (error) {
@@ -87,7 +88,7 @@ export function StatsCards() {
         icon={TrendingUp}
         iconClassName="text-primary"
         cardClassName="lg:col-span-1 border-primary/20 bg-primary/5"
-        formatValue={(val) => formatPoints(val)}
+        formatValue={(val) => formatPoints(val, locale)}
       />
 
       <StatsCard

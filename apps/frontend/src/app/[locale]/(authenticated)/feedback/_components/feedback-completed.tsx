@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Trophy } from 'lucide-react';
@@ -14,6 +14,7 @@ interface FeedbackCompletedProps {
 export function FeedbackCompleted({ points }: FeedbackCompletedProps) {
   const t = useTranslations('feedback');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
   const router = useRouter();
 
   return (
@@ -35,7 +36,7 @@ export function FeedbackCompleted({ points }: FeedbackCompletedProps) {
         <div className="text-center p-6 bg-primary/5 rounded-lg">
           <p className="text-sm text-muted-foreground mb-2">{t('completedState.earned')}</p>
           <p className="text-3xl sm:text-4xl font-bold text-primary">
-            {formatPoints(points)} {tCommon('points')}
+            {formatPoints(points, locale)} {tCommon('points')}
           </p>
         </div>
 

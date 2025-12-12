@@ -111,7 +111,7 @@ export function PendingReceiptFeedbackStatus() {
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground">{t('earned')}:</span>
               <span className="font-semibold text-primary">
-                {formatPoints(feedbackState.pointsValue)}{' '}
+                {formatPoints(feedbackState.pointsValue, locale)}{' '}
                 {tCommon('points')}
               </span>
             </div>

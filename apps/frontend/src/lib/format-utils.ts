@@ -31,20 +31,19 @@ export function formatDate(
 /**
  * Format a number with locale-specific formatting
  * @param value - Number to format
- * @param locale - Locale string (default: 'en-US')
+ * @param locale - Locale string (optional, uses browser's default locale if not provided)
  * @returns Formatted number string
  */
-export function formatNumber(value: number, locale = 'en-US'): string {
-  return value.toLocaleString(locale);
+export function formatNumber(value: number, locale?: string): string {
+  return locale ? value.toLocaleString(locale) : value.toLocaleString();
 }
 
 /**
  * Format points value with locale-specific formatting
  * @param points - Points value to format
- * @param locale - Locale string (default: 'en-US')
+ * @param locale - Locale string (optional, uses browser's default locale if not provided)
  * @returns Formatted points string
  */
-export function formatPoints(points: number, locale = 'en-US'): string {
+export function formatPoints(points: number, locale?: string): string {
   return formatNumber(points, locale);
 }
-
