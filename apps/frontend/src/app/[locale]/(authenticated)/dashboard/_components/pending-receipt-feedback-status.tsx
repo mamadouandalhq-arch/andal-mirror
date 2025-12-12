@@ -15,6 +15,7 @@ import { useFeedbackState, useStartFeedback } from '@/hooks/use-feedback';
 import { Progress } from '@/components/ui/progress';
 import { MessageSquare, Play, ArrowRight } from 'lucide-react';
 import { useRouter } from '@/i18n';
+import { formatPoints } from '@/lib/format-utils';
 
 export function PendingReceiptFeedbackStatus() {
   const t = useTranslations('feedback');
@@ -110,7 +111,7 @@ export function PendingReceiptFeedbackStatus() {
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground">{t('earned')}:</span>
               <span className="font-semibold text-primary">
-                {feedbackState.pointsValue.toLocaleString()}{' '}
+                {formatPoints(feedbackState.pointsValue)}{' '}
                 {tCommon('points')}
               </span>
             </div>

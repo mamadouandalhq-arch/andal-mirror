@@ -18,15 +18,7 @@ import { useRouter } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import { getStatusBadge } from '@/lib/receipt-utils';
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(date);
-}
+import { formatDate } from '@/lib/format-utils';
 
 export function ReceiptList() {
   const t = useTranslations('dashboard.receipts');
@@ -173,7 +165,7 @@ export function ReceiptList() {
               <ReceiptViewer
                 receiptUrl={receipt.receiptUrl}
                 alt={`Receipt ${receipt.id}`}
-                height={200}
+                height={230}
                 showDownload={false}
               />
 

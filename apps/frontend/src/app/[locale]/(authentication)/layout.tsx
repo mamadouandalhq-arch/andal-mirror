@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from '@/i18n';
 import { useAuth } from '@/contexts/auth-context';
+import { useIsAdmin } from '@/hooks/use-is-admin';
 import { Spinner } from '@/components/ui/spinner';
 import { useTranslations } from 'next-intl';
 import { Header } from '@/components/layout/header';
@@ -14,14 +15,16 @@ export default function AuthenticationLayout({
   children: React.ReactNode;
 }) {
   const { isAuthenticated, isLoading } = useAuth();
+  const isAdmin = useIsAdmin();
   const router = useRouter();
   const t = useTranslations('auth');
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      // If user is already authenticated, redirect to dashboard
-      router.push('/dashboard');
+      // If user is already authenticated, redirect based on role
+      const redirectPath = isAdmin ? '/admin' : '/dashboard';
+      router.push(redirectPath);
     }
-  }, [isLoading, isAuthenticated, router]);
+  }, [isLoading, isAuthenticated, isAdmin, router]);
 
   if (isLoading) {
     return (

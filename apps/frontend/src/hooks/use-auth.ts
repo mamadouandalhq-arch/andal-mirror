@@ -4,6 +4,7 @@ import { useRouter } from '@/i18n';
 import { apiClient } from '@/lib/api-client';
 import { authStorage } from '@/lib/auth-storage';
 import { locales, defaultLocale } from '@/i18n/config';
+import { getRedirectPathForRole } from '@/lib/jwt-utils';
 
 export interface LoginCredentials {
   email: string;
@@ -95,9 +96,10 @@ export function useLogin() {
       authStorage.setAccessToken(response.accessToken);
       return response;
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
-      router.push('/dashboard');
+      const redirectPath = getRedirectPathForRole(response.accessToken);
+      router.push(redirectPath);
     },
   });
 }

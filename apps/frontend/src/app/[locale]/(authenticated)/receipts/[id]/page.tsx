@@ -18,17 +18,7 @@ import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import { getStatusBadge } from '@/lib/receipt-utils';
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(date);
-}
+import { formatDate } from '@/lib/format-utils';
 
 export default function ReceiptDetailsPage() {
   const t = useTranslations('dashboard.receipts.details');
@@ -91,11 +81,11 @@ export default function ReceiptDetailsPage() {
                   {t('receipt')} #{receipt.id.slice(0, 8)}
                 </CardTitle>
                 <CardDescription className="mt-2">
-                  {t('uploadedOn')}: {formatDate(receipt.createdAt)}
+                  {t('uploadedOn')}: {formatDate(receipt.createdAt, { includeTime: true, monthFormat: 'long' })}
                 </CardDescription>
                 {receipt.approvedAt && (
                   <CardDescription>
-                    {t('approvedOn')}: {formatDate(receipt.approvedAt)}
+                    {t('approvedOn')}: {formatDate(receipt.approvedAt, { includeTime: true, monthFormat: 'long' })}
                   </CardDescription>
                 )}
               </div>

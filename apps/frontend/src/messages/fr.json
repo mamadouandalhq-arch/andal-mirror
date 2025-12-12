@@ -4,6 +4,7 @@
     "language": "Langue",
     "welcome": "Bienvenue",
     "points": "points",
+    "admin": "Admin",
     "status": {
       "pending": "En attente",
       "approved": "Approuvé",
@@ -263,7 +264,7 @@
     "title": "Session de retour",
     "completed": "Terminé",
     "inProgress": "En cours",
-    "completedDescription": "Vous avez terminé la session de retour pour ce reçu.",
+    "completedDescription": "Vous avez terminé la session de commentaires relative au reçu.",
     "inProgressDescription": "Continuez à fournir des retours pour gagner des récompenses.",
     "progress": "Progression",
     "earned": "Gagné",
@@ -290,6 +291,30 @@
       "message": "Le retour n'est pas disponible pour le moment.",
       "noPendingReceipt": "Vous devez avoir un reçu en attente pour fournir un retour.",
       "backToDashboard": "Retour au tableau de bord"
+    }
+  },
+  "admin": {
+    "title": "Panneau d'administration",
+    "description": "Gérer les utilisateurs, les reçus, les retours et consulter les statistiques",
+    "users": {
+      "title": "Utilisateurs",
+      "description": "Gérer les comptes utilisateurs et les permissions",
+      "comingSoon": "Bientôt disponible"
+    },
+    "receipts": {
+      "title": "Reçus",
+      "description": "Examiner et gérer les soumissions de reçus",
+      "comingSoon": "Bientôt disponible"
+    },
+    "feedback": {
+      "title": "Retours",
+      "description": "Voir et gérer les retours des utilisateurs",
+      "comingSoon": "Bientôt disponible"
+    },
+    "statistics": {
+      "title": "Statistiques",
+      "description": "Voir les statistiques et analyses de la plateforme",
+      "comingSoon": "Bientôt disponible"
     }
   }
 }

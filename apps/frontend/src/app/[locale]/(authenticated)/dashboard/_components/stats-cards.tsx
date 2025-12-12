@@ -11,6 +11,7 @@ import {
   LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { formatPoints } from '@/lib/format-utils';
 
 interface StatsCardProps {
   title: string;
@@ -86,7 +87,7 @@ export function StatsCards() {
         icon={TrendingUp}
         iconClassName="text-primary"
         cardClassName="lg:col-span-1 border-primary/20 bg-primary/5"
-        formatValue={(val) => val.toLocaleString()}
+        formatValue={(val) => formatPoints(val)}
       />
 
       <StatsCard

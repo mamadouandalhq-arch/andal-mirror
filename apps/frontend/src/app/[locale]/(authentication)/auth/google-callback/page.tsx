@@ -8,6 +8,7 @@ import { authStorage } from '@/lib/auth-storage';
 import { apiClient } from '@/lib/api-client';
 import type { AuthResponse } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
+import { getRedirectPathForRole } from '@/lib/jwt-utils';
 
 export default function GoogleCallbackPage() {
   const t = useTranslations('auth');
@@ -19,9 +20,11 @@ export default function GoogleCallbackPage() {
     const finalizeLogin = async () => {
       try {
         const tokenFromQuery = searchParams.get('accessToken');
+        let accessToken: string;
 
         if (tokenFromQuery) {
-          authStorage.setAccessToken(tokenFromQuery);
+          accessToken = tokenFromQuery;
+          authStorage.setAccessToken(accessToken);
         } else {
           // If accessToken is not present (e.g., blocked by browser),
           // try to exchange the refresh token cookie for a new access token.
@@ -29,10 +32,12 @@ export default function GoogleCallbackPage() {
             '/auth/refresh',
             {},
           );
-          authStorage.setAccessToken(refreshed.accessToken);
+          accessToken = refreshed.accessToken;
+          authStorage.setAccessToken(accessToken);
         }
 
-        router.push('/dashboard');
+        const redirectPath = getRedirectPathForRole(accessToken);
+        router.push(redirectPath);
       } catch (err) {
         setError(err instanceof Error ? err.message : t('googleSignInFailed'));
       }

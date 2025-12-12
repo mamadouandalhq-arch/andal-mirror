@@ -4,6 +4,7 @@
     "language": "Language",
     "welcome": "Welcome",
     "points": "points",
+    "admin": "Admin",
     "status": {
       "pending": "Pending",
       "approved": "Approved",
@@ -263,7 +264,7 @@
     "title": "Feedback Session",
     "completed": "Completed",
     "inProgress": "In Progress",
-    "completedDescription": "You've completed the feedback session for this receipt.",
+    "completedDescription": "You've completed the feedback session for the receipt.",
     "inProgressDescription": "Continue providing feedback to earn rewards.",
     "progress": "Progress",
     "earned": "Earned",
@@ -290,6 +291,30 @@
       "message": "Feedback is not available at this time.",
       "noPendingReceipt": "You need to have a pending receipt to provide feedback.",
       "backToDashboard": "Back to Dashboard"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "description": "Manage users, receipts, feedback, and view statistics",
+    "users": {
+      "title": "Users",
+      "description": "Manage user accounts and permissions",
+      "comingSoon": "Coming soon"
+    },
+    "receipts": {
+      "title": "Receipts",
+      "description": "Review and manage receipt submissions",
+      "comingSoon": "Coming soon"
+    },
+    "feedback": {
+      "title": "Feedback",
+      "description": "View and manage user feedback",
+      "comingSoon": "Coming soon"
+    },
+    "statistics": {
+      "title": "Statistics",
+      "description": "View platform statistics and analytics",
+      "comingSoon": "Coming soon"
     }
   }
 }

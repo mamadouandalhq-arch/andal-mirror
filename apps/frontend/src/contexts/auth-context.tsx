@@ -13,6 +13,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { authStorage } from '@/lib/auth-storage';
 import { apiClient } from '@/lib/api-client';
+import { decodeJWT, isTokenExpired } from '@/lib/jwt-utils';
 
 interface User {
   id: string;
@@ -40,36 +41,6 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 /* ---------------- JWT helpers ---------------- */
-
-function decodeJWT(token: string) {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join(''),
-    );
-    return JSON.parse(jsonPayload) as {
-      sub: string;
-      email: string;
-      role: string;
-      exp?: number;
-    };
-  } catch {
-    return null;
-  }
-}
-
-function isTokenExpired(token: string | null, bufferSeconds = 0) {
-  if (!token) return true;
-  const decoded = decodeJWT(token);
-  if (!decoded?.exp) return true;
-
-  const now = Math.floor(Date.now() / 1000);
-  return decoded.exp <= now + bufferSeconds;
-}
 
 function createTokenStore() {
   const listeners = new Set<() => void>();
@@ -143,13 +114,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setHasCheckedToken(true);
     });
 
-    // Attempt refresh if:
-    // 1. We have no token but might have a refresh token cookie (new tab scenario)
-    // 2. We have a token but it's expired
-    // This allows refreshing in new tabs even when accessToken isn't in localStorage yet
-    const shouldRefresh = !token || expired;
+    // Only attempt refresh if we have a token (even if expired)
+    // This prevents unnecessary refresh attempts when user is not logged in
+    // If token exists but is expired, try to refresh it
+    // If no token at all, user is not logged in - don't attempt refresh
+    const shouldRefresh = token && expired;
 
-    if (!shouldRefresh) return;
+    if (!shouldRefresh) {
+      // If no token, ensure it's cleared (in case of stale state)
+      if (!token) {
+        authStorage.clearAccessToken();
+        tokenStore.notify();
+      }
+      return;
+    }
 
     startTransition(() => {
       setIsRefreshing(true);

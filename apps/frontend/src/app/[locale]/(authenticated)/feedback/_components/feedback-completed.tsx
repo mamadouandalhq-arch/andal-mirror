@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Trophy } from 'lucide-react';
 import { useRouter } from '@/i18n';
+import { formatPoints } from '@/lib/format-utils';
 
 interface FeedbackCompletedProps {
   points: number;
@@ -34,7 +35,7 @@ export function FeedbackCompleted({ points }: FeedbackCompletedProps) {
         <div className="text-center p-6 bg-primary/5 rounded-lg">
           <p className="text-sm text-muted-foreground mb-2">{t('completedState.earned')}</p>
           <p className="text-3xl sm:text-4xl font-bold text-primary">
-            {points.toLocaleString()} {tCommon('points')}
+            {formatPoints(points)} {tCommon('points')}
           </p>
         </div>
 
