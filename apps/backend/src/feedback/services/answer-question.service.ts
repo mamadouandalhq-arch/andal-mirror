@@ -1,45 +1,62 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { FeedbackResultWithCurrentQuestion } from '../types';
-import { FeedbackQuestion, FeedbackStatus, Prisma } from '@prisma/client';
+import {
+  FeedbackAnswer,
+  FeedbackQuestion,
+  FeedbackStatus,
+  Prisma,
+} from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class AnswerQuestionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAnswerAndThrowIfAnswered(
+  upsertAnswerIfAnswers(
     feedback: FeedbackResultWithCurrentQuestion,
     currentQuestion: FeedbackQuestion,
+    answers?: string[],
   ) {
-    const existingAnswer = await this.prisma.feedbackAnswer.findUnique({
+    if (!answers) {
+      return;
+    }
+
+    return this.prisma.feedbackAnswer.upsert({
       where: {
         feedbackResultId_questionId: {
           feedbackResultId: feedback.id,
           questionId: currentQuestion.id,
         },
       },
+      update: {
+        answer: answers,
+      },
+      create: {
+        feedbackResultId: feedback.id,
+        questionId: currentQuestion.id,
+        answer: answers,
+      },
     });
-
-    if (existingAnswer) {
-      throw new ConflictException('You already answered this question.');
-    }
   }
 
   async getAnswerDataToChange(
     validatedFeedback: FeedbackResultWithCurrentQuestion,
     currentQuestion: FeedbackQuestion,
+    existingAnswer: FeedbackAnswer | null,
     answers?: string[],
   ) {
     const isLastAnswer =
       currentQuestion.serialNumber === validatedFeedback.totalQuestions;
 
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
-      pointsValue: answers && validatedFeedback.pointsValue + 10,
+      pointsValue:
+        answers && !existingAnswer
+          ? validatedFeedback.pointsValue + 10
+          : undefined,
     };
 
     if (!isLastAnswer) {
@@ -50,7 +67,7 @@ export class AnswerQuestionService {
       this.modifyChangeDataIfLastAnswer(dataToChange);
     }
 
-    if (answers) {
+    if (answers && !existingAnswer) {
       dataToChange.answeredQuestions = validatedFeedback.answeredQuestions + 1;
     }
     return dataToChange;

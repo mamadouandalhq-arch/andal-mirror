@@ -1,7 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiConflictResponse,
   ApiExtraModels,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -15,40 +14,49 @@ import { feedBackCompletedExample, feedbackInProgressExample } from '../consts';
 export function AnswerQuestionDocs() {
   return applyDecorators(
     ApiOperation({
-      summary: 'An endpoint to send an answer to a current question.',
-      description: `An endpoint to send an answer to a current question. Current question is provided by /feedback/state endpoint or by previous response of /feedback/answer-question. Returns current feedback session state if OK, else throws an error. If OK, response.current_question becomes user's next question. Please note, that answers array is optional. If answers = undefined, a question is being skipped and no points will be earned for the the skipped question.`,
+      summary: 'An endpoint to send or update an answer to a current question.',
+      description: `
+An endpoint to send an answer to a current question.
+
+- Current question is provided by /feedback/state endpoint or by a previous response of /feedback/answer-question  
+- If answers array is provided, the answer will be saved  
+- If answers array is omitted, the question will be skipped and no points will be earned  
+- If the question was already answered before, the previous answer will be **overwritten** with the new one  
+- Returns updated feedback session state if OK  
+- response.current_question contains the next question if feedback session is still in progress
+      `,
     }),
+
     ApiExtraModels(FeedbackResultInAnswerSwaggerDto, BadRequestSwaggerDto),
+
     ApiOkResponse({
       description:
-        'Question answered successfully. Response depends on whether the feedback session continues or has been completed.',
+        'Question processed successfully. Depending on the session state, either returns the next question or the completed feedback result.',
       content: {
         'application/json': {
           schema: {
             $ref: getSchemaPath(FeedbackResultInAnswerSwaggerDto),
           },
-
           examples: {
             inProgress: {
-              summary: 'Next question returned, feedback session in progress',
+              summary:
+                'Answer saved or updated, feedback session still in progress',
               value: feedbackInProgressExample,
             },
-
             completed: {
-              summary:
-                'Feedback session completed after answering this question',
+              summary: 'Answer saved or updated, feedback session completed',
               value: feedBackCompletedExample,
             },
           },
         },
       },
     }),
+
     ApiBadRequestResponse({
-      description: 'Validation errors for answering feedback questions',
+      description: 'Validation errors while answering feedback questions',
       content: {
         'application/json': {
           schema: {
-            type: 'object',
             $ref: getSchemaPath(BadRequestSwaggerDto),
           },
           examples: {
@@ -80,27 +88,16 @@ export function AnswerQuestionDocs() {
         },
       },
     }),
+
     ApiNotFoundResponse({
-      description: 'No translation was found for this question',
+      description:
+        'Unable to answer question because no translation was found for the selected language',
       content: {
         'application/json': {
           example: {
             statusCode: 404,
             message:
               'Unable to answer question. No translation was found for selected language.',
-          },
-        },
-      },
-    }),
-    ApiConflictResponse({
-      description:
-        'User attempted to answer a question that was already answered',
-      content: {
-        'application/json': {
-          example: {
-            message: 'You already answered this question.',
-            error: 'Conflict',
-            statusCode: 409,
           },
         },
       },

@@ -12,6 +12,7 @@ import {
 import {
   AnswerQuestionDto,
   GetUniqueFeedbackDto,
+  ReturnBackDto,
   StartFeedbackDto,
 } from './dto';
 import { FeedbackResultWithCurrentQuestion } from './types';
@@ -27,6 +28,50 @@ export class FeedbackService {
     private answerQuestionService: AnswerQuestionService,
     private startFeedbackService: StartFeedbackService,
   ) {}
+
+  async returnBack(userId: string, dto: ReturnBackDto) {
+    const currentFeedback = await this.prisma.feedbackResult.findFirst({
+      where: {
+        userId: userId,
+        status: PrismaFeedbackStatus.inProgress,
+      },
+      include: this.getCurrentQuestionIncludeFilter(dto.language),
+    });
+
+    if (!currentFeedback || !currentFeedback.currentQuestion) {
+      throw new BadRequestException(
+        "You don't provide any feedback right now.",
+      );
+    }
+
+    if (currentFeedback.currentQuestion.serialNumber === 1) {
+      throw new BadRequestException(
+        `You can't go back from the first question`,
+      );
+    }
+
+    const previousQuestion = await this.prisma.feedbackQuestion.findUnique({
+      where: {
+        serialNumber: currentFeedback.currentQuestion.serialNumber - 1,
+      },
+    });
+
+    if (!previousQuestion) {
+      throw new NotFoundException('Previous question does not exist');
+    }
+
+    const updatedFeedback = await this.prisma.feedbackResult.update({
+      where: {
+        id: currentFeedback.id,
+      },
+      data: {
+        currentQuestionId: previousQuestion.id,
+      },
+      include: this.getCurrentQuestionIncludeFilter(dto.language),
+    });
+
+    return this.convertFeedbackToResponse(updatedFeedback);
+  }
 
   async answerQuestion(
     userId: string,
@@ -46,24 +91,27 @@ export class FeedbackService {
         answers,
       );
 
-    await this.answerQuestionService.getAnswerAndThrowIfAnswered(
-      validatedFeedback,
-      currentQuestion,
-    );
+    const existingAnswer = await this.prisma.feedbackAnswer.findUnique({
+      where: {
+        feedbackResultId_questionId: {
+          feedbackResultId: validatedFeedback.id,
+          questionId: currentQuestion.id,
+        },
+      },
+    });
 
     const dataToChange = await this.answerQuestionService.getAnswerDataToChange(
       validatedFeedback,
       currentQuestion,
+      existingAnswer,
       answers,
     );
 
-    const createAnswer = this.prisma.feedbackAnswer.create({
-      data: {
-        feedbackResultId: validatedFeedback.id,
-        questionId: currentQuestion.id,
-        answer: answers,
-      },
-    });
+    const upsertAnswer = this.answerQuestionService.upsertAnswerIfAnswers(
+      validatedFeedback,
+      currentQuestion,
+      answers,
+    );
 
     const updateFeedback = this.prisma.feedbackResult.update({
       where: {
@@ -73,10 +121,16 @@ export class FeedbackService {
       include: this.getCurrentQuestionIncludeFilter(language),
     });
 
-    const [, updatedFeedback] = await this.prisma.$transaction([
-      createAnswer,
-      updateFeedback,
-    ]);
+    if (upsertAnswer) {
+      const [updatedFeedback] = await this.prisma.$transaction([
+        updateFeedback,
+        upsertAnswer,
+      ]);
+
+      return this.convertFeedbackToResponse(updatedFeedback);
+    }
+
+    const updatedFeedback = await updateFeedback;
 
     return this.convertFeedbackToResponse(updatedFeedback);
   }

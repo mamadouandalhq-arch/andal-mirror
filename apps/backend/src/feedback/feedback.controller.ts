@@ -12,14 +12,26 @@ import { FeedbackService } from './feedback.service';
 import { JwtGuard } from '../auth/guards';
 import { User } from '../user/decorators';
 import { UserDto } from '../common';
-import { AnswerQuestionDto, StartFeedbackDto } from './dto';
+import { AnswerQuestionDto, ReturnBackDto, StartFeedbackDto } from './dto';
 import { FeedbackStateResponse } from '@shared/feedback';
-import { AnswerQuestionDocs, GetStateDocs, StartFeedbackDocs } from './swagger';
+import {
+  AnswerQuestionDocs,
+  GetStateDocs,
+  ReturnBackDocs,
+  StartFeedbackDocs,
+} from './swagger';
 
 @UseGuards(JwtGuard)
 @Controller('feedback')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
+
+  @HttpCode(HttpStatus.OK)
+  @ReturnBackDocs()
+  @Post('back')
+  returnBack(@User() user: UserDto, @Body() dto: ReturnBackDto) {
+    return this.feedbackService.returnBack(user.sub, dto);
+  }
 
   @HttpCode(HttpStatus.OK)
   @AnswerQuestionDocs()
