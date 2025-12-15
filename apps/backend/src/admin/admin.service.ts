@@ -56,6 +56,14 @@ export class AdminService {
       },
       include: {
         feedbackResult: true,
+        user: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            avatarUrl: true,
+          },
+        },
       },
     });
 

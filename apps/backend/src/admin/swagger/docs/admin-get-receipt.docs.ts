@@ -8,8 +8,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import {
-  receiptWithFeedbackResultExample,
-  receiptWithoutFeedbackResultExample,
+  receiptWithFeedbackAndUserExample,
+  receiptWithoutFeedbackWithUserExample,
 } from '../consts';
 
 export function AdminGetReceiptDocs() {
@@ -28,17 +28,17 @@ export function AdminGetReceiptDocs() {
 
     ApiOkResponse({
       description:
-        'Receipt retrieved successfully. Feedback result attached to a receipt might be null.',
+        'Receipt retrieved successfully. User info is attached to a receipt. Feedback result attached to a receipt might be null.',
       content: {
         'application/json': {
           examples: {
             receiptWithFeedbackResult: {
               summary: 'Receipt with feedback result',
-              value: receiptWithFeedbackResultExample,
+              value: receiptWithFeedbackAndUserExample,
             },
             receiptWithoutFeedbackResult: {
               summary: 'Receipt without feedback result',
-              value: receiptWithoutFeedbackResultExample,
+              value: receiptWithoutFeedbackWithUserExample,
             },
           },
         },
