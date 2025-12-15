@@ -93,8 +93,8 @@ export class ForgotPasswordService {
     }
   }
 
-  findTokenById(tokenId: string) {
-    return this.prisma.forgotPasswordToken.findUnique({
+  async findTokenById(tokenId: string) {
+    return await this.prisma.forgotPasswordToken.findUnique({
       where: {
         id: tokenId,
       },

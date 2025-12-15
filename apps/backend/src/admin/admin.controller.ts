@@ -23,18 +23,18 @@ export class AdminController {
   @Patch('/receipts/review')
   @HttpCode(200)
   async reviewReceipt(@Body() dto: ReviewReceiptDto) {
-    return this.adminService.reviewReceipt(dto);
+    return await this.adminService.reviewReceipt(dto);
   }
 
   @AdminGetReceiptsDocs()
   @Get('receipts')
   async getPendingReceipts(@Query() query: GetReceiptsQueryDto) {
-    return this.adminService.getReceipts(query);
+    return await this.adminService.getReceipts(query);
   }
 
   @AdminGetReceiptDocs()
   @Get('/receipts/:id')
   async getReceipt(@Param('id') id: string) {
-    return this.adminService.getReceipt(id);
+    return await this.adminService.getReceipt(id);
   }
 }

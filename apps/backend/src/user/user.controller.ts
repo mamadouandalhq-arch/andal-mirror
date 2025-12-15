@@ -14,12 +14,12 @@ export class UserController {
   @UpdateUserDocs()
   @Post('/update')
   async update(@User() user: UserDto, @Body() dto: UpdateUserDto) {
-    return this.userService.update(user.sub, dto);
+    return await this.userService.update(user.sub, dto);
   }
 
   @GetMeDocs()
   @Get('/me')
   async me(@User() user: UserDto) {
-    return this.userService.getMe(user.sub);
+    return await this.userService.getMe(user.sub);
   }
 }

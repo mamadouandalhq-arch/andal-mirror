@@ -11,8 +11,8 @@ export class EmailService {
     private readonly configService: ConfigService,
   ) {}
 
-  sendWelcomeEmail(dto: SendWelcomeEmailDto) {
-    return this.resendClient.emails.send({
+  async sendWelcomeEmail(dto: SendWelcomeEmailDto) {
+    return await this.resendClient.emails.send({
       to: dto.email,
       template: {
         id: 'welcome-email',
@@ -31,7 +31,7 @@ export class EmailService {
 
     const forgotPasswordLink = `${frontendUrl}${forgotPasswordPath}?token=${dto.token}&tokenId=${dto.tokenId}`;
 
-    return this.resendClient.emails.send({
+    return await this.resendClient.emails.send({
       to: dto.email,
       template: {
         id: 'forgot-password',

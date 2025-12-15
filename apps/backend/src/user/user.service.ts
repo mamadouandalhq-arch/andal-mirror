@@ -57,7 +57,7 @@ export class UserService {
 
     const hashedPassword = await argon.hash(createUserDto.password);
 
-    return this.prisma.user.create({
+    return await this.prisma.user.create({
       data: { ...createUserDto, password: hashedPassword },
     });
   }
@@ -109,7 +109,7 @@ export class UserService {
   }
 
   async getUniqueById(userId: string) {
-    return this.prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: {
         id: userId,
       },

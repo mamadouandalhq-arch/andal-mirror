@@ -25,20 +25,23 @@ export class ReceiptController {
 
   @GetReceiptListDocs()
   @Get('/list')
-  getAll(@User() user: UserDto) {
-    return this.receiptService.getAll(user.sub);
+  async getAll(@User() user: UserDto) {
+    return await this.receiptService.getAll(user.sub);
   }
 
   @GetReceiptDocs()
   @Get('/:id')
-  getOne(@Param('id') receiptId: string, @User() user: UserDto) {
-    return this.receiptService.getOneOrThrow(receiptId, user.sub);
+  async getOne(@Param('id') receiptId: string, @User() user: UserDto) {
+    return await this.receiptService.getOneOrThrow(receiptId, user.sub);
   }
 
   @UploadReceiptDocs()
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@User() user: UserDto, @UploadedFile() file: Express.Multer.File) {
-    return this.receiptService.saveAndUpload(user.sub, file);
+  async uploadFile(
+    @User() user: UserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.receiptService.saveAndUpload(user.sub, file);
   }
 }

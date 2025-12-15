@@ -55,7 +55,7 @@ export class ReceiptService {
   }
 
   async getAll(userId: string) {
-    return this.prisma.receipt.findMany({
+    return await this.prisma.receipt.findMany({
       where: {
         userId,
       },
@@ -91,11 +91,11 @@ export class ReceiptService {
   }
 
   async getFirst(where: Prisma.ReceiptWhereInput) {
-    return this.prisma.receipt.findFirst({ where });
+    return await this.prisma.receipt.findFirst({ where });
   }
 
   async getMany(where: Prisma.ReceiptWhereInput) {
-    return this.prisma.receipt.findMany({ where });
+    return await this.prisma.receipt.findMany({ where });
   }
 
   private async upload(userId: string, file: Express.Multer.File) {

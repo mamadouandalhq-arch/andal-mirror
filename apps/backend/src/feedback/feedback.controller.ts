@@ -29,29 +29,29 @@ export class FeedbackController {
   @HttpCode(HttpStatus.OK)
   @ReturnBackDocs()
   @Post('back')
-  returnBack(@User() user: UserDto, @Body() dto: ReturnBackDto) {
-    return this.feedbackService.returnBack(user.sub, dto);
+  async returnBack(@User() user: UserDto, @Body() dto: ReturnBackDto) {
+    return await this.feedbackService.returnBack(user.sub, dto);
   }
 
   @HttpCode(HttpStatus.OK)
   @AnswerQuestionDocs()
   @Post('answer-question')
-  answerQuestion(
+  async answerQuestion(
     @User() user: UserDto,
     @Body() dto: AnswerQuestionDto,
   ): Promise<FeedbackStateResponse> {
-    return this.feedbackService.answerQuestion(user.sub, dto);
+    return await this.feedbackService.answerQuestion(user.sub, dto);
   }
 
   @StartFeedbackDocs()
   @Post('start')
-  start(@User() user: UserDto, @Body() dto: StartFeedbackDto) {
-    return this.feedbackService.startFeedback(user.sub, dto);
+  async start(@User() user: UserDto, @Body() dto: StartFeedbackDto) {
+    return await this.feedbackService.startFeedback(user.sub, dto);
   }
 
   @GetStateDocs()
   @Get('state')
-  getState(@User() user: UserDto, @Query('language') language: string) {
-    return this.feedbackService.getState(user.sub, language);
+  async getState(@User() user: UserDto, @Query('language') language: string) {
+    return await this.feedbackService.getState(user.sub, language);
   }
 }
