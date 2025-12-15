@@ -295,26 +295,56 @@
   },
   "admin": {
     "title": "Panneau d'administration",
-    "description": "Gérer les utilisateurs, les reçus, les retours et consulter les statistiques",
-    "users": {
-      "title": "Utilisateurs",
-      "description": "Gérer les comptes utilisateurs et les permissions",
-      "comingSoon": "Bientôt disponible"
-    },
+    "description": "Gérer les reçus et les retours soumis par les utilisateurs",
     "receipts": {
-      "title": "Reçus",
-      "description": "Examiner et gérer les soumissions de reçus",
-      "comingSoon": "Bientôt disponible"
+      "title": "Reçus avec retour soumis",
+      "empty": "Aucun reçu avec retour soumis pour le moment.",
+      "error": "Échec du chargement des reçus.",
+      "view": "Voir",
+      "searchPlaceholder": "Rechercher par ID, utilisateur ou e-mail",
+      "filters": {
+        "status": "Statut",
+        "allStatuses": "Tous les statuts"
+      },
+      "sortBy": "Trier par",
+      "sort": {
+        "createdAt": "Date de dépôt",
+        "user": "Utilisateur",
+        "email": "E-mail",
+        "status": "Statut",
+        "direction": "Sens",
+        "asc": "Plus anciens d'abord",
+        "desc": "Plus récents d'abord",
+        "ascText": "A-Z",
+        "descText": "Z-A"
+      },
+      "columns": {
+        "id": "ID",
+        "user": "Utilisateur",
+        "email": "E-mail",
+        "uploaded": "Téléchargé le",
+        "status": "Statut",
+        "actions": "Actions"
+      }
     },
-    "feedback": {
-      "title": "Retours",
-      "description": "Voir et gérer les retours des utilisateurs",
-      "comingSoon": "Bientôt disponible"
-    },
-    "statistics": {
-      "title": "Statistiques",
-      "description": "Voir les statistiques et analyses de la plateforme",
-      "comingSoon": "Bientôt disponible"
+    "receiptDetail": {
+      "error": "Échec du chargement du reçu.",
+      "backToList": "Retour à la liste",
+      "receipt": "Reçu",
+      "status": "Statut",
+      "uploaded": "Téléchargé le",
+      "approvedOn": "Approuvé le",
+      "user": "Utilisateur",
+      "feedbackStatus": "Statut du retour",
+      "points": "Points",
+      "questions": "Questions",
+      "completedAt": "Terminé le",
+      "comment": "Commentaire",
+      "actions": "Actions",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "preview": "Aperçu",
+      "open": "Ouvrir dans un nouvel onglet"
     }
   }
 }

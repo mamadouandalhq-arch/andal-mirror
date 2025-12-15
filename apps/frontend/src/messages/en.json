@@ -295,26 +295,56 @@
   },
   "admin": {
     "title": "Admin Panel",
-    "description": "Manage users, receipts, feedback, and view statistics",
-    "users": {
-      "title": "Users",
-      "description": "Manage user accounts and permissions",
-      "comingSoon": "Coming soon"
-    },
+    "description": "Manage receipts and feedback submitted by users",
     "receipts": {
-      "title": "Receipts",
-      "description": "Review and manage receipt submissions",
-      "comingSoon": "Coming soon"
+      "title": "Receipts with submitted feedback",
+      "empty": "No receipts with submitted feedback yet.",
+      "error": "Failed to load receipts.",
+      "view": "View",
+      "searchPlaceholder": "Search by ID, user or email",
+      "filters": {
+        "status": "Status",
+        "allStatuses": "All statuses"
+      },
+      "sortBy": "Sort by",
+      "sort": {
+        "createdAt": "Uploaded date",
+        "user": "User",
+        "email": "Email",
+        "status": "Status",
+        "direction": "Direction",
+        "asc": "Oldest first",
+        "desc": "Newest first",
+        "ascText": "A-Z",
+        "descText": "Z-A"
+      },
+      "columns": {
+        "id": "ID",
+        "user": "User",
+        "email": "Email",
+        "uploaded": "Uploaded",
+        "status": "Status",
+        "actions": "Actions"
+      }
     },
-    "feedback": {
-      "title": "Feedback",
-      "description": "View and manage user feedback",
-      "comingSoon": "Coming soon"
-    },
-    "statistics": {
-      "title": "Statistics",
-      "description": "View platform statistics and analytics",
-      "comingSoon": "Coming soon"
+    "receiptDetail": {
+      "error": "Failed to load receipt.",
+      "backToList": "Back to list",
+      "receipt": "Receipt",
+      "status": "Status",
+      "uploaded": "Uploaded",
+      "approvedOn": "Approved on",
+      "user": "User",
+      "feedbackStatus": "Feedback status",
+      "points": "Points",
+      "questions": "Questions",
+      "completedAt": "Completed at",
+      "comment": "Comment",
+      "actions": "Actions",
+      "approve": "Approve",
+      "reject": "Reject",
+      "preview": "Preview",
+      "open": "Open in new tab"
     }
   }
 }

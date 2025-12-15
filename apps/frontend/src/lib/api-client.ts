@@ -82,7 +82,7 @@ export async function apiRequest<T>(
         headers,
         credentials: 'include',
       });
-    } catch (error) {
+    } catch {
       // Refresh failed, user needs to login again
       authStorage.clearAccessToken();
       // Redirect to login or handle as needed
@@ -140,6 +140,11 @@ export const apiClient = {
   put: <T>(endpoint: string, data: unknown) =>
     apiRequest<T>(endpoint, {
       method: 'PUT',
+      body: data instanceof FormData ? data : JSON.stringify(data),
+    }),
+  patch: <T>(endpoint: string, data: unknown) =>
+    apiRequest<T>(endpoint, {
+      method: 'PATCH',
       body: data instanceof FormData ? data : JSON.stringify(data),
     }),
   delete: <T>(endpoint: string) =>
