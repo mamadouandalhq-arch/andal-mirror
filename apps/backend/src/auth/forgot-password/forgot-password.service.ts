@@ -77,7 +77,7 @@ export class ForgotPasswordService {
 
   async deleteTokenByIdOrThrow(tokenId: string) {
     try {
-      return this.prisma.forgotPasswordToken.delete({
+      return await this.prisma.forgotPasswordToken.delete({
         where: {
           id: tokenId,
         },

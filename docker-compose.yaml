@@ -15,7 +15,7 @@ services:
     depends_on:
       - postgres
   postgres:
-    image: postgres:latest
+    image: postgres:17
     container_name: postgres
     env_file:
       - apps/backend/.env
