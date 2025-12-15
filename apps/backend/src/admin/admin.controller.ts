@@ -24,6 +24,14 @@ import {
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  @Get('/feedback/:id')
+  getFeedbackById(
+    @Param('id') feedbackId: string,
+    @Query('language') language: string,
+  ) {
+    return this.adminService.getFeedbackById(feedbackId, language);
+  }
+
   @ReviewReceiptDocs()
   @Patch('/receipts/review')
   @HttpCode(200)

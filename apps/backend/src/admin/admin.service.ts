@@ -6,10 +6,48 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { GetReceiptsQueryDto, ReviewReceiptDto } from './dto';
 import { ReceiptStatus } from '@prisma/client';
+import { mapFeedbackAnswers } from './mappers';
 
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getFeedbackById(feedbackId: string, language: string) {
+    const feedbackResult = await this.prisma.feedbackResult.findUnique({
+      where: {
+        id: feedbackId,
+      },
+      include: {
+        answers: {
+          include: {
+            question: {
+              include: {
+                translations: {
+                  where: { lang: language },
+                  select: {
+                    text: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!feedbackResult) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    return {
+      id: feedbackResult.id,
+      status: feedbackResult.status,
+      pointsValue: feedbackResult.pointsValue,
+      createdAt: feedbackResult.createdAt,
+      completedAt: feedbackResult.completedAt,
+      answers: mapFeedbackAnswers(feedbackResult.answers),
+    };
+  }
 
   async reviewReceipt(dto: ReviewReceiptDto) {
     return await this.prisma.$transaction(async (tx) => {
