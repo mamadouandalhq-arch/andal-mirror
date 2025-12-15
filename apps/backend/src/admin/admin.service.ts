@@ -1,31 +1,63 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetReceiptsQueryDto, ReviewReceiptDto } from './dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ReceiptStatus } from '@prisma/client';
 
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
 
   async reviewReceipt(dto: ReviewReceiptDto) {
-    try {
-      return await this.prisma.receipt.update({
-        where: {
-          id: dto.receiptId,
-        },
-        data: {
-          status: dto.status,
+    return await this.prisma.$transaction(async (tx) => {
+      const receipt = await tx.receipt.findUnique({
+        where: { id: dto.receiptId },
+        select: {
+          id: true,
+          status: true,
+          userId: true,
+          feedbackResult: {
+            select: { pointsValue: true },
+          },
         },
       });
-    } catch (err: unknown) {
-      if (err instanceof PrismaClientKnownRequestError) {
-        if (err.code === 'P2025') {
-          throw new NotFoundException('Receipt not found');
-        }
+
+      if (!receipt) {
+        throw new NotFoundException('Receipt not found');
       }
 
-      throw err;
-    }
+      if (!receipt.userId) {
+        throw new NotFoundException('User not found');
+      }
+
+      const wasPending = receipt.status === ReceiptStatus.pending;
+      const willBeApproved = dto.status === ReceiptStatus.approved;
+
+      if (!wasPending) {
+        throw new BadRequestException('Receipt was already handled');
+      }
+
+      const updatedReceipt = await tx.receipt.update({
+        where: { id: receipt.id },
+        data: { status: dto.status },
+      });
+
+      if (wasPending && willBeApproved) {
+        await tx.user.update({
+          where: { id: receipt.userId },
+          data: {
+            pointsBalance: {
+              increment: receipt.feedbackResult?.pointsValue ?? 0,
+            },
+          },
+        });
+      }
+
+      return updatedReceipt;
+    });
   }
 
   async getReceipts(query: GetReceiptsQueryDto) {

@@ -13,8 +13,17 @@ export function ReviewReceiptDocs() {
   return applyDecorators(
     ApiOperation({
       summary: 'Review receipt',
-      description:
-        'Approve or reject a receipt uploaded by a user. Only available for admins.',
+      description: `
+Approve or reject a user receipt.
+
+Business rules:
+- Points are awarded ONLY when receipt status changes from 'pending' to 'approved'
+- Re-approving an already approved receipt does NOT award points again
+- Rejecting a receipt never awards points
+- Endpoint is idempotent for repeated approve actions
+
+Admin only.
+      `,
     }),
 
     ApiOkResponse({
@@ -56,7 +65,7 @@ export function ReviewReceiptDocs() {
     }),
 
     ApiForbiddenResponse({
-      description: 'Forbidden resource',
+      description: 'Forbidden resource (admin access required)',
       content: {
         'application/json': {
           example: {
@@ -68,12 +77,24 @@ export function ReviewReceiptDocs() {
     }),
 
     ApiNotFoundResponse({
-      description: 'Receipt not found',
+      description: 'Receipt or related user not found',
       content: {
         'application/json': {
-          example: {
-            statusCode: 404,
-            message: 'Receipt not found',
+          examples: {
+            receiptNotFound: {
+              summary: 'Receipt not found',
+              value: {
+                statusCode: 404,
+                message: 'Receipt not found',
+              },
+            },
+            userNotFound: {
+              summary: 'User not found',
+              value: {
+                statusCode: 404,
+                message: 'User not found',
+              },
+            },
           },
         },
       },
