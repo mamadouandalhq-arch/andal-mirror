@@ -60,7 +60,7 @@ export function AdminGetReceiptsDocs() {
         'application/json': {
           example: {
             statusCode: 403,
-            message: 'Forbidden',
+            message: 'Forbidden resource',
           },
         },
       },
