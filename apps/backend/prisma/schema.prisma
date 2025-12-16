@@ -71,6 +71,8 @@ model Receipt {
   createdAt  DateTime  @default(now())
   approvedAt DateTime?
 
+  comment String?
+
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
@@ -129,7 +131,6 @@ model FeedbackResult {
   userId            String
   status            FeedbackStatus @default(inProgress)
   totalQuestions    Int
-  comment           String?
   answeredQuestions Int            @default(0)
   pointsValue       Int            @default(0)
 

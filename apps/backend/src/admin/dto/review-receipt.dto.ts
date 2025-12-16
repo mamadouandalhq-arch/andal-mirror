@@ -1,5 +1,5 @@
 import { ReceiptStatus } from '@prisma/client';
-import { IsIn, IsNotEmpty, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -20,8 +20,19 @@ export class ReviewReceiptDto {
   @ApiProperty({
     description:
       'Receipt status. Can only accept two values: approved, rejected',
-    example: 'approved',
+    example: 'rejected',
   })
   @IsIn(ReviewReceiptStatuses)
   status: Exclude<ReceiptStatus, 'pending'>;
+
+  @ApiProperty({
+    description:
+      "Admin comment. Only acceptable if receipt status was 'pending' and goes to 'rejected'",
+    example:
+      'Your provided a check from the previous year. Please provide another one.',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  comment?: string;
 }

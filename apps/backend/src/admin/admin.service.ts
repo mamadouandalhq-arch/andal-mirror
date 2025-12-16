@@ -65,7 +65,10 @@ export class AdminService {
 
       const updatedReceipt = await tx.receipt.update({
         where: { id: receipt.id },
-        data: { status: dto.status },
+        data: {
+          status: dto.status,
+          comment: willBeApproved ? undefined : dto.comment,
+        },
       });
 
       if (wasPending && willBeApproved) {
