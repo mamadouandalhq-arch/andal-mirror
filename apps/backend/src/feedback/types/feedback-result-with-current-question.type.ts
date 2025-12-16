@@ -6,6 +6,11 @@ export type FeedbackResultWithCurrentQuestion =
       currentQuestion: {
         include: {
           translations: true;
+          options: {
+            include: {
+              translations: true;
+            };
+          };
         };
       };
     };

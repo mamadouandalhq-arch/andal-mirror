@@ -105,6 +105,7 @@ model FeedbackQuestion {
   type         FeedbackType
   createdAt    DateTime     @default(now())
 
+  options         FeedbackOption[]
   translations    FeedbackQuestionTranslation[]
   feedbackAnswers FeedbackAnswer[]
   feedbackResults FeedbackResult[]
@@ -114,7 +115,6 @@ model FeedbackQuestionTranslation {
   id        String   @id @default(uuid())
   language  String
   text      String
-  options   String[]
   createdAt DateTime @default(now())
 
   questionId String
@@ -151,11 +151,38 @@ model FeedbackAnswer {
   id               String   @id @default(uuid())
   feedbackResultId String
   questionId       String
-  answer           String[]
+  answerKeys       String[]
   createdAt        DateTime @default(now())
 
   feedbackResult FeedbackResult   @relation(fields: [feedbackResultId], references: [id])
   question       FeedbackQuestion @relation(fields: [questionId], references: [id])
 
   @@unique([feedbackResultId, questionId])
+}
+
+model FeedbackOption {
+  id        String   @id @default(uuid())
+  key       String
+  order     Int
+  score     Int?
+  createdAt DateTime @default(now())
+
+  questionId String
+  question   FeedbackQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  translations FeedbackOptionTranslation[]
+
+  @@unique([questionId, key])
+  @@unique([questionId, order])
+}
+
+model FeedbackOptionTranslation {
+  id       String @id @default(uuid())
+  language String
+  label    String
+
+  optionId String
+  option   FeedbackOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([optionId, language])
 }

@@ -41,6 +41,13 @@ export class StartFeedbackService {
               where: { language: language },
               take: 1,
             },
+            options: {
+              include: {
+                translations: {
+                  where: { language: language },
+                },
+              },
+            },
           },
         },
       },

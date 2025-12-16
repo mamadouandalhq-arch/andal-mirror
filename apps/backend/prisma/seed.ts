@@ -2,107 +2,103 @@ import { FeedbackType, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function seed() {
-  const coreQuestions = [
-    { serialNumber: 1, type: FeedbackType.single },
-    { serialNumber: 2, type: FeedbackType.single },
-    { serialNumber: 3, type: FeedbackType.single },
-  ];
-
-  const translations = {
-    en: [
-      {
-        serialNumber: 1,
-        text: 'How would you rate your apartment condition?',
-        options: ['1', '2', '3', '4', '5'],
-      },
-      {
-        serialNumber: 2,
-        text: 'How would you rate your relationship with the landlord?',
-        options: ['1', '2', '3', '4', '5'],
-      },
-      {
-        serialNumber: 3,
-        text: 'Do you have any complaints about your life in the apartment/complex?',
-        options: ['Yes, a lot', 'Yes, a few', 'No'],
-      },
+const QUESTIONS = [
+  {
+    serialNumber: 1,
+    type: FeedbackType.single,
+    translations: {
+      en: 'How would you rate your apartment condition?',
+      fr: "Comment évalueriez-vous l'état de votre appartement ?",
+    },
+    options: [
+      { en: '1', fr: '1', score: 0 },
+      { en: '2', fr: '2', score: 1 },
+      { en: '3', fr: '3', score: 2 },
+      { en: '4', fr: '4', score: 3 },
+      { en: '5', fr: '5', score: 4 },
     ],
-    fr: [
-      {
-        serialNumber: 1,
-        text: "Comment évalueriez-vous l'état de votre appartement ?",
-        options: ['1', '2', '3', '4', '5'],
-      },
-      {
-        serialNumber: 2,
-        text: 'Comment évalueriez-vous votre relation avec le propriétaire ?',
-        options: ['1', '2', '3', '4', '5'],
-      },
-      {
-        serialNumber: 3,
-        text: "Avez-vous des plaintes concernant votre vie dans l'appartement/le complexe ?",
-        options: ['Oui, beaucoup', 'Oui, un peu', 'Non'],
-      },
+  },
+  {
+    serialNumber: 2,
+    type: FeedbackType.single,
+    translations: {
+      en: 'How would you rate your relationship with the landlord?',
+      fr: 'Comment évalueriez-vous votre relation avec le propriétaire ?',
+    },
+    options: [
+      { en: '1', fr: '1', score: 0 },
+      { en: '2', fr: '2', score: 1 },
+      { en: '3', fr: '3', score: 2 },
+      { en: '4', fr: '4', score: 3 },
+      { en: '5', fr: '5', score: 4 },
     ],
-  };
+  },
+  {
+    serialNumber: 3,
+    type: FeedbackType.single,
+    translations: {
+      en: 'Do you have any complaints about your life in the apartment/complex?',
+      fr: "Avez-vous des plaintes concernant votre vie dans l'appartement/le complexe ?",
+    },
+    options: [
+      { en: 'Yes, a lot', fr: 'Oui, beaucoup', score: 0 },
+      { en: 'Yes, a few', fr: 'Oui, un peu', score: 1 },
+      { en: 'No', fr: 'Non', score: 2 },
+    ],
+  },
+];
 
-  for (const q of coreQuestions) {
-    const exists = await prisma.feedbackQuestion.findUnique({
-      where: { serialNumber: q.serialNumber },
+async function seed() {
+  for (const questionData of QUESTIONS) {
+    const question = await prisma.feedbackQuestion.create({
+      data: {
+        serialNumber: questionData.serialNumber,
+        type: questionData.type,
+      },
     });
 
-    if (!exists) {
-      const created = await prisma.feedbackQuestion.create({
-        data: {
-          serialNumber: q.serialNumber,
-          type: q.type,
-        },
-      });
-
-      console.log(`Created core question #${q.serialNumber} (${created.id})`);
-    } else {
-      console.log(
-        `Core question #${q.serialNumber} already exists (${exists.id}), skipping`,
-      );
-    }
-  }
-
-  for (const language of Object.keys(translations)) {
-    for (const tr of translations[language]) {
-      const parent = await prisma.feedbackQuestion.findUnique({
-        where: { serialNumber: tr.serialNumber },
-      });
-
-      if (!parent) {
-        console.error(
-          `Core question #${tr.serialNumber} missing - cannot add translation`,
-        );
-        continue;
-      }
-
-      await prisma.feedbackQuestionTranslation.upsert({
-        where: {
-          questionId_language: {
-            questionId: parent.id,
-            language,
-          },
-        },
-        update: {},
-        create: {
-          questionId: parent.id,
+    await prisma.feedbackQuestionTranslation.createMany({
+      data: Object.entries(questionData.translations).map(
+        ([language, text]) => ({
+          questionId: question.id,
           language,
-          text: tr.text,
-          options: tr.options,
+          text,
+        }),
+      ),
+    });
+
+    for (let i = 0; i < questionData.options.length; i++) {
+      const optionData = questionData.options[i];
+
+      const option = await prisma.feedbackOption.create({
+        data: {
+          questionId: question.id,
+          key: `option${i + 1}`,
+          order: i + 1,
+          score: optionData.score,
         },
       });
 
-      console.log(
-        `Ensured translation for question #${tr.serialNumber} in ${language}`,
-      );
+      await prisma.feedbackOptionTranslation.createMany({
+        data: [
+          {
+            optionId: option.id,
+            language: 'en',
+            label: optionData.en,
+          },
+          {
+            optionId: option.id,
+            language: 'fr',
+            label: optionData.fr,
+          },
+        ],
+      });
     }
   }
+
+  console.log('Feedback questions seeded');
 }
 
 seed()
-  .catch((err) => console.error(err))
+  .catch(console.error)
   .finally(async () => prisma.$disconnect());

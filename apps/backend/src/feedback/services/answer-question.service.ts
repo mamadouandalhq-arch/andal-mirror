@@ -25,6 +25,8 @@ export class AnswerQuestionService {
       return;
     }
 
+    // TODO
+
     return this.prisma.feedbackAnswer.upsert({
       where: {
         feedbackResultId_questionId: {
@@ -33,12 +35,12 @@ export class AnswerQuestionService {
         },
       },
       update: {
-        answer: answers,
+        answerKeys: answers,
       },
       create: {
         feedbackResultId: feedback.id,
         questionId: currentQuestion.id,
-        answer: answers,
+        answerKeys: answers,
       },
     });
   }
@@ -120,7 +122,8 @@ export class AnswerQuestionService {
       );
     }
 
-    const options = translation.options;
+    // TODO
+    const options = [''];
 
     if (!answers) {
       return { feedback, currentQuestion };
