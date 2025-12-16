@@ -13,6 +13,7 @@ import { Roles, RolesGuard } from '../common';
 import { JwtGuard } from '../auth/guards';
 import { GetReceiptsQueryDto, ReviewReceiptDto } from './dto';
 import {
+  AdminGetFeedbackDocs,
   AdminGetReceiptDocs,
   AdminGetReceiptsDocs,
   ReviewReceiptDocs,
@@ -24,6 +25,7 @@ import {
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  @AdminGetFeedbackDocs()
   @Get('/feedback/:id')
   getFeedbackById(
     @Param('id') feedbackId: string,

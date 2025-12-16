@@ -17,27 +17,7 @@ export class AdminService {
       where: {
         id: feedbackId,
       },
-      include: {
-        answers: {
-          include: {
-            question: {
-              include: {
-                translations: {
-                  where: { language: language },
-                  take: 1,
-                },
-                options: {
-                  include: {
-                    translations: {
-                      where: { language: language },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+      include: this.getFeedbackWithAnswersInclude(language),
     });
 
     if (!feedbackResult) {
@@ -147,5 +127,29 @@ export class AdminService {
     }
 
     return receipt;
+  }
+
+  private getFeedbackWithAnswersInclude(language: string) {
+    return {
+      answers: {
+        include: {
+          question: {
+            include: {
+              translations: {
+                where: { language: language },
+                take: 1,
+              },
+              options: {
+                include: {
+                  translations: {
+                    where: { language: language },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
   }
 }
