@@ -10,8 +10,8 @@ import { ApiProperty } from '@nestjs/swagger';
 export class AnswerQuestionDto {
   @ApiProperty({
     description:
-      'Answers, passed as string array of answers. If answers array is not passed, question will be skipped. If answers array is empty, it counts as an attempt to answer a question.',
-    example: ['1'],
+      'Array of selected option keys for the current question. Each value must be a valid option key (for example "option1"), not a label. If the field is omitted, the question will be skipped. If the array is provided but empty, it is treated as an attempt to answer the question.',
+    example: ['option1'],
     required: false,
   })
   @IsOptional()

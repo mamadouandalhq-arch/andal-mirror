@@ -69,7 +69,7 @@ An endpoint to send an answer to a current question.
             invalidAnswerOption: {
               summary: 'Provided answer is not in allowed options list',
               value: getBadRequestDocExample(
-                'You provided invalid answer option.',
+                'You provided invalid answer option key.',
               ),
             },
             singleChoiceMustHaveOneAnswer: {
@@ -91,13 +91,25 @@ An endpoint to send an answer to a current question.
 
     ApiNotFoundResponse({
       description:
-        'Unable to answer question because no translation was found for the selected language',
+        'Unable to answer question because some resource was not found',
       content: {
         'application/json': {
-          example: {
-            statusCode: 404,
-            message:
-              'Unable to answer question. No translation was found for selected language.',
+          examples: {
+            noTranslationsForQuestion: {
+              summary: 'No translations found for the current question',
+              value: {
+                statusCode: 404,
+                message:
+                  'Unable to answer question. No translation was found for selected language.',
+              },
+            },
+            optionCouldNotBeFound: {
+              summary: 'Option could not be found',
+              value: {
+                statusCode: 404,
+                message: "Option with key 'option1' not found",
+              },
+            },
           },
         },
       },
