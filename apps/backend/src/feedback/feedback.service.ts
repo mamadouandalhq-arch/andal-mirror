@@ -18,7 +18,7 @@ import {
 import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
 import { AnswerQuestionService, StartFeedbackService } from './services';
-import { FeedbackStateResponse } from '@shared/feedback';
+import { FeedbackOptionDto, FeedbackStateResponse } from '@shared/feedback';
 
 @Injectable()
 export class FeedbackService {
@@ -75,7 +75,7 @@ export class FeedbackService {
 
   async answerQuestion(
     userId: string,
-    { answers, language }: AnswerQuestionDto,
+    { answerKeys, language }: AnswerQuestionDto,
   ): Promise<FeedbackStateResponse> {
     const currentFeedback = await this.prisma.feedbackResult.findFirst({
       where: {
@@ -88,7 +88,7 @@ export class FeedbackService {
     const { feedback: validatedFeedback, currentQuestion } =
       this.answerQuestionService.validateAnswerOrThrow(
         currentFeedback,
-        answers,
+        answerKeys,
       );
 
     const existingAnswer = await this.prisma.feedbackAnswer.findUnique({
@@ -104,13 +104,13 @@ export class FeedbackService {
       validatedFeedback,
       currentQuestion,
       existingAnswer,
-      answers,
+      answerKeys,
     );
 
     const upsertAnswer = this.answerQuestionService.upsertAnswerIfAnswers(
       validatedFeedback,
       currentQuestion,
-      answers,
+      answerKeys,
     );
 
     const updateFeedback = this.prisma.feedbackResult.update({
@@ -263,9 +263,13 @@ export class FeedbackService {
         },
       });
 
-      const options = currentQuestion.options.map(
-        (question) => question.translations[0].label,
-      );
+      const options = currentQuestion.options.map((option) => {
+        const data = {
+          key: option.key,
+          label: option.translations[0].label,
+        };
+        return FeedbackOptionDto.create(data);
+      });
 
       response.currentQuestion = {
         id: currentQuestion.id,

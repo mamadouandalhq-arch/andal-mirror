@@ -1,9 +1,11 @@
+import { FeedbackOptionDto } from '@shared/feedback';
+
 export class FeedbackQuestionDto {
   id!: string;
   serialNumber!: number;
   text!: string;
   type!: 'single' | 'multiple';
-  options!: string[];
+  options!: FeedbackOptionDto[];
   currentAnswer?: string[];
 
   static create(data: FeedbackQuestionDto): FeedbackQuestionDto {

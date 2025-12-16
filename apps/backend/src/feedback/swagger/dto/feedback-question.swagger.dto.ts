@@ -1,4 +1,4 @@
-import { FeedbackQuestionDto } from '@shared/feedback';
+import { FeedbackOptionDto, FeedbackQuestionDto } from '@shared/feedback';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class FeedbackQuestionSwaggerDto extends FeedbackQuestionDto {
@@ -18,5 +18,5 @@ export class FeedbackQuestionSwaggerDto extends FeedbackQuestionDto {
   declare type: 'single' | 'multiple';
 
   @ApiProperty({ type: [String], example: ['1', '2', '3'] })
-  declare options: string[];
+  declare options: FeedbackOptionDto[];
 }

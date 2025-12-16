@@ -18,7 +18,7 @@ export class AnswerQuestionDto {
   @IsArray()
   @ArrayNotEmpty()
   @IsString({ each: true })
-  answers?: string[];
+  answerKeys?: string[];
 
   @ApiProperty({ description: 'Language code', example: 'fr' })
   @IsString()

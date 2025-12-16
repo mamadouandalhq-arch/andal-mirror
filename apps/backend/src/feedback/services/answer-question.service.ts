@@ -19,13 +19,11 @@ export class AnswerQuestionService {
   upsertAnswerIfAnswers(
     feedback: FeedbackResultWithCurrentQuestion,
     currentQuestion: FeedbackQuestion,
-    answers?: string[],
+    answerKeys?: string[],
   ) {
-    if (!answers) {
+    if (!answerKeys) {
       return;
     }
-
-    // TODO
 
     return this.prisma.feedbackAnswer.upsert({
       where: {
@@ -35,12 +33,12 @@ export class AnswerQuestionService {
         },
       },
       update: {
-        answerKeys: answers,
+        answerKeys: answerKeys,
       },
       create: {
         feedbackResultId: feedback.id,
         questionId: currentQuestion.id,
-        answerKeys: answers,
+        answerKeys: answerKeys,
       },
     });
   }
@@ -104,7 +102,7 @@ export class AnswerQuestionService {
 
   validateAnswerOrThrow(
     feedback: FeedbackResultWithCurrentQuestion | null,
-    answers?: string[],
+    answerKeys?: string[],
   ) {
     if (!feedback || !feedback.currentQuestion) {
       throw new BadRequestException(
@@ -122,24 +120,23 @@ export class AnswerQuestionService {
       );
     }
 
-    // TODO
-    const options = [''];
+    const optionKeys = currentQuestion.options.map((option) => option.key);
 
-    if (!answers) {
+    if (!answerKeys) {
       return { feedback, currentQuestion };
     }
 
-    if (answers.some((answer) => !options.includes(answer))) {
-      throw new BadRequestException('You provided invalid answer option.');
+    if (answerKeys.some((answer) => !optionKeys.includes(answer))) {
+      throw new BadRequestException('You provided invalid answer option key.');
     }
 
-    if (type === 'single' && answers.length !== 1) {
+    if (type === 'single' && answerKeys.length !== 1) {
       throw new BadRequestException(
         'Single-choice question must have exactly one answer',
       );
     }
 
-    if (new Set(answers).size !== answers.length) {
+    if (new Set(answerKeys).size !== answerKeys.length) {
       throw new BadRequestException('Duplicate answers are not allowed');
     }
 
