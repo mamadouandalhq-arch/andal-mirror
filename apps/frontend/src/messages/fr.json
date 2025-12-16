@@ -1,10 +1,12 @@
 {
   "common": {
-    "appName": "Achat de Pouvoirs d'Achat",
+    "appName": "Andal Rewards",
     "language": "Langue",
     "welcome": "Bienvenue",
     "points": "points",
     "admin": "Admin",
+    "forTenants": "Pour Locataires",
+    "forLandlords": "Pour Propriétaires",
     "status": {
       "pending": "En attente",
       "approved": "Approuvé",
@@ -34,11 +36,11 @@
       "privacy": "Politique de Confidentialité",
       "terms": "Conditions d'Utilisation"
     },
-    "copyright": "© {year} Achat de Pouvoirs d'Achat. Tous droits réservés.",
+    "copyright": "© {year} Andal Rewards. Tous droits réservés.",
     "rights": "Tous droits réservés."
   },
   "home": {
-    "title": "Achat de Pouvoirs d'Achat",
+    "title": "Andal Rewards",
     "description": "Gagnez des points en téléchargeant des reçus et échangez-les contre des cartes-cadeaux",
     "getStarted": "Commencer",
     "hero": {
@@ -48,31 +50,28 @@
       "learnMore": "En Savoir Plus"
     },
     "features": {
-      "title": "Pourquoi Nous Choisir",
-      "subtitle": "Tout ce dont vous avez besoin pour transformer vos paiements de loyer en récompenses",
+      "title": "Gagnez des Récompenses sur Vos Plus Grosses Dépenses Mensuelles",
+      "subtitle": "Transformez vos paiements de loyer en récompenses et débloquez des opportunités futures",
+      "comingSoon": "Bientôt Disponible",
       "receiptUpload": {
         "title": "Téléchargement Facile des Reçus",
         "description": "Téléchargez simplement vos reçus de loyer avec notre interface intuitive. Rapide, sécurisé et sans tracas."
-      },
-      "feedbackRewards": {
-        "title": "Gagnez pour Vos Avis",
-        "description": "Partagez votre expérience et soyez récompensé. Vos retours aident à améliorer les services et vous rapportent des points."
       },
       "onTimePayments": {
         "title": "Bonus de Paiement Ponctuel",
         "description": "Obtenez des récompenses supplémentaires lorsque vous payez votre loyer à temps. Des paiements réguliers signifient plus de points sur votre compte."
       },
-      "flexibleRewards": {
-        "title": "Récompenses Flexibles",
-        "description": "Choisissez comment vous voulez être récompensé - espèces ou cartes-cadeaux de vos magasins préférés. Le choix vous appartient."
+      "feedbackRewards": {
+        "title": "Gagnez pour Vos Avis",
+        "description": "Partagez votre expérience et soyez récompensé. Vos retours aident à améliorer les services et vous rapportent des points."
       },
-      "simpleRegistration": {
-        "title": "Inscription Rapide",
-        "description": "Commencez en quelques minutes. Processus d'inscription simple conçu pour les locataires qui veulent commencer à gagner immédiatement."
+      "affiliatedMerchants": {
+        "title": "Commerces Partenaires",
+        "description": "Nous construisons des partenariats avec des commerces du quotidien. Bientôt, vous pourrez échanger vos points contre des récompenses dans ces établissements."
       },
-      "securePlatform": {
-        "title": "Sécurisé et Fiable",
-        "description": "Vos données sont protégées par une sécurité de niveau bancaire. Téléchargez des reçus et gérez votre compte en toute confiance."
+      "homeownership": {
+        "title": "Chemin vers la Propriété",
+        "description": "Transformer le loyer en chemin vers la propriété."
       }
     },
     "howItWorks": {
@@ -123,6 +122,76 @@
       "description": "Rejoignez des milliers de locataires qui transforment déjà leurs paiements de loyer en récompenses.",
       "button": "Commencer Maintenant",
       "secondaryButton": "En Savoir Plus"
+    }
+  },
+  "landlords": {
+    "comingSoon": "Bientôt Disponible",
+    "title": "Nous Aidons les Propriétaires à Gagner, Que les Locataires Restent ou Partent",
+    "subtitle": "Réduisez les coûts de rotation, améliorez la satisfaction des locataires et construisez votre réputation",
+    "keepTenants": {
+      "title": "Scénario 1 : Garder les Bons Locataires Plus Longtemps",
+      "description": "Engagez les locataires mensuellement et prévoyez les départs avant qu'ils ne se produisent",
+      "features": {
+        "monthlyEngagement": {
+          "title": "Engagement Mensuel",
+          "description": "Engagement mensuel grâce à des récompenses en $ pour le loyer payé à temps + enquêtes rapides"
+        },
+        "churnPrediction": {
+          "title": "Prédiction des Départs",
+          "description": "Avertissements précoces de 90 jours avec scores de risque combinant paiement tardif + faible satisfaction + problèmes de maintenance non résolus"
+        },
+        "interventionTools": {
+          "title": "Outils d'Intervention",
+          "description": "Les alertes du tableau de bord montrent les locataires à risque (ex. '12 locataires à haut risque - prioriser les unités 4B, 7A, 2C'). Analyse des causes profondes avec suivi des sentiments et détection de modèles."
+        }
+      },
+      "result": {
+        "title": "Résultat",
+        "description": "Prévenez 2-3 rotations inutiles par an",
+        "savings": ["Économisez 5 000 $/an"]
+      }
+    },
+    "smoothExits": {
+      "title": "Scénario 2 : Rendre les Départs des Locataires Fluides",
+      "description": "Récompensez les préavis précoces et permettez des transitions sans vacance",
+      "features": {
+        "earlyNotice": {
+          "title": "Récompenses pour Préavis Précoce",
+          "description": "Récompensez les préavis précoces (100 $ pour un préavis de 60 jours au lieu de 30 jours)"
+        },
+        "smoothExit": {
+          "title": "Programme de Départ Fluide",
+          "description": "250 $ pour une unité propre, permettant les visites, retour ponctuel des clés"
+        },
+        "concurrentPlacement": {
+          "title": "Placement Concurrent",
+          "description": "Aidez à trouver de nouveaux locataires avant que les anciens ne partent. Permettez des transitions sans vacance (nouveau locataire emménage le même jour)"
+        }
+      },
+      "result": {
+        "title": "Résultat",
+        "description": "Réduisez le coût de rotation de 4 000 $ à 1 500 $",
+        "savings": ["Économisez 2 500 $ par rotation"]
+      }
+    },
+    "reputationManagement": {
+      "title": "Scénario 3 : Gestion de la Réputation",
+      "description": "Générez des avis authentiques 5 étoiles et gérez les retours en privé",
+      "features": {
+        "happyTenants": {
+          "title": "Orienter les Locataires Satisfaits",
+          "description": "Invitez automatiquement les locataires avec des notes de 4-5 étoiles à laisser des avis sur Google, Yelp et les sites d'avis d'appartements"
+        },
+        "privateFeedback": {
+          "title": "Canal de Retour Privé",
+          "description": "Orientez les locataires insatisfaits (1-3 étoiles) pour envoyer des retours en privé au gestionnaire de propriété uniquement - corrigez les problèmes avant qu'ils ne deviennent des avis négatifs publics"
+        }
+      },
+      "result": {
+        "title": "Résultat",
+        "description": "Générez des avis authentiques 5 étoiles qui aident à remplir les vacances plus rapidement",
+        "savings": ["Remplissez les vacances 7-15 jours plus rapidement"]
+      }
     }
   },
   "auth": {

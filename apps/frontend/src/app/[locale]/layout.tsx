@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Buy Purchasing Powers',
-  description: 'Buy Purchasing Powers',
+  title: 'Andal Rewards',
+  description: 'Andal Rewards',
 };
 
 export function generateStaticParams() {

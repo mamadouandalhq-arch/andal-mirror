@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="w-full border-t bg-muted/50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-12 grid grid-cols-1 gap-8 md:grid-cols-4">
+        <div className="max-w-7xl mx-auto py-12 grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">{t('appName')}</h3>
             <p className="text-sm text-muted-foreground">
@@ -86,8 +86,8 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <Separator />
-        <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <Separator className="max-w-7xl mx-auto" />
+        <div className="max-w-7xl mx-auto py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             {footerT('copyright', {
               year: new Date().getFullYear(),
