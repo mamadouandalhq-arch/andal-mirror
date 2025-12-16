@@ -16,7 +16,7 @@ export class StartFeedbackService {
     const translation = await this.prisma.feedbackQuestionTranslation.findFirst(
       {
         where: {
-          lang: language,
+          language: language,
         },
       },
     );
@@ -38,7 +38,7 @@ export class StartFeedbackService {
         currentQuestion: {
           include: {
             translations: {
-              where: { lang: language },
+              where: { language: language },
               take: 1,
             },
           },

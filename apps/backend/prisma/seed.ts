@@ -67,8 +67,8 @@ export async function seed() {
     }
   }
 
-  for (const lang of Object.keys(translations)) {
-    for (const tr of translations[lang]) {
+  for (const language of Object.keys(translations)) {
+    for (const tr of translations[language]) {
       const parent = await prisma.feedbackQuestion.findUnique({
         where: { serialNumber: tr.serialNumber },
       });
@@ -82,22 +82,22 @@ export async function seed() {
 
       await prisma.feedbackQuestionTranslation.upsert({
         where: {
-          questionId_lang: {
+          questionId_language: {
             questionId: parent.id,
-            lang,
+            language,
           },
         },
         update: {},
         create: {
           questionId: parent.id,
-          lang,
+          language,
           text: tr.text,
           options: tr.options,
         },
       });
 
       console.log(
-        `Ensured translation for question #${tr.serialNumber} in ${lang}`,
+        `Ensured translation for question #${tr.serialNumber} in ${language}`,
       );
     }
   }

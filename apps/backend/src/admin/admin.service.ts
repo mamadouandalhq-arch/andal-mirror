@@ -23,7 +23,7 @@ export class AdminService {
             question: {
               include: {
                 translations: {
-                  where: { lang: language },
+                  where: { language: language },
                   select: {
                     text: true,
                   },

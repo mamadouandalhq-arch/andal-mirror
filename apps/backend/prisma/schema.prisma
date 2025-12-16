@@ -112,7 +112,7 @@ model FeedbackQuestion {
 
 model FeedbackQuestionTranslation {
   id        String   @id @default(uuid())
-  lang      String
+  language  String
   text      String
   options   String[]
   createdAt DateTime @default(now())
@@ -120,7 +120,7 @@ model FeedbackQuestionTranslation {
   questionId String
   question   FeedbackQuestion @relation(fields: [questionId], references: [id])
 
-  @@unique([questionId, lang])
+  @@unique([questionId, language])
 }
 
 model FeedbackResult {

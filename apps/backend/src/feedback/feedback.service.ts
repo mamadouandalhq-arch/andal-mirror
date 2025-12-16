@@ -221,7 +221,7 @@ export class FeedbackService {
       currentQuestion: {
         include: {
           translations: {
-            where: { lang: language },
+            where: { language: language },
             take: 1,
           },
         },
