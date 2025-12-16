@@ -284,9 +284,7 @@ export class FeedbackService {
             const option = currentQuestion.options.find((o) => o.key === key);
 
             if (!option) {
-              throw new BadRequestException(
-                `Option with key '${key}' not found`,
-              );
+              throw new NotFoundException(`Option with key '${key}' not found`);
             }
 
             return option.key;

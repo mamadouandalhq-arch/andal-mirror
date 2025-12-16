@@ -69,9 +69,21 @@ export function GetStateDocs() {
       description: 'Invalid current question or translation',
       content: {
         'application/json': {
-          example: {
-            statusCode: 404,
-            message: 'Invalid current question or translation',
+          examples: {
+            invalidQuestionOrFeedback: {
+              summary: 'Invalid current question or translation',
+              value: {
+                statusCode: 404,
+                message: 'Invalid current question or translation',
+              },
+            },
+            optionCouldNotBeFound: {
+              summary: 'Option could not be found',
+              value: {
+                statusCode: 404,
+                message: "Option with key 'option1' not found",
+              },
+            },
           },
         },
       },
