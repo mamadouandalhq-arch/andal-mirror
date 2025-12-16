@@ -52,13 +52,25 @@ export function StartFeedbackDocs() {
       },
     }),
     ApiNotFoundResponse({
-      description: 'Translation not found for the provided language',
+      description: 'Related resource not found',
       content: {
         'application/json': {
-          example: {
-            statusCode: 404,
-            message:
-              "Unable to create question. No translations were found for 'en'",
+          examples: {
+            translationNotFound: {
+              summary: 'Translation not found',
+              value: {
+                statusCode: 404,
+                message:
+                  "Unable to create question. No translations were found for 'en'",
+              },
+            },
+            optionCouldNotBeFound: {
+              summary: 'Option could not be found',
+              value: {
+                statusCode: 404,
+                message: "Option with key 'option1' not found",
+              },
+            },
           },
         },
       },
