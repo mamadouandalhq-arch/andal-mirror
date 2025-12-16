@@ -1,13 +1,47 @@
+import { BadRequestException } from '@nestjs/common';
+
 export function mapFeedbackAnswers(
-  answers: {
-    answer: string[];
+  answers: Array<{
+    answerKeys: string[];
     question: {
       translations: { text: string }[];
+      options: {
+        key: string;
+        translations: { label: string }[];
+      }[];
     };
-  }[],
-) {
-  return answers.map((a) => ({
-    question: a.question.translations[0]?.text ?? '',
-    answer: a.answer.join(', '),
-  }));
+  }>,
+): Array<{ question: string; answer: string }> {
+  return answers.map((answerItem) => {
+    const questionText = answerItem.question.translations[0]?.text;
+
+    if (!questionText) {
+      throw new BadRequestException('Question translation not found');
+    }
+
+    const labels = answerItem.answerKeys.map((key) => {
+      const option = answerItem.question.options.find((o) => o.key === key);
+
+      if (!option) {
+        throw new BadRequestException(
+          `Option with key '${key}' not found for question`,
+        );
+      }
+
+      const label = option.translations[0]?.label;
+
+      if (!label) {
+        throw new BadRequestException(
+          `Translation not found for option '${key}'`,
+        );
+      }
+
+      return label;
+    });
+
+    return {
+      question: questionText,
+      answer: labels.join(', '),
+    };
+  });
 }

@@ -239,7 +239,6 @@ export class FeedbackService {
   private async convertFeedbackToResponse(
     feedback: FeedbackResultWithCurrentQuestion,
   ): Promise<FeedbackStateResponse> {
-    console.log({ feedback: JSON.stringify(feedback, null, 2) });
     const response: FeedbackStateResponse = {
       status: feedback.status,
       totalQuestions: feedback.totalQuestions,
@@ -280,9 +279,18 @@ export class FeedbackService {
       };
 
       if (existingAnswer) {
-        // get from db, from another table
-        // each answer key map an answer from the db, then create an array of answers from db and write this array to the resulting currentQuestion.currentAnswer
-        response.currentQuestion.currentAnswer = ['1'];
+        response.currentQuestion.currentAnswerKeys =
+          existingAnswer.answerKeys.map((key) => {
+            const option = currentQuestion.options.find((o) => o.key === key);
+
+            if (!option) {
+              throw new BadRequestException(
+                `Option with key '${key}' not found`,
+              );
+            }
+
+            return option.key;
+          });
       }
     }
 

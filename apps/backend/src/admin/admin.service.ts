@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { GetReceiptsQueryDto, ReviewReceiptDto } from './dto';
 import { ReceiptStatus } from '@prisma/client';
+import { mapFeedbackAnswers } from './mappers';
 
 @Injectable()
 export class AdminService {
@@ -23,8 +24,13 @@ export class AdminService {
               include: {
                 translations: {
                   where: { language: language },
-                  select: {
-                    text: true,
+                  take: 1,
+                },
+                options: {
+                  include: {
+                    translations: {
+                      where: { language: language },
+                    },
                   },
                 },
               },
@@ -38,14 +44,13 @@ export class AdminService {
       throw new NotFoundException('Feedback not found');
     }
 
-    //  TODO
     return {
       id: feedbackResult.id,
       status: feedbackResult.status,
       pointsValue: feedbackResult.pointsValue,
       createdAt: feedbackResult.createdAt,
       completedAt: feedbackResult.completedAt,
-      // answers: mapFeedbackAnswers(feedbackResult.answers),
+      answers: mapFeedbackAnswers(feedbackResult.answers),
     };
   }
 
