@@ -201,6 +201,10 @@ model FeedbackSurvey {
   createdAt       DateTime         @default(now())
   feedbackResults FeedbackResult[]
   SurveyQuestion  SurveyQuestion[]
+
+  // Only one survey can have isActive = true.
+  // Implemented via custom SQL migration:
+  // 'only_one_active_feedback_survey'
 }
 
 model SurveyQuestion {

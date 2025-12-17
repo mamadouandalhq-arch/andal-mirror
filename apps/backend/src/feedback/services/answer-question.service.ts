@@ -11,10 +11,14 @@ import {
   Prisma,
 } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { SurveyQuestionService } from './survey-question.service';
 
 @Injectable()
 export class AnswerQuestionService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private surveyQuestionService: SurveyQuestionService,
+  ) {}
 
   upsertAnswerIfAnswers(
     feedback: FeedbackResultWithCurrentQuestion,
@@ -49,8 +53,21 @@ export class AnswerQuestionService {
     existingAnswer: FeedbackAnswer | null,
     answers?: string[],
   ) {
-    const isLastAnswer =
-      currentQuestion.serialNumber === validatedFeedback.totalQuestions;
+    const currentSurveyQuestion = await this.surveyQuestionService.getUnique({
+      questionId_surveyId: {
+        surveyId: validatedFeedback.surveyId,
+        questionId: currentQuestion.id,
+      },
+    });
+
+    const nextSurveyQuestion = await this.surveyQuestionService.getUnique({
+      surveyId_order: {
+        surveyId: validatedFeedback.surveyId,
+        order: currentSurveyQuestion.order + 1,
+      },
+    });
+
+    const isLastAnswer = !nextSurveyQuestion;
 
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
       pointsValue:
@@ -60,36 +77,53 @@ export class AnswerQuestionService {
     };
 
     if (!isLastAnswer) {
-      await this.modifyChangeDataIfNotLastAnswer(currentQuestion, dataToChange);
-    }
-
-    if (isLastAnswer) {
+      await this.modifyChangeDataIfNotLastAnswer(
+        validatedFeedback.surveyId,
+        currentQuestion.id,
+        dataToChange,
+      );
+    } else {
       this.modifyChangeDataIfLastAnswer(dataToChange);
     }
 
     if (answers && !existingAnswer) {
       dataToChange.answeredQuestions = validatedFeedback.answeredQuestions + 1;
     }
+
     return dataToChange;
   }
 
   async modifyChangeDataIfNotLastAnswer(
-    currentQuestion: FeedbackQuestion,
+    surveyId: string,
+    currentQuestionId: string,
     dataToChange: Prisma.FeedbackResultUpdateInput,
   ) {
-    const nextQuestion = await this.prisma.feedbackQuestion.findFirst({
-      where: {
-        serialNumber: currentQuestion.serialNumber + 1,
+    const currentSurveyQuestion = await this.surveyQuestionService.getUnique({
+      questionId_surveyId: {
+        surveyId,
+        questionId: currentQuestionId,
       },
     });
 
-    if (!nextQuestion) {
-      throw new NotFoundException('Could not find next question');
+    const nextSurveyQuestion = await this.prisma.surveyQuestion.findUnique({
+      where: {
+        surveyId_order: {
+          surveyId,
+          order: currentSurveyQuestion.order + 1,
+        },
+      },
+      include: {
+        question: true,
+      },
+    });
+
+    if (!nextSurveyQuestion) {
+      return;
     }
 
     dataToChange.currentQuestion = {
       connect: {
-        id: nextQuestion.id,
+        id: nextSurveyQuestion.question.id,
       },
     };
   }

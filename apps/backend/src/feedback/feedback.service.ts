@@ -38,47 +38,51 @@ export class FeedbackService {
   ) {}
 
   async returnBack(userId: string, dto: ReturnBackDto) {
-    const currentFeedback = await this.prisma.feedbackResult.findFirst({
+    const feedback = await this.prisma.feedbackResult.findFirst({
       where: {
-        userId: userId,
+        userId,
         status: PrismaFeedbackStatus.inProgress,
       },
-      include: this.getCurrentQuestionIncludeFilter(dto.language),
+      include: {
+        currentQuestion: true,
+      },
     });
 
-    if (!currentFeedback || !currentFeedback.currentQuestion) {
+    if (!feedback || !feedback.currentQuestion) {
       throw new BadRequestException(
         "You don't provide any feedback right now.",
       );
     }
 
-    if (currentFeedback.currentQuestion.serialNumber === 1) {
-      throw new BadRequestException(
-        `You can't go back from the first question`,
-      );
-    }
-
-    const previousQuestion = await this.prisma.feedbackQuestion.findUnique({
-      where: {
-        serialNumber: currentFeedback.currentQuestion.serialNumber - 1,
+    const currentSurveyQuestion = await this.surveyQuestionService.getUnique({
+      questionId_surveyId: {
+        surveyId: feedback.surveyId,
+        questionId: feedback.currentQuestion.id,
       },
     });
 
-    if (!previousQuestion) {
-      throw new NotFoundException('Previous question does not exist');
+    if (currentSurveyQuestion.order === 1) {
+      throw new BadRequestException(
+        "You can't go back from the first question",
+      );
     }
 
-    const updatedFeedback = await this.prisma.feedbackResult.update({
-      where: {
-        id: currentFeedback.id,
+    const previousSurveyQuestion = await this.surveyQuestionService.getUnique({
+      surveyId_order: {
+        surveyId: feedback.surveyId,
+        order: currentSurveyQuestion.order - 1,
       },
+    });
+
+    const updatedFeedback = await this.prisma.feedbackResult.update({
+      where: { id: feedback.id },
       data: {
-        currentQuestionId: previousQuestion.id,
+        currentQuestionId: previousSurveyQuestion.questionId,
       },
       include: this.getCurrentQuestionIncludeFilter(dto.language),
     });
 
-    return await this.convertFeedbackToResponse(updatedFeedback);
+    return this.convertFeedbackToResponse(updatedFeedback);
   }
 
   async answerQuestion(
@@ -294,8 +298,10 @@ export class FeedbackService {
       );
 
       const surveyQuestion = await this.surveyQuestionService.getUnique({
-        surveyId: survey.id,
-        questionId: currentQuestion.id,
+        questionId_surveyId: {
+          surveyId: survey.id,
+          questionId: currentQuestion.id,
+        },
       });
 
       response.currentQuestion = {

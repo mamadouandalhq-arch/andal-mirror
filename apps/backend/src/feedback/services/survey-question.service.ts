@@ -1,16 +1,14 @@
 import { PrismaService } from '../../prisma/prisma.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { GetUniqueSurveyQuestionDto } from '../dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SurveyQuestionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUnique(dto: GetUniqueSurveyQuestionDto) {
+  async getUnique(where: Prisma.SurveyQuestionWhereUniqueInput) {
     const surveyQuestion = await this.prisma.surveyQuestion.findUnique({
-      where: {
-        questionId_surveyId: dto,
-      },
+      where: where,
     });
 
     if (!surveyQuestion) {
