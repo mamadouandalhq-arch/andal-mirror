@@ -1,12 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Receipt } from '@prisma/client';
+import { FeedbackSurvey, Receipt } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class StartFeedbackService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createFeedback(userId: string, language: string, receipt: Receipt) {
+  async createFeedback(
+    userId: string,
+    language: string,
+    receipt: Receipt,
+    survey: FeedbackSurvey,
+  ) {
     const questions = await this.prisma.feedbackQuestion.findMany();
 
     if (!questions || questions.length < 1) {
@@ -27,12 +32,19 @@ export class StartFeedbackService {
       );
     }
 
+    const questionsBySurvey = await this.prisma.surveyQuestion.count({
+      where: {
+        surveyId: survey.id,
+      },
+    });
+
     return await this.prisma.feedbackResult.create({
       data: {
         userId: userId,
         receiptId: receipt.id,
-        totalQuestions: questions.length,
+        totalQuestions: questionsBySurvey,
         currentQuestionId: questions[0].id,
+        surveyId: survey.id,
       },
       include: {
         currentQuestion: {

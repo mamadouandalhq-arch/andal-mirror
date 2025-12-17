@@ -17,8 +17,14 @@ import {
 } from './dto';
 import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
-import { AnswerQuestionService, StartFeedbackService } from './services';
+import {
+  AnswerQuestionService,
+  FeedbackSurveyService,
+  StartFeedbackService,
+  SurveyQuestionService,
+} from './services';
 import { FeedbackOptionDto, FeedbackStateResponse } from '@shared/feedback';
+import { mapAnswerKeysFromQuestion } from './mappers';
 
 @Injectable()
 export class FeedbackService {
@@ -27,6 +33,8 @@ export class FeedbackService {
     private receiptService: ReceiptService,
     private answerQuestionService: AnswerQuestionService,
     private startFeedbackService: StartFeedbackService,
+    private feedbackSurveyService: FeedbackSurveyService,
+    private surveyQuestionService: SurveyQuestionService,
   ) {}
 
   async returnBack(userId: string, dto: ReturnBackDto) {
@@ -162,10 +170,21 @@ export class FeedbackService {
       throw new ConflictException('Feedback already in progress.');
     }
 
+    const survey = await this.prisma.feedbackSurvey.findFirst({
+      where: {
+        isActive: true,
+      },
+    });
+
+    if (!survey) {
+      throw new NotFoundException('Survey not found');
+    }
+
     const newFeedback = await this.startFeedbackService.createFeedback(
       userId,
       dto.language,
       pendingReceipt,
+      survey,
     );
 
     return await this.convertFeedbackToResponse(newFeedback);
@@ -270,9 +289,18 @@ export class FeedbackService {
         return FeedbackOptionDto.create(data);
       });
 
+      const survey = await this.feedbackSurveyService.getFirstByIdOrThrow(
+        feedback.surveyId,
+      );
+
+      const surveyQuestion = await this.surveyQuestionService.getUnique({
+        surveyId: survey.id,
+        questionId: currentQuestion.id,
+      });
+
       response.currentQuestion = {
         id: currentQuestion.id,
-        serialNumber: currentQuestion.serialNumber,
+        serialNumber: surveyQuestion.order,
         type: currentQuestion.type,
         text: currentQuestion.translations[0].text,
         options: options,
@@ -280,15 +308,9 @@ export class FeedbackService {
 
       if (existingAnswer) {
         response.currentQuestion.currentAnswerKeys =
-          existingAnswer.answerKeys.map((key) => {
-            const option = currentQuestion.options.find((o) => o.key === key);
-
-            if (!option) {
-              throw new NotFoundException(`Option with key '${key}' not found`);
-            }
-
-            return option.key;
-          });
+          existingAnswer.answerKeys.map((key) =>
+            mapAnswerKeysFromQuestion(currentQuestion, key),
+          );
       }
     }
 
