@@ -134,15 +134,15 @@
       "features": {
         "monthlyEngagement": {
           "title": "Monthly Engagement",
-          "description": "Monthly engagement through $ rewards for on-time rent + quick surveys"
+          "description": "Monthly engagement through rewards for on-time rent + quick surveys"
         },
         "churnPrediction": {
           "title": "Churn Prediction",
-          "description": "90-day early warnings with churn risk scores combining late payment + low satisfaction + unresolved maintenance issues"
+          "description": "90-day early warnings with churn risk scores"
         },
         "interventionTools": {
           "title": "Intervention Tools",
-          "description": "Dashboard alerts show at-risk tenants (e.g., '12 tenants at high risk - prioritize Units 4B, 7A, 2C'). Root cause analysis with sentiment tracking and pattern detection."
+          "description": "Dashboard alerts show at-risk tenants. Root cause analysis with sentiment tracking and pattern detection."
         }
       },
       "result": {
@@ -157,15 +157,11 @@
       "features": {
         "earlyNotice": {
           "title": "Early Notice Rewards",
-          "description": "Reward early notice ($100 for 60-day notice instead of 30-day)"
+          "description": "Reward early notice (for 60-day notice instead of 30-day)"
         },
         "smoothExit": {
           "title": "Smooth Exit Program",
-          "description": "$250 for clean unit, allowing showings, timely key return"
-        },
-        "concurrentPlacement": {
-          "title": "Concurrent Placement",
-          "description": "Help find new tenants before old ones leave. Enable zero-vacancy transitions (new tenant moves in same day)"
+          "description": "Rewards for clean unit, allowing showings, timely key return"
         }
       },
       "result": {
@@ -176,15 +172,15 @@
     },
     "reputationManagement": {
       "title": "Scenario 3: Reputation Management",
-      "description": "Generate authentic 5-star reviews and handle feedback privately",
+      "description": "Build your reputation through authentic reviews and private feedback channels",
       "features": {
         "happyTenants": {
           "title": "Route Happy Tenants",
-          "description": "Automatically invite tenants with 4-5 star ratings to leave Google, Yelp, and apartment review sites"
+          "description": "Automatically invite satisfied tenants to leave reviews on Google, Yelp, and apartment review sites"
         },
         "privateFeedback": {
           "title": "Private Feedback Channel",
-          "description": "Route unhappy tenants (1-3 stars) to send feedback privately to property manager only - fix issues before they become public negative reviews"
+          "description": "Provide a private channel for tenants to share concerns directly with property management - address issues before they become public"
         }
       },
       "result": {

@@ -134,15 +134,15 @@
       "features": {
         "monthlyEngagement": {
           "title": "Engagement Mensuel",
-          "description": "Engagement mensuel grâce à des récompenses en $ pour le loyer payé à temps + enquêtes rapides"
+          "description": "Engagement mensuel grâce à des récompenses pour le loyer payé à temps + enquêtes rapides"
         },
         "churnPrediction": {
           "title": "Prédiction des Départs",
-          "description": "Avertissements précoces de 90 jours avec scores de risque combinant paiement tardif + faible satisfaction + problèmes de maintenance non résolus"
+          "description": "Avertissements précoces de 90 jours avec scores de risque"
         },
         "interventionTools": {
           "title": "Outils d'Intervention",
-          "description": "Les alertes du tableau de bord montrent les locataires à risque (ex. '12 locataires à haut risque - prioriser les unités 4B, 7A, 2C'). Analyse des causes profondes avec suivi des sentiments et détection de modèles."
+          "description": "Les alertes du tableau de bord montrent les locataires à risque. Analyse des causes profondes avec suivi des sentiments et détection de modèles."
         }
       },
       "result": {
@@ -157,15 +157,11 @@
       "features": {
         "earlyNotice": {
           "title": "Récompenses pour Préavis Précoce",
-          "description": "Récompensez les préavis précoces (100 $ pour un préavis de 60 jours au lieu de 30 jours)"
+          "description": "Récompensez les préavis précoces (pour un préavis de 60 jours au lieu de 30 jours)"
         },
         "smoothExit": {
           "title": "Programme de Départ Fluide",
-          "description": "250 $ pour une unité propre, permettant les visites, retour ponctuel des clés"
-        },
-        "concurrentPlacement": {
-          "title": "Placement Concurrent",
-          "description": "Aidez à trouver de nouveaux locataires avant que les anciens ne partent. Permettez des transitions sans vacance (nouveau locataire emménage le même jour)"
+          "description": "Récompenses pour une unité propre, permettant les visites, retour ponctuel des clés"
         }
       },
       "result": {
@@ -176,15 +172,15 @@
     },
     "reputationManagement": {
       "title": "Scénario 3 : Gestion de la Réputation",
-      "description": "Générez des avis authentiques 5 étoiles et gérez les retours en privé",
+      "description": "Construisez votre réputation grâce à des avis authentiques et des canaux de retour privés",
       "features": {
         "happyTenants": {
           "title": "Orienter les Locataires Satisfaits",
-          "description": "Invitez automatiquement les locataires avec des notes de 4-5 étoiles à laisser des avis sur Google, Yelp et les sites d'avis d'appartements"
+          "description": "Invitez automatiquement les locataires satisfaits à laisser des avis sur Google, Yelp et les sites d'avis d'appartements"
         },
         "privateFeedback": {
           "title": "Canal de Retour Privé",
-          "description": "Orientez les locataires insatisfaits (1-3 étoiles) pour envoyer des retours en privé au gestionnaire de propriété uniquement - corrigez les problèmes avant qu'ils ne deviennent des avis négatifs publics"
+          "description": "Fournissez un canal privé pour que les locataires partagent leurs préoccupations directement avec la gestion de propriété - résolvez les problèmes avant qu'ils ne deviennent publics"
         }
       },
       "result": {

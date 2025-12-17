@@ -38,7 +38,6 @@ const scenarios = [
     features: [
       { key: 'earlyNotice', icon: Calendar },
       { key: 'smoothExit', icon: Home },
-      { key: 'concurrentPlacement', icon: Users },
     ],
   },
   {
