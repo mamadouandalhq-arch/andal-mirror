@@ -1,7 +1,13 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Trophy } from 'lucide-react';
 import { useRouter } from '@/i18n';
@@ -34,7 +40,9 @@ export function FeedbackCompleted({ points }: FeedbackCompletedProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center p-6 bg-primary/5 rounded-lg">
-          <p className="text-sm text-muted-foreground mb-2">{t('completedState.earned')}</p>
+          <p className="text-sm text-muted-foreground mb-2">
+            {t('completedState.earned')}
+          </p>
           <p className="text-3xl sm:text-4xl font-bold text-primary">
             {formatPoints(points, locale)} {tCommon('points')}
           </p>
@@ -56,4 +64,3 @@ export function FeedbackCompleted({ points }: FeedbackCompletedProps) {
     </Card>
   );
 }
-

@@ -60,12 +60,12 @@ export function PendingReceiptFeedbackStatus() {
     if (feedbackState.status === 'notStarted') {
       try {
         await startFeedbackMutation.mutateAsync();
-        router.push('/feedback');
+        router.push('/dashboard/feedback');
       } catch (error) {
         console.error('Failed to start feedback:', error);
       }
     } else if (isInProgress) {
-      router.push('/feedback');
+      router.push('/dashboard/feedback');
     }
   };
 

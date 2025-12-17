@@ -73,7 +73,7 @@ export function ReceiptList() {
         if (feedbackState?.status === 'notStarted') {
           await startFeedbackMutation.mutateAsync();
         }
-        router.push('/feedback');
+        router.push('/dashboard/feedback');
       } catch (error) {
         console.error('Failed to start feedback:', error);
       }
@@ -206,7 +206,7 @@ export function ReceiptList() {
               <Button
                 variant="outline"
                 className="w-full sm:w-auto"
-                onClick={() => router.push(`/receipts/${receipt.id}`)}
+                onClick={() => router.push(`/dashboard/receipts/${receipt.id}`)}
               >
                 {t('viewDetails')}
               </Button>

@@ -316,6 +316,7 @@
       "startFeedback": "Start Feedback",
       "viewFeedback": "View Feedback",
       "details": {
+        "rejectionComment": "Rejection Comment",
         "loading": "Loading receipt...",
         "error": "Failed to load receipt details.",
         "backToDashboard": "Back to Dashboard",
@@ -413,7 +414,19 @@
       "approve": "Approve",
       "reject": "Reject",
       "preview": "Preview",
-      "open": "Open in new tab"
+      "open": "Open in new tab",
+      "confirmApprove": "Approve Receipt",
+      "confirmApproveDescription": "Are you sure you want to approve this receipt? The user will receive points for their feedback.",
+      "confirmReject": "Reject Receipt",
+      "confirmRejectDescription": "Are you sure you want to reject this receipt? You can optionally provide a comment that will be shown to the user.",
+      "rejectionComment": "Rejection Comment",
+      "rejectionCommentPlaceholder": "Please provide a reason for rejection (optional)...",
+      "optional": "Optional",
+      "cancel": "Cancel",
+      "viewFeedback": "View Feedback",
+      "feedbackDetails": "Feedback Details",
+      "answers": "Answers",
+      "noFeedbackData": "No feedback data available"
     }
   }
 }

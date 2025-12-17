@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useAnswerQuestion, useReturnBack } from '@/hooks/use-feedback';
-import { FeedbackQuestionDto } from '@shared/feedback';
+import { FeedbackQuestionDto, FeedbackOptionDto } from '@shared/feedback';
 import { Loader2, CheckCircle2, ChevronLeft, SkipForward } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -34,17 +34,17 @@ export function FeedbackQuestionForm({
   const answerMutation = useAnswerQuestion(locale);
   const returnBackMutation = useReturnBack(locale);
 
-  // Initialize with answer from backend if available
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
-    question.currentAnswer || [],
+  // Initialize with answer keys from backend if available
+  const [selectedAnswerKeys, setSelectedAnswerKeys] = useState<string[]>(
+    question.currentAnswerKeys || [],
   );
 
-  // Update selected answers when question changes (e.g., when navigating back)
+  // Update selected answer keys when question changes (e.g., when navigating back)
   useEffect(() => {
     startTransition(() => {
-      setSelectedAnswers(question.currentAnswer || []);
+      setSelectedAnswerKeys(question.currentAnswerKeys || []);
     });
-  }, [question.id, question.currentAnswer]);
+  }, [question.id, question.currentAnswerKeys]);
 
   const isSingleChoice = question.type === 'single';
   const progress = totalQuestions > 0 ? answeredQuestions / totalQuestions : 0;
@@ -52,14 +52,14 @@ export function FeedbackQuestionForm({
   const isLastQuestion = question.serialNumber === totalQuestions;
   const isLoading = answerMutation.isPending || returnBackMutation.isPending;
 
-  const handleOptionToggle = (option: string) => {
+  const handleOptionToggle = (optionKey: string) => {
     if (isSingleChoice) {
-      setSelectedAnswers([option]);
+      setSelectedAnswerKeys([optionKey]);
     } else {
-      setSelectedAnswers((prev) =>
-        prev.includes(option)
-          ? prev.filter((a) => a !== option)
-          : [...prev, option],
+      setSelectedAnswerKeys((prev) =>
+        prev.includes(optionKey)
+          ? prev.filter((key) => key !== optionKey)
+          : [...prev, optionKey],
       );
     }
   };
@@ -67,13 +67,13 @@ export function FeedbackQuestionForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Allow submit without answer only on last question (to complete feedback)
-    if (selectedAnswers.length === 0 && !isLastQuestion) return;
+    if (selectedAnswerKeys.length === 0 && !isLastQuestion) return;
 
     try {
       await answerMutation.mutateAsync(
-        selectedAnswers.length > 0 ? { answers: selectedAnswers } : {},
+        selectedAnswerKeys.length > 0 ? { answerKeys: selectedAnswerKeys } : {},
       );
-      // Don't clear selectedAnswers here - let the backend response update it
+      // Don't clear selectedAnswerKeys here - let the backend response update it
       onAnswerSubmitted();
     } catch (error) {
       console.error('Failed to submit answer:', error);
@@ -126,13 +126,13 @@ export function FeedbackQuestionForm({
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            {question.options.map((option, index) => {
-              const isSelected = selectedAnswers.includes(option);
+            {question.options.map((option: FeedbackOptionDto) => {
+              const isSelected = selectedAnswerKeys.includes(option.key);
               return (
                 <button
-                  key={index}
+                  key={option.key}
                   type="button"
-                  onClick={() => handleOptionToggle(option)}
+                  onClick={() => handleOptionToggle(option.key)}
                   disabled={isLoading}
                   className={cn(
                     'w-full text-left p-4 rounded-lg border-2 transition-all min-h-[44px]',
@@ -156,7 +156,7 @@ export function FeedbackQuestionForm({
                         <CheckCircle2 className="h-3 w-3 text-primary-foreground" />
                       )}
                     </div>
-                    <span className="text-sm sm:text-base">{option}</span>
+                    <span className="text-sm sm:text-base">{option.label}</span>
                   </div>
                 </button>
               );
@@ -167,7 +167,8 @@ export function FeedbackQuestionForm({
             <Button
               type="submit"
               disabled={
-                (selectedAnswers.length === 0 && !isLastQuestion) || isLoading
+                (selectedAnswerKeys.length === 0 && !isLastQuestion) ||
+                isLoading
               }
               className="w-full min-h-[44px]"
               size="lg"
@@ -177,7 +178,7 @@ export function FeedbackQuestionForm({
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                   {t('submitting')}
                 </>
-              ) : isLastQuestion && selectedAnswers.length === 0 ? (
+              ) : isLastQuestion && selectedAnswerKeys.length === 0 ? (
                 t('completeFeedback')
               ) : (
                 t('submitAnswer')

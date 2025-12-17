@@ -3,7 +3,7 @@ import { apiClient } from '@/lib/api-client';
 import { FeedbackStateResponse } from '@shared/feedback';
 
 export interface AnswerQuestionDto {
-  answers: string[];
+  answerKeys?: string[];
   language: string;
 }
 
@@ -43,13 +43,17 @@ export function useAnswerQuestion(locale: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (dto: Partial<Omit<AnswerQuestionDto, 'language'>>) => {
+    mutationFn: (dto: { answerKeys?: string[] }) => {
+      const body: { answerKeys?: string[]; language: string } = {
+        language: locale,
+      };
+      // Include answerKeys if it's explicitly provided (even if empty array)
+      if (dto.answerKeys !== undefined) {
+        body.answerKeys = dto.answerKeys;
+      }
       return apiClient.post<FeedbackStateResponse>(
         '/feedback/answer-question',
-        {
-          ...dto,
-          language: locale,
-        },
+        body,
       );
     },
     onSuccess: () => {

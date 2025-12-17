@@ -316,6 +316,7 @@
       "startFeedback": "Commencer le retour",
       "viewFeedback": "Voir le retour",
       "details": {
+        "rejectionComment": "Commentaire de rejet",
         "loading": "Chargement du reçu...",
         "error": "Échec du chargement des détails du reçu.",
         "backToDashboard": "Retour au tableau de bord",
@@ -413,7 +414,19 @@
       "approve": "Approuver",
       "reject": "Rejeter",
       "preview": "Aperçu",
-      "open": "Ouvrir dans un nouvel onglet"
+      "open": "Ouvrir dans un nouvel onglet",
+      "confirmApprove": "Approuver le reçu",
+      "confirmApproveDescription": "Êtes-vous sûr de vouloir approuver ce reçu ? L'utilisateur recevra des points pour son retour.",
+      "confirmReject": "Rejeter le reçu",
+      "confirmRejectDescription": "Êtes-vous sûr de vouloir rejeter ce reçu ? Vous pouvez optionnellement fournir un commentaire qui sera affiché à l'utilisateur.",
+      "rejectionComment": "Commentaire de rejet",
+      "rejectionCommentPlaceholder": "Veuillez fournir une raison de rejet (optionnel)...",
+      "optional": "Optionnel",
+      "cancel": "Annuler",
+      "viewFeedback": "Voir le retour",
+      "feedbackDetails": "Détails du retour",
+      "answers": "Réponses",
+      "noFeedbackData": "Aucune donnée de retour disponible"
     }
   }
 }

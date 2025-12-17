@@ -9,6 +9,7 @@ export interface Receipt {
   status: ReceiptStatus;
   createdAt: string;
   approvedAt: string | null;
+  comment?: string | null;
   userId: string;
   // Note: pointsValue is not in receipt - it comes from FeedbackResult.pointsValue
 }
@@ -50,6 +51,8 @@ export function useReceiptUpload() {
       // Invalidate receipts query to refetch the list
       queryClient.invalidateQueries({ queryKey: ['receipts'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+      // Invalidate feedback state to show feedback button for new pending receipt
+      queryClient.invalidateQueries({ queryKey: ['feedback', 'state'] });
     },
   });
 }

@@ -33,7 +33,20 @@ export interface AdminFeedbackResult {
 
 export interface AdminReceiptDetail extends AdminReceiptListItem {
   receiptUrl: string;
+  comment?: string | null;
   feedbackResult: AdminFeedbackResult | null;
+}
+
+export interface AdminFeedbackDetail {
+  id: string;
+  status: 'inProgress' | 'completed';
+  pointsValue: number;
+  createdAt: string;
+  completedAt?: string | null;
+  answers: Array<{
+    question: string;
+    answer: string;
+  }>;
 }
 
 export function useAdminReceipts() {
@@ -83,17 +96,33 @@ export function useAdminRejectReceipt() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (receiptId: string) =>
+    mutationFn: (data: { receiptId: string; comment?: string }) =>
       apiClient.patch<{ id: string; status: 'rejected' }>(
         '/admin/receipts/review',
         {
-          receiptId,
+          receiptId: data.receiptId,
           status: 'rejected',
+          comment: data.comment,
         },
       ),
-    onSuccess: (_data, receiptId) => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['admin-receipts'] });
-      queryClient.invalidateQueries({ queryKey: ['admin-receipt', receiptId] });
+      queryClient.invalidateQueries({
+        queryKey: ['admin-receipt', variables.receiptId],
+      });
     },
+  });
+}
+
+export function useAdminFeedback(feedbackId: string, language: string) {
+  return useQuery({
+    queryKey: ['admin-feedback', feedbackId, language],
+    queryFn: () =>
+      apiClient.get<AdminFeedbackDetail>(
+        `/admin/feedback/${feedbackId}?language=${language}`,
+      ),
+    enabled: !!feedbackId && !!language,
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 }

@@ -81,11 +81,19 @@ export default function ReceiptDetailsPage() {
                   {t('receipt')} #{receipt.id.slice(0, 8)}
                 </CardTitle>
                 <CardDescription className="mt-2">
-                  {t('uploadedOn')}: {formatDate(receipt.createdAt, { includeTime: true, monthFormat: 'long' })}
+                  {t('uploadedOn')}:{' '}
+                  {formatDate(receipt.createdAt, {
+                    includeTime: true,
+                    monthFormat: 'long',
+                  })}
                 </CardDescription>
                 {receipt.approvedAt && (
                   <CardDescription>
-                    {t('approvedOn')}: {formatDate(receipt.approvedAt, { includeTime: true, monthFormat: 'long' })}
+                    {t('approvedOn')}:{' '}
+                    {formatDate(receipt.approvedAt, {
+                      includeTime: true,
+                      monthFormat: 'long',
+                    })}
                   </CardDescription>
                 )}
               </div>
@@ -121,6 +129,18 @@ export default function ReceiptDetailsPage() {
               </div>
               {/* Note: Points come from FeedbackResult.pointsValue, not from receipt */}
             </div>
+
+            {/* Admin Comment (if rejected) */}
+            {receipt.status === 'rejected' && receipt.comment && (
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <p className="text-sm font-medium text-destructive mb-2">
+                  {t('rejectionComment')}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {receipt.comment}
+                </p>
+              </div>
+            )}
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-2 pt-4 border-t">
