@@ -48,13 +48,15 @@ export function UploadReceiptDocs() {
     }),
     ApiConsumes('multipart/form-data'),
     ApiBody({
-      description: 'File image/pdf upload',
+      description:
+        'Upload receipt file. Allowed file types: JPEG, PNG, WEBP, PDF. Maximum file size: 5MB.',
       schema: {
         type: 'object',
         properties: {
           file: {
             type: 'string',
             format: 'binary',
+            description: 'Receipt file (JPEG, PNG, WEBP, PDF). Max size: 5MB.',
           },
         },
         required: ['file'],
