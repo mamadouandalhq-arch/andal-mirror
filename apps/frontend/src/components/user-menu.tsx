@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/auth-context';
 import { useLogout } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,7 @@ export function UserMenu() {
   const { user } = useAuth();
   const logout = useLogout();
   const tAuth = useTranslations('auth');
+  const tProfile = useTranslations('profile');
 
   if (!user) return null;
 
@@ -53,9 +55,14 @@ export function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
+        <DropdownMenuItem asChild>
+          <Link
+            href="/dashboard/profile"
+            className="flex items-center cursor-pointer"
+          >
+            <User className="mr-2 h-4 w-4" />
+            <span>{tProfile('myProfile')}</span>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

@@ -233,7 +233,8 @@
       "passwordMinLength": "Password must be at least 8 characters",
       "passwordMaxLength": "Password must be at most 20 characters",
       "confirmPasswordRequired": "Please confirm your password",
-      "passwordsDoNotMatch": "Passwords do not match"
+      "passwordsDoNotMatch": "Passwords do not match",
+      "invalidUrl": "Please enter a valid URL"
     },
     "errors": {
       "invalidCredentials": "Invalid credentials",
@@ -255,7 +256,20 @@
     "myProfile": "My Profile",
     "pointsBalance": "Points Balance",
     "editProfile": "Edit Profile",
-    "address": "Address"
+    "editProfileDescription": "Manage your personal information and preferences",
+    "editProfileInfo": "Update your profile information below. Email and password cannot be changed here.",
+    "backToDashboard": "Back to Dashboard",
+    "address": "Address",
+    "addressPlaceholder": "Enter your address",
+    "clickToChangeAvatar": "Click to change avatar",
+    "avatarInvalidFileType": "Please select an image file",
+    "avatarFileTooLarge": "File size must be less than 5MB",
+    "avatarUploadError": "Failed to upload avatar. Please try again.",
+    "avatarUploadSuccess": "Avatar updated successfully!",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "updating": "Updating...",
+    "updateSuccess": "Profile updated successfully!"
   },
   "giftCards": {
     "title": "Gift Cards",

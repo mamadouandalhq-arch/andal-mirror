@@ -233,7 +233,8 @@
       "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
       "passwordMaxLength": "Le mot de passe doit contenir au maximum 20 caractères",
       "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
-      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "invalidUrl": "Veuillez entrer une URL valide"
     },
     "errors": {
       "invalidCredentials": "Identifiants invalides",
@@ -255,7 +256,20 @@
     "myProfile": "Mon profil",
     "pointsBalance": "Solde de points",
     "editProfile": "Modifier le profil",
-    "address": "Adresse"
+    "editProfileDescription": "Gérez vos informations personnelles et préférences",
+    "editProfileInfo": "Mettez à jour vos informations de profil ci-dessous. L'email et le mot de passe ne peuvent pas être modifiés ici.",
+    "backToDashboard": "Retour au tableau de bord",
+    "address": "Adresse",
+    "addressPlaceholder": "Entrez votre adresse",
+    "clickToChangeAvatar": "Cliquez pour changer l'avatar",
+    "avatarInvalidFileType": "Veuillez sélectionner un fichier image",
+    "avatarFileTooLarge": "La taille du fichier doit être inférieure à 5 Mo",
+    "avatarUploadError": "Échec du téléchargement de l'avatar. Veuillez réessayer.",
+    "avatarUploadSuccess": "Avatar mis à jour avec succès !",
+    "saveChanges": "Enregistrer les modifications",
+    "cancel": "Annuler",
+    "updating": "Mise à jour...",
+    "updateSuccess": "Profil mis à jour avec succès !"
   },
   "giftCards": {
     "title": "Cartes-cadeaux",
