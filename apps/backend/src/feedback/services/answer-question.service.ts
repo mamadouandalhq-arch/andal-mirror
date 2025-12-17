@@ -17,7 +17,7 @@ import { SurveyQuestionService } from './survey-question.service';
 export class AnswerQuestionService {
   constructor(
     private readonly prisma: PrismaService,
-    private surveyQuestionService: SurveyQuestionService,
+    private readonly surveyQuestionService: SurveyQuestionService,
   ) {}
 
   upsertAnswerIfAnswers(
@@ -25,9 +25,7 @@ export class AnswerQuestionService {
     currentQuestion: FeedbackQuestion,
     answerKeys?: string[],
   ) {
-    if (!answerKeys) {
-      return;
-    }
+    if (!answerKeys) return;
 
     return this.prisma.feedbackAnswer.upsert({
       where: {
@@ -37,12 +35,12 @@ export class AnswerQuestionService {
         },
       },
       update: {
-        answerKeys: answerKeys,
+        answerKeys,
       },
       create: {
         feedbackResultId: feedback.id,
         questionId: currentQuestion.id,
-        answerKeys: answerKeys,
+        answerKeys,
       },
     });
   }
@@ -60,11 +58,14 @@ export class AnswerQuestionService {
       },
     });
 
-    const nextSurveyQuestion = await this.surveyQuestionService.getUnique({
-      surveyId_order: {
-        surveyId: validatedFeedback.surveyId,
-        order: currentSurveyQuestion.order + 1,
+    const nextSurveyQuestion = await this.prisma.surveyQuestion.findUnique({
+      where: {
+        surveyId_order: {
+          surveyId: validatedFeedback.surveyId,
+          order: currentSurveyQuestion.order + 1,
+        },
       },
+      select: { questionId: true },
     });
 
     const isLastAnswer = !nextSurveyQuestion;
@@ -77,11 +78,9 @@ export class AnswerQuestionService {
     };
 
     if (!isLastAnswer) {
-      await this.modifyChangeDataIfNotLastAnswer(
-        validatedFeedback.surveyId,
-        currentQuestion.id,
-        dataToChange,
-      );
+      dataToChange.currentQuestion = {
+        connect: { id: nextSurveyQuestion.questionId },
+      };
     } else {
       this.modifyChangeDataIfLastAnswer(dataToChange);
     }
@@ -91,41 +90,6 @@ export class AnswerQuestionService {
     }
 
     return dataToChange;
-  }
-
-  async modifyChangeDataIfNotLastAnswer(
-    surveyId: string,
-    currentQuestionId: string,
-    dataToChange: Prisma.FeedbackResultUpdateInput,
-  ) {
-    const currentSurveyQuestion = await this.surveyQuestionService.getUnique({
-      questionId_surveyId: {
-        surveyId,
-        questionId: currentQuestionId,
-      },
-    });
-
-    const nextSurveyQuestion = await this.prisma.surveyQuestion.findUnique({
-      where: {
-        surveyId_order: {
-          surveyId,
-          order: currentSurveyQuestion.order + 1,
-        },
-      },
-      include: {
-        question: true,
-      },
-    });
-
-    if (!nextSurveyQuestion) {
-      return;
-    }
-
-    dataToChange.currentQuestion = {
-      connect: {
-        id: nextSurveyQuestion.question.id,
-      },
-    };
   }
 
   modifyChangeDataIfLastAnswer(dataToChange: Prisma.FeedbackResultUpdateInput) {
@@ -143,28 +107,25 @@ export class AnswerQuestionService {
         "You don't provide any feedback right now.",
       );
     }
+
     const currentQuestion = feedback.currentQuestion;
-    const { type } = currentQuestion;
 
     const translation = currentQuestion.translations[0];
-
     if (!translation) {
       throw new NotFoundException(
         'Unable to answer question. No translation was found for selected language.',
       );
     }
 
-    const optionKeys = currentQuestion.options.map((option) => option.key);
+    const optionKeys = currentQuestion.options.map((o) => o.key);
 
-    if (!answerKeys) {
-      return { feedback, currentQuestion };
-    }
+    if (!answerKeys) return { feedback, currentQuestion };
 
-    if (answerKeys.some((answer) => !optionKeys.includes(answer))) {
+    if (answerKeys.some((k) => !optionKeys.includes(k))) {
       throw new BadRequestException('You provided invalid answer option key.');
     }
 
-    if (type === 'single' && answerKeys.length !== 1) {
+    if (currentQuestion.type === 'single' && answerKeys.length !== 1) {
       throw new BadRequestException(
         'Single-choice question must have exactly one answer',
       );

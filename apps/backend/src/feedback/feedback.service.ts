@@ -19,7 +19,6 @@ import { FeedbackResultWithCurrentQuestion } from './types';
 import { ReceiptService } from '../receipt/receipt.service';
 import {
   AnswerQuestionService,
-  FeedbackSurveyService,
   StartFeedbackService,
   SurveyQuestionService,
 } from './services';
@@ -33,7 +32,6 @@ export class FeedbackService {
     private receiptService: ReceiptService,
     private answerQuestionService: AnswerQuestionService,
     private startFeedbackService: StartFeedbackService,
-    private feedbackSurveyService: FeedbackSurveyService,
     private surveyQuestionService: SurveyQuestionService,
   ) {}
 
@@ -285,21 +283,16 @@ export class FeedbackService {
         },
       });
 
-      const options = currentQuestion.options.map((option) => {
-        const data = {
+      const options = currentQuestion.options.map((option) =>
+        FeedbackOptionDto.create({
           key: option.key,
-          label: option.translations[0].label,
-        };
-        return FeedbackOptionDto.create(data);
-      });
-
-      const survey = await this.feedbackSurveyService.getFirstByIdOrThrow(
-        feedback.surveyId,
+          label: option.translations[0]?.label ?? '',
+        }),
       );
 
       const surveyQuestion = await this.surveyQuestionService.getUnique({
         questionId_surveyId: {
-          surveyId: survey.id,
+          surveyId: feedback.surveyId,
           questionId: currentQuestion.id,
         },
       });
@@ -309,7 +302,7 @@ export class FeedbackService {
         serialNumber: surveyQuestion.order,
         type: currentQuestion.type,
         text: currentQuestion.translations[0].text,
-        options: options,
+        options,
       };
 
       if (existingAnswer) {
