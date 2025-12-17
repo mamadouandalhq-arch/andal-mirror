@@ -102,15 +102,16 @@ model GiftCard {
 }
 
 model FeedbackQuestion {
-  id           String       @id @default(uuid())
-  serialNumber Int          @unique()
-  type         FeedbackType
-  createdAt    DateTime     @default(now())
+  id        String       @id @default(uuid())
+  type      FeedbackType
+  createdAt DateTime     @default(now())
 
   options         FeedbackOption[]
   translations    FeedbackQuestionTranslation[]
   feedbackAnswers FeedbackAnswer[]
   feedbackResults FeedbackResult[]
+
+  surveyQuestions SurveyQuestion[]
 }
 
 model FeedbackQuestionTranslation {
@@ -126,13 +127,17 @@ model FeedbackQuestionTranslation {
 }
 
 model FeedbackResult {
-  id                String         @id @default(uuid())
-  receiptId         String         @unique()
-  userId            String
-  status            FeedbackStatus @default(inProgress)
+  id        String         @id @default(uuid())
+  receiptId String         @unique()
+  userId    String
+  status    FeedbackStatus @default(inProgress)
+
+  surveyId String
+  survey   FeedbackSurvey @relation(fields: [surveyId], references: [id])
+
   totalQuestions    Int
-  answeredQuestions Int            @default(0)
-  pointsValue       Int            @default(0)
+  answeredQuestions Int @default(0)
+  pointsValue       Int @default(0)
 
   currentQuestionId String?
   currentQuestion   FeedbackQuestion? @relation(fields: [currentQuestionId], references: [id])
@@ -186,4 +191,30 @@ model FeedbackOptionTranslation {
   option   FeedbackOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
   @@unique([optionId, language])
+}
+
+model FeedbackSurvey {
+  id       String  @id @default(uuid())
+  name     String
+  isActive Boolean @default(false)
+
+  createdAt       DateTime         @default(now())
+  feedbackResults FeedbackResult[]
+  SurveyQuestion  SurveyQuestion[]
+}
+
+model SurveyQuestion {
+  id String @id @default(uuid())
+
+  surveyId   String
+  questionId String
+
+  order     Int
+  createdAt DateTime @default(now())
+
+  survey   FeedbackSurvey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  question FeedbackQuestion @relation(fields: [questionId], references: [id], onDelete: Restrict)
+
+  @@unique([questionId, surveyId])
+  @@unique([surveyId, order])
 }

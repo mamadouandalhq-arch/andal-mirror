@@ -49,10 +49,17 @@ const QUESTIONS = [
 ];
 
 async function seed() {
+  const survey = await prisma.feedbackSurvey.create({
+    data: {
+      name: 'Default feedback survey',
+    },
+  });
+
+  console.log(`Created survey: ${survey.name}`);
+
   for (const questionData of QUESTIONS) {
     const question = await prisma.feedbackQuestion.create({
       data: {
-        serialNumber: questionData.serialNumber,
         type: questionData.type,
       },
     });
@@ -81,22 +88,22 @@ async function seed() {
 
       await prisma.feedbackOptionTranslation.createMany({
         data: [
-          {
-            optionId: option.id,
-            language: 'en',
-            label: optionData.en,
-          },
-          {
-            optionId: option.id,
-            language: 'fr',
-            label: optionData.fr,
-          },
+          { optionId: option.id, language: 'en', label: optionData.en },
+          { optionId: option.id, language: 'fr', label: optionData.fr },
         ],
       });
     }
+
+    await prisma.surveyQuestion.create({
+      data: {
+        surveyId: survey.id,
+        questionId: question.id,
+        order: questionData.serialNumber,
+      },
+    });
   }
 
-  console.log('Feedback questions seeded');
+  console.log('Feedback questions + survey seeded');
 }
 
 seed()
