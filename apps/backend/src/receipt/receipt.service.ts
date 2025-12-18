@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, ReceiptStatus } from '@prisma/client';
 import { StorageService } from '../storage/storage.service';
+import { ulid } from 'ulid';
 
 @Injectable()
 export class ReceiptService {
@@ -37,7 +38,7 @@ export class ReceiptService {
     });
   }
 
-  async saveAndUpload(userId: string, file?: Express.Multer.File) {
+  async saveAndUpload(userId: string, file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('File is missing in the request');
     }
@@ -53,7 +54,10 @@ export class ReceiptService {
       );
     }
 
-    const url = await this.upload(userId, file);
+    const url = await this.storageService.uploadFile({
+      fileName: `receipts/${userId}-${ulid()}`,
+      file,
+    });
 
     await this.prisma.receipt.create({
       data: {
@@ -72,6 +76,4 @@ export class ReceiptService {
   async getMany(where: Prisma.ReceiptWhereInput) {
     return await this.prisma.receipt.findMany({ where });
   }
-
-  private async upload(userId: string, file: Express.Multer.File) {}
 }
