@@ -6,9 +6,13 @@ import { Prisma } from '@prisma/client';
 export class SurveyQuestionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUnique(where: Prisma.SurveyQuestionWhereUniqueInput) {
+  async getUnique(
+    where: Prisma.SurveyQuestionWhereUniqueInput,
+    select?: Prisma.SurveyQuestionSelect,
+  ) {
     const surveyQuestion = await this.prisma.surveyQuestion.findUnique({
-      where: where,
+      where,
+      select,
     });
 
     if (!surveyQuestion) {

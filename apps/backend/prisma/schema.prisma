@@ -200,7 +200,7 @@ model FeedbackSurvey {
 
   createdAt       DateTime         @default(now())
   feedbackResults FeedbackResult[]
-  SurveyQuestion  SurveyQuestion[]
+  surveyQuestions SurveyQuestion[]
 
   // Only one survey can have isActive = true.
   // Implemented via custom SQL migration:

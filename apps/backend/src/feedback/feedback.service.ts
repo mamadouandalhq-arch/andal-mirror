@@ -186,7 +186,6 @@ export class FeedbackService {
       userId,
       dto.language,
       pendingReceipt,
-      survey,
     );
 
     return await this.convertFeedbackToResponse(newFeedback);

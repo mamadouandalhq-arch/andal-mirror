@@ -52,6 +52,7 @@ async function seed() {
   const survey = await prisma.feedbackSurvey.create({
     data: {
       name: 'Default feedback survey',
+      isActive: true,
     },
   });
 
