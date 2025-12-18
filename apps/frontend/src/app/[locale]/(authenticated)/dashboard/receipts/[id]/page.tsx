@@ -18,7 +18,7 @@ import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import { getStatusBadge } from '@/lib/receipt-utils';
-import { formatDate } from '@/lib/format-utils';
+import { formatDate, formatPoints } from '@/lib/format-utils';
 
 export default function ReceiptDetailsPage() {
   const t = useTranslations('dashboard.receipts.details');
@@ -127,8 +127,23 @@ export default function ReceiptDetailsPage() {
                   {tCommon(`status.${receipt.status}`)}
                 </Badge>
               </div>
-              {/* Note: Points come from FeedbackResult.pointsValue, not from receipt */}
             </div>
+
+            {/* Points earned from feedback - only for approved receipts */}
+            {receipt.status === 'approved' &&
+              receipt.feedbackResult?.status === 'completed' &&
+              receipt.feedbackResult?.pointsValue !== undefined &&
+              receipt.feedbackResult.pointsValue > 0 && (
+                <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                  <p className="text-sm font-medium text-muted-foreground mb-1">
+                    {t('pointsEarned')}
+                  </p>
+                  <p className="text-lg font-semibold text-primary">
+                    {formatPoints(receipt.feedbackResult.pointsValue)}{' '}
+                    {tCommon('points')}
+                  </p>
+                </div>
+              )}
 
             {/* Admin Comment (if rejected) */}
             {receipt.status === 'rejected' && receipt.comment && (

@@ -11,7 +11,12 @@ export interface Receipt {
   approvedAt: string | null;
   comment?: string | null;
   userId: string;
-  // Note: pointsValue is not in receipt - it comes from FeedbackResult.pointsValue
+  feedbackResult: {
+    id: string;
+    status: 'inProgress' | 'completed';
+    pointsValue: number;
+    completedAt?: string | null;
+  } | null;
 }
 
 export function useReceipts() {

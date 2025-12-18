@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useRouter } from '@/i18n';
 import { useAuth } from '@/contexts/auth-context';
-import { AuthenticatedHeader } from './_components/authenticated-header';
 import { Spinner } from '@/components/ui/spinner';
 
 export default function AuthenticatedLayout({
@@ -30,10 +29,5 @@ export default function AuthenticatedLayout({
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <AuthenticatedHeader />
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }

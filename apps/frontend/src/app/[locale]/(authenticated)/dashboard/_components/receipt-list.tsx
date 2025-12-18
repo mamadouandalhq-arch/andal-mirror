@@ -18,7 +18,7 @@ import { useRouter } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import { getStatusBadge } from '@/lib/receipt-utils';
-import { formatDate } from '@/lib/format-utils';
+import { formatDate, formatPoints } from '@/lib/format-utils';
 
 export function ReceiptList() {
   const t = useTranslations('dashboard.receipts');
@@ -201,6 +201,21 @@ export function ReceiptList() {
                     )}
                 </div>
               )}
+              {/* Points for approved receipts with completed feedback */}
+              {receipt.status === 'approved' &&
+                receipt.feedbackResult?.status === 'completed' &&
+                receipt.feedbackResult?.pointsValue !== undefined &&
+                receipt.feedbackResult.pointsValue > 0 && (
+                  <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-1">
+                      {t('pointsEarned')}
+                    </p>
+                    <p className="text-sm font-semibold text-primary">
+                      {formatPoints(receipt.feedbackResult.pointsValue, locale)}{' '}
+                      {tCommon('points')}
+                    </p>
+                  </div>
+                )}
             </CardContent>
             <CardFooter className="p-3 pt-0 sm:p-6 sm:pt-0 flex flex-col sm:flex-row gap-2">
               <Button

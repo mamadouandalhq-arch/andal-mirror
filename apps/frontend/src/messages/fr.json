@@ -377,6 +377,12 @@
   "admin": {
     "title": "Panneau d'administration",
     "description": "Gérer les reçus et les retours soumis par les utilisateurs",
+    "sidebar": {
+      "surveyManagement": "Gestion des enquêtes",
+      "receipts": "Reçus",
+      "redemptions": "Rachats",
+      "giftCards": "Cartes cadeaux"
+    },
     "receipts": {
       "title": "Reçus avec retour soumis",
       "empty": "Aucun reçu avec retour soumis pour le moment.",
@@ -405,6 +411,7 @@
         "email": "E-mail",
         "uploaded": "Téléchargé le",
         "status": "Statut",
+        "points": "Points",
         "actions": "Actions"
       }
     },

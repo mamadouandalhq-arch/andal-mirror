@@ -18,6 +18,12 @@ export interface AdminReceiptListItem {
   createdAt: string;
   approvedAt: string | null;
   user: AdminReceiptUser;
+  feedbackResult: {
+    id: string;
+    status: 'inProgress' | 'completed';
+    pointsValue: number;
+    completedAt?: string | null;
+  } | null;
 }
 
 export interface AdminFeedbackResult {

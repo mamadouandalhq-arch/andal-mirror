@@ -2,17 +2,17 @@
 
 import { useTranslations } from 'next-intl';
 
-export default function AdminPage() {
+export default function GiftCardsPage() {
   const t = useTranslations('admin');
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
       <div className="flex flex-col gap-2 mb-6">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
-          {t('title')}
+          Gift Cards
         </h1>
         <p className="text-base sm:text-lg text-muted-foreground">
-          {t('description')}
+          Manage gift cards and redemption options
         </p>
       </div>
     </div>

@@ -377,6 +377,12 @@
   "admin": {
     "title": "Admin Panel",
     "description": "Manage receipts and feedback submitted by users",
+    "sidebar": {
+      "surveyManagement": "Survey Management",
+      "receipts": "Receipts",
+      "redemptions": "Redemptions",
+      "giftCards": "Gift Cards"
+    },
     "receipts": {
       "title": "Receipts with submitted feedback",
       "empty": "No receipts with submitted feedback yet.",
@@ -405,6 +411,7 @@
         "email": "Email",
         "uploaded": "Uploaded",
         "status": "Status",
+        "points": "Points",
         "actions": "Actions"
       }
     },

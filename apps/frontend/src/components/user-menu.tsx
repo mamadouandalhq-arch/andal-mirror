@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/auth-context';
 import { useLogout } from '@/hooks/use-auth';
+import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n';
 import {
@@ -19,6 +20,7 @@ import { Button } from '@/components/ui/button';
 export function UserMenu() {
   const { user } = useAuth();
   const logout = useLogout();
+  const isAdmin = useIsAdmin();
   const tAuth = useTranslations('auth');
   const tProfile = useTranslations('profile');
 
@@ -27,6 +29,7 @@ export function UserMenu() {
   const initials = getInitials(user.firstName, user.lastName);
   const displayName =
     [user.firstName, user.lastName].filter(Boolean).join(' ') || user.email;
+  const profileHref = isAdmin ? '/admin/profile' : '/dashboard/profile';
 
   return (
     <DropdownMenu>
@@ -56,10 +59,7 @@ export function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link
-            href="/dashboard/profile"
-            className="flex items-center cursor-pointer"
-          >
+          <Link href={profileHref} className="flex items-center cursor-pointer">
             <User className="mr-2 h-4 w-4" />
             <span>{tProfile('myProfile')}</span>
           </Link>

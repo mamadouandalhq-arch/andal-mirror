@@ -79,7 +79,10 @@ export default function AdminReceiptDetailPage() {
         <Card className="max-w-md w-full">
           <CardContent className="py-10 space-y-4">
             <p className="text-destructive">{t('error')}</p>
-            <Button onClick={() => router.push('/admin')} variant="outline">
+            <Button
+              onClick={() => router.push('/admin/receipts')}
+              variant="outline"
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               {t('backToList')}
             </Button>
@@ -95,7 +98,7 @@ export default function AdminReceiptDetailPage() {
 
   const handleApproveConfirm = () => {
     approveMutation.mutate(data.id, {
-      onSuccess: () => router.push('/admin'),
+      onSuccess: () => router.push('/admin/receipts'),
     });
   };
 
@@ -113,7 +116,7 @@ export default function AdminReceiptDetailPage() {
         onSuccess: () => {
           setShowRejectDialog(false);
           setRejectComment('');
-          router.push('/admin');
+          router.push('/admin/receipts');
         },
       },
     );
@@ -123,7 +126,7 @@ export default function AdminReceiptDetailPage() {
     <main className="min-h-full bg-gray-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
       <div className="max-w-5xl mx-auto space-y-6">
         <Button
-          onClick={() => router.push('/admin')}
+          onClick={() => router.push('/admin/receipts')}
           variant="ghost"
           className="w-fit"
         >

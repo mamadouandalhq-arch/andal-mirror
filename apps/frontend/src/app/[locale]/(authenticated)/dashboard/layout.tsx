@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from '@/i18n';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useAuth } from '@/contexts/auth-context';
+import { AuthenticatedHeader } from '../_components/authenticated-header';
 import { Spinner } from '@/components/ui/spinner';
 
 export default function DashboardLayout({
@@ -31,6 +32,10 @@ export default function DashboardLayout({
     );
   }
 
-  return <>{children}</>;
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <AuthenticatedHeader />
+      {children}
+    </div>
+  );
 }
-
