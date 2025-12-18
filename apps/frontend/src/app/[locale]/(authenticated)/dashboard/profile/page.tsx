@@ -128,8 +128,9 @@ export default function ProfilePage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
+    // Validate file type - only JPEG, PNG, and WebP are supported
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedMimeTypes.includes(file.type)) {
       setAvatarError(t('avatarInvalidFileType'));
       return;
     }
@@ -200,7 +201,7 @@ export default function ProfilePage() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp"
                   onChange={handleFileChange}
                   className="hidden"
                   aria-label={t('clickToChangeAvatar')}

@@ -262,7 +262,7 @@
     "address": "Address",
     "addressPlaceholder": "Enter your address",
     "clickToChangeAvatar": "Click to change avatar",
-    "avatarInvalidFileType": "Please select an image file",
+    "avatarInvalidFileType": "Please select a JPEG, PNG, or WebP image file",
     "avatarFileTooLarge": "File size must be less than 5MB",
     "avatarUploadError": "Failed to upload avatar. Please try again.",
     "avatarUploadSuccess": "Avatar updated successfully!",
