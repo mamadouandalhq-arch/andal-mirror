@@ -11,6 +11,7 @@ import { ReceiptModule } from './receipt/receipt.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { EmailModule } from './email/email.module';
 import { AdminModule } from './admin/admin.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AdminModule } from './admin/admin.module';
     FeedbackModule,
     EmailModule,
     AdminModule,
+    StorageModule,
   ],
   controllers: [],
   providers: [],

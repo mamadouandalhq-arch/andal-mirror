@@ -15,6 +15,11 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async uploadAvatar(userId: string, file: Express.Multer.File) {
+    // upload to s3
+    // change avatar url
+  }
+
   async getMe(userId: string) {
     const user = await this.getUniqueById(userId);
 
