@@ -103,6 +103,14 @@ export class AdminService {
             avatarUrl: true,
           },
         },
+        feedbackResult: {
+          select: {
+            id: true,
+            status: true,
+            pointsValue: true,
+            completedAt: true,
+          },
+        },
       },
     });
   }
@@ -113,7 +121,14 @@ export class AdminService {
         id: receiptId,
       },
       include: {
-        feedbackResult: true,
+        feedbackResult: {
+          select: {
+            id: true,
+            status: true,
+            pointsValue: true,
+            completedAt: true,
+          },
+        },
         user: {
           select: {
             email: true,

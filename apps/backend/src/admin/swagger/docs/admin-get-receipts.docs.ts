@@ -7,14 +7,14 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { FeedbackStatus, ReceiptStatus } from '@prisma/client';
-import { receiptWithUserExample } from '../consts';
+import { receiptWithFeedbackAndUserExample } from '../consts';
 
 export function AdminGetReceiptsDocs() {
   return applyDecorators(
     ApiOperation({
       summary: 'Get receipts with optional feedback status filter',
       description:
-        'Returns a list of receipts. Can be filtered by feedback status and receipt status. Accessible only for admins. Also, returns a user connected to the receipt',
+        'Returns a list of receipts. Can be filtered by feedback status and receipt status. Accessible only for admins. Also, returns a user connected to the receipt with a feedback result',
     }),
 
     ApiQuery({
@@ -37,7 +37,7 @@ export function AdminGetReceiptsDocs() {
       description: 'Receipts retrieved successfully',
       content: {
         'application/json': {
-          example: [receiptWithUserExample],
+          example: [receiptWithFeedbackAndUserExample],
         },
       },
     }),

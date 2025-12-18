@@ -21,6 +21,7 @@ export class ReceiptService {
         id: receiptId,
         userId: userId,
       },
+      include: this.getReceiptFeedbackResultInclude(),
     });
 
     if (!receipt) {
@@ -35,6 +36,7 @@ export class ReceiptService {
       where: {
         userId,
       },
+      include: this.getReceiptFeedbackResultInclude(),
     });
   }
 
@@ -75,5 +77,18 @@ export class ReceiptService {
 
   async getMany(where: Prisma.ReceiptWhereInput) {
     return await this.prisma.receipt.findMany({ where });
+  }
+
+  private getReceiptFeedbackResultInclude() {
+    return {
+      feedbackResult: {
+        select: {
+          id: true,
+          status: true,
+          pointsValue: true,
+          completedAt: true,
+        },
+      },
+    };
   }
 }
