@@ -10,14 +10,25 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 import omit from 'lodash/omit';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { StorageService } from '../storage/storage.service';
+import { ulid } from 'ulid';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storageService: StorageService,
+  ) {}
 
   async uploadAvatar(userId: string, file: Express.Multer.File) {
-    // upload to s3
-    // change avatar url
+    const url = await this.storageService.uploadFile({
+      fileName: `avatars/${userId}-${ulid()}`,
+      file: file,
+    });
+
+    await this.update(userId, { avatarUrl: url });
+
+    return { avatarUrl: url };
   }
 
   async getMe(userId: string) {

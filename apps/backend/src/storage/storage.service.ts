@@ -10,6 +10,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { UploadFileDto } from './dto';
+import { mimeToExt } from './utils';
 
 @Injectable()
 export class StorageService {
@@ -45,7 +46,7 @@ export class StorageService {
     try {
       await this.s3.send(command);
 
-      return `https://${this.bucketName}.s3.${this.bucketRegion}.amazonaws.com/${fileName}`;
+      return `https://${this.bucketName}.s3.${this.bucketRegion}.amazonaws.com/${fileName}.${mimeToExt(file.mimetype)}`;
     } catch (err) {
       this.logger.error(err);
       throw new InternalServerErrorException(
