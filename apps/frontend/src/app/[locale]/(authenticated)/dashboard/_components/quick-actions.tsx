@@ -18,6 +18,29 @@ export function QuickActions() {
   const hasPendingReceipt = stats?.hasPendingReceipt ?? false;
   const isDisabled = hasPendingReceipt || uploadMutation.isPending;
 
+  // Supported MIME types matching backend validation
+  const supportedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'application/pdf',
+  ];
+  const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+  const validateFile = (file: File): string | null => {
+    // Validate file type
+    if (!supportedMimeTypes.includes(file.type)) {
+      return t('invalidFileType');
+    }
+
+    // Validate file size
+    if (file.size > maxFileSize) {
+      return t('fileTooLarge');
+    }
+
+    return null;
+  };
+
   const handleUploadClick = () => {
     if (!isDisabled && fileInputRef.current) {
       fileInputRef.current.click();
@@ -26,6 +49,17 @@ export function QuickActions() {
 
   const handleFileUpload = async (file: File) => {
     setUploadError(null);
+
+    // Validate file before upload
+    const validationError = validateFile(file);
+    if (validationError) {
+      setUploadError(validationError);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
 
     try {
       await uploadMutation.mutateAsync(file);
@@ -81,14 +115,6 @@ export function QuickActions() {
     const file = e.dataTransfer.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    const isValidType =
-      file.type.startsWith('image/') || file.type === 'application/pdf';
-    if (!isValidType) {
-      setUploadError(t('invalidFileType'));
-      return;
-    }
-
     await handleFileUpload(file);
   };
 
@@ -97,7 +123,7 @@ export function QuickActions() {
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*,.pdf"
+        accept="image/jpeg,image/png,image/webp,application/pdf"
         className="hidden"
         onChange={handleFileChange}
         disabled={isDisabled}

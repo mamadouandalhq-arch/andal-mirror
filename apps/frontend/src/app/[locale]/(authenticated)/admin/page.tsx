@@ -101,9 +101,9 @@ export default function AdminPage() {
                 <Spinner />
               </div>
             ) : error ? (
-              <p className="text-destructive">{t('receipts.error')}</p>
+              <p className="text-destructive p-6">{t('receipts.error')}</p>
             ) : !data || data.length === 0 ? (
-              <p className="text-muted-foreground">{t('receipts.empty')}</p>
+              <p className="text-muted-foreground p-6">{t('receipts.empty')}</p>
             ) : (
               <div className="space-y-4">
                 <div className="flex flex-col gap-3 px-4 pt-4">

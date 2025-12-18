@@ -307,9 +307,10 @@
       "uploadError": "Failed to upload receipt. Please try again.",
       "dragAndDropOrClick": "Drag and drop your receipt here, or click to browse",
       "dropFileHere": "Drop your file here",
-      "supportedFormats": "Supports images and PDF files",
+      "supportedFormats": "Supports JPEG, PNG, WebP images and PDF files",
       "selectFile": "Select File",
-      "invalidFileType": "Invalid file type. Please upload an image or PDF file."
+      "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, WebP image or PDF file.",
+      "fileTooLarge": "File size must be less than 5MB."
     },
     "receipts": {
       "receipt": "Receipt",

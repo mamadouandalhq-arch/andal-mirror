@@ -307,9 +307,10 @@
       "uploadError": "Échec du téléchargement du reçu. Veuillez réessayer.",
       "dragAndDropOrClick": "Glissez-déposez votre reçu ici, ou cliquez pour parcourir",
       "dropFileHere": "Déposez votre fichier ici",
-      "supportedFormats": "Prend en charge les images et les fichiers PDF",
+      "supportedFormats": "Prend en charge les images JPEG, PNG, WebP et les fichiers PDF",
       "selectFile": "Sélectionner un fichier",
-      "invalidFileType": "Type de fichier invalide. Veuillez télécharger une image ou un fichier PDF."
+      "invalidFileType": "Type de fichier invalide. Veuillez télécharger une image JPEG, PNG, WebP ou un fichier PDF.",
+      "fileTooLarge": "La taille du fichier doit être inférieure à 5 Mo."
     },
     "receipts": {
       "receipt": "Reçu",
