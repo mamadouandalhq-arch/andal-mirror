@@ -20,7 +20,11 @@ export class UserService {
     private readonly storageService: StorageService,
   ) {}
 
-  async uploadAvatar(userId: string, file: Express.Multer.File) {
+  async uploadAvatar(userId: string, file?: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException('File is missing in the request');
+    }
+
     const url = await this.storageService.uploadFile({
       fileName: `avatars/${userId}-${ulid()}`,
       file: file,

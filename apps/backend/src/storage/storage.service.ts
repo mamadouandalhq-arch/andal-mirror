@@ -34,9 +34,10 @@ export class StorageService {
   }
 
   async uploadFile({ fileName, file }: UploadFileDto) {
+    const fileNameWithExt = `${fileName}.${mimeToExt(file.mimetype)}`;
     const params: PutObjectCommandInput = {
       Bucket: this.bucketName,
-      Key: fileName,
+      Key: fileNameWithExt,
       Body: file.buffer,
       ContentType: file.mimetype,
     };
@@ -46,7 +47,7 @@ export class StorageService {
     try {
       await this.s3.send(command);
 
-      return `https://${this.bucketName}.s3.${this.bucketRegion}.amazonaws.com/${fileName}.${mimeToExt(file.mimetype)}`;
+      return `https://${this.bucketName}.s3.${this.bucketRegion}.amazonaws.com/${fileNameWithExt}`;
     } catch (err) {
       this.logger.error(err);
       throw new InternalServerErrorException(

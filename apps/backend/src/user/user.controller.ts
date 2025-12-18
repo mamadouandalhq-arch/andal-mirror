@@ -32,8 +32,10 @@ export class UserController {
   )
   async uploadAvatar(
     @User() user: UserDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {}
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.userService.uploadAvatar(user.sub, file);
+  }
 
   @UpdateUserDocs()
   @Post('/update')
