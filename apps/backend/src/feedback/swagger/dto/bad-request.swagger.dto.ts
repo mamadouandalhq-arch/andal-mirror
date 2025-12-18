@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class BadRequestSwaggerDto {
   @ApiProperty({ example: 'Some error message' })
-  message!: string;
+  message!: string | string[];
 
   @ApiProperty({ example: 'Bad Request' })
   error!: string;

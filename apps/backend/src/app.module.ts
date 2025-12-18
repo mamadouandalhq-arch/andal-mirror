@@ -12,6 +12,7 @@ import { FeedbackModule } from './feedback/feedback.module';
 import { EmailModule } from './email/email.module';
 import { AdminModule } from './admin/admin.module';
 import { StorageModule } from './storage/storage.module';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { StorageModule } from './storage/storage.module';
     EmailModule,
     AdminModule,
     StorageModule,
+    QuestionModule,
   ],
   controllers: [],
   providers: [],
