@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { QuestionService } from './question.service';
-import { CreateFeedbackQuestionDto } from './dto';
+import { CreateFeedbackQuestionDto, UpdateFeedbackQuestionDto } from './dto';
 import { Roles } from '../common';
 import { UserRole } from '@prisma/client';
 import {
   AdminCreateQuestionDocs,
-  AdminDuplicateQuestionDocs,
   AdminGetQuestionByIdDocs,
   AdminGetQuestionsDocs,
+  DuplicateAndEditFeedbackQuestionDocs,
 } from './swagger';
 
 @Roles(UserRole.admin)
@@ -33,9 +33,12 @@ export class AdminQuestionController {
     return this.questionService.create(dto);
   }
 
-  @AdminDuplicateQuestionDocs()
-  @Post('/:id/duplicate')
-  duplicate(@Param('id') id: string) {
-    return this.questionService.duplicate(id);
+  @DuplicateAndEditFeedbackQuestionDocs()
+  @Post('/:id/duplicate-and-edit')
+  duplicateAndEdit(
+    @Param('id') questionId: string,
+    @Body() dto: UpdateFeedbackQuestionDto,
+  ) {
+    return this.questionService.duplicateAndEdit(questionId, dto);
   }
 }

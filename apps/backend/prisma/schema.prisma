@@ -102,9 +102,10 @@ model GiftCard {
 }
 
 model FeedbackQuestion {
-  id        String       @id @default(uuid())
-  type      FeedbackType
-  createdAt DateTime     @default(now())
+  id         String       @id @default(uuid())
+  type       FeedbackType
+  isArchived Boolean      @default(false)
+  createdAt  DateTime     @default(now())
 
   options         FeedbackOption[]
   translations    FeedbackQuestionTranslation[]
