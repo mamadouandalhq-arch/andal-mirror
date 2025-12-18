@@ -10,34 +10,47 @@ import {
 } from '@nestjs/swagger';
 import { getBadRequestDocExample } from '../../../common';
 
-export function UploadReceiptDocs() {
+export function UploadAvatarDocs() {
   return applyDecorators(
     ApiOperation({
-      summary: 'Upload receipt',
-      description: 'Upload receipt',
+      summary: 'Upload user avatar',
+      description: 'Upload and set a new user avatar',
     }),
+
     ApiOkResponse({
-      description: 'Receipt upload successfully',
+      description: 'Avatar uploaded successfully',
       content: {
         'application/json': {
           example: {
-            url: 'https://buy-purchasing-powers-bucket.s3.eu-central-1.amazonaws.com/receipts/8f6d3c2b-4e71-4c8e-9b76-b2f1cc52c89e-01J0B9K9W9P2XKZ7VQF3ZC4TQS',
+            avatarUrl:
+              'https://buy-purchasing-powers-bucket.s3.eu-central-1.amazonaws.com/avatars/8f6d3c2b-4e71-4c8e-9b76-b2f1cc52c89e-01J0B9K9W9P2XKZ7VQF3ZC4TQS',
           },
         },
       },
     }),
+
     ApiBadRequestResponse({
-      description: 'User already has pending receipt',
+      description: 'Invalid file or request',
       content: {
         'application/json': {
-          example: getBadRequestDocExample(
-            "You already have pending receipt! You can't create more than one pending receipt.",
-          ),
+          examples: {
+            fileMissing: {
+              summary: 'File missing',
+              value: getBadRequestDocExample('File is missing in the request'),
+            },
+            invalidMimeType: {
+              summary: 'Invalid file type',
+              value: getBadRequestDocExample(
+                'Invalid file type. Allowed types: image/jpeg, image/png, image/webp',
+              ),
+            },
+          },
         },
       },
     }),
+
     ApiPayloadTooLargeResponse({
-      description: 'Uploaded file exceeds maximum allowed size (5MB)',
+      description: 'Uploaded file exceeds size limit (5MB)',
       content: {
         'application/json': {
           example: {
@@ -54,23 +67,23 @@ export function UploadReceiptDocs() {
       content: {
         'application/json': {
           example: {
-            message: 'Unauthorized',
             statusCode: 401,
+            message: 'Unauthorized',
           },
         },
       },
     }),
+
     ApiConsumes('multipart/form-data'),
+
     ApiBody({
-      description:
-        'Upload receipt file. Allowed file types: JPEG, PNG, WEBP, PDF. Maximum file size: 5MB.',
+      description: 'Avatar image file',
       schema: {
         type: 'object',
         properties: {
           file: {
             type: 'string',
             format: 'binary',
-            description: 'Receipt file (JPEG, PNG, WEBP, PDF). Max size: 5MB.',
           },
         },
         required: ['file'],

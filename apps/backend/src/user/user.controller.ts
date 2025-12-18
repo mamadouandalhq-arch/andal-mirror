@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 import { User } from './decorators';
 import { createMimeTypeFilter, UserDto } from '../common';
 import { JwtGuard } from '../auth/guards';
-import { GetMeDocs, UpdateUserDocs } from './swagger';
+import { GetMeDocs, UpdateUserDocs, UploadAvatarDocs } from './swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { supportedMimeTypes } from './consts';
 
@@ -21,6 +21,7 @@ import { supportedMimeTypes } from './consts';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UploadAvatarDocs()
   @Post('/upload-avatar')
   @UseInterceptors(
     FileInterceptor('file', {
