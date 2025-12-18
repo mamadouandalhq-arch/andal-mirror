@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/contexts/auth-context';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from '@/i18n';
@@ -42,23 +42,32 @@ export default function ProfilePage() {
   const [avatarSuccess, setAvatarSuccess] = useState(false);
 
   // Store initial values to compare for changes
-  const getInitialValues = (): UpdateProfileFormData => {
-    return {
+  // Derived from user data, updated after successful save
+  const userBasedValues = useMemo<UpdateProfileFormData>(
+    () => ({
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
       address: user?.address || '',
-    };
-  };
+    }),
+    [user?.firstName, user?.lastName, user?.address],
+  );
 
-  const [initialValues, setInitialValues] =
-    useState<UpdateProfileFormData>(getInitialValues);
+  // Track values saved to server (only updated on successful save)
+  const [savedValues, setSavedValues] = useState<UpdateProfileFormData | null>(
+    null,
+  );
+
+  // Initial values come from saved values (if exists) or user data
+  const initialValues = useMemo<UpdateProfileFormData>(() => {
+    return savedValues || userBasedValues;
+  }, [savedValues, userBasedValues]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
+    control,
   } = useForm<UpdateProfileFormData>({
     resolver: zodResolver(updateProfileSchema),
     mode: 'onBlur',
@@ -66,23 +75,21 @@ export default function ProfilePage() {
   });
 
   // Watch form values to detect changes
-  const currentValues = watch();
+  const watchedValues = useWatch({ control });
   const hasChanges = useMemo(() => {
     return (
-      currentValues.firstName !== initialValues.firstName ||
-      currentValues.lastName !== initialValues.lastName ||
-      currentValues.address !== initialValues.address
+      watchedValues.firstName !== initialValues.firstName ||
+      watchedValues.lastName !== initialValues.lastName ||
+      watchedValues.address !== initialValues.address
     );
-  }, [currentValues, initialValues]);
+  }, [watchedValues, initialValues]);
 
   // Reset form when user data changes
   useEffect(() => {
     if (user) {
-      const newInitialValues = getInitialValues();
-      setInitialValues(newInitialValues);
-      reset(newInitialValues);
+      reset(userBasedValues);
     }
-  }, [user, reset]);
+  }, [user, userBasedValues, reset]);
 
   const onSubmit = async (data: UpdateProfileFormData) => {
     setError(null);
@@ -97,13 +104,13 @@ export default function ProfilePage() {
       };
 
       await updateProfile.mutateAsync(updateData);
-      // Update initial values after successful save
+      // Update saved values after successful save
       const newInitialValues = {
         firstName: data.firstName,
         lastName: data.lastName,
         address: data.address || '',
       };
-      setInitialValues(newInitialValues);
+      setSavedValues(newInitialValues);
       setSuccess(true);
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
