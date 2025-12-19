@@ -45,6 +45,7 @@ export class StartFeedbackService {
         totalQuestions: questionsBySurvey,
         currentQuestionId: firstSurveyQuestion.questionId,
         surveyId: surveyWithQuestions.id,
+        pointsValue: surveyWithQuestions.startPoints,
       },
       include: {
         currentQuestion: {

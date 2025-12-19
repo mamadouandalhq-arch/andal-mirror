@@ -53,6 +53,8 @@ async function seed() {
     data: {
       name: 'Default feedback survey',
       isActive: true,
+      startPoints: 100,
+      pointsPerAnswer: 100,
     },
   });
 

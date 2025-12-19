@@ -2,11 +2,12 @@ export const activeSurveyExampleConst = {
   id: 'aa606215-d95d-458a-abf8-6fd7d90cd72a',
   name: 'new survey',
   isActive: true,
+  startPoints: 10,
+  pointsPerAnswer: 5,
   questions: [
     {
       id: '0ba22c7b-1137-4318-a9a9-dd30d3a559cd',
       type: 'single',
-      isArchived: false,
       createdAt: '2025-12-18T14:19:03.336Z',
       translations: [
         {

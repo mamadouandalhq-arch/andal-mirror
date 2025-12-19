@@ -22,6 +22,8 @@ Behavior:
 - Creates a new survey with provided questions
 - Question order is defined by the order of questionIds in request body
 - Archived or non-existing questions are not allowed
+- startPoints: Base points awarded when receipt is uploaded (feedback starts)
+- pointsPerAnswer: Points awarded for each answered question (independent of answer choice)
       `,
     }),
 

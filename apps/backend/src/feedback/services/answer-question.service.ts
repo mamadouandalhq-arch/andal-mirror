@@ -70,10 +70,19 @@ export class AnswerQuestionService {
 
     const isLastAnswer = !nextSurveyQuestion;
 
+    const survey = await this.prisma.feedbackSurvey.findUnique({
+      where: { id: validatedFeedback.surveyId },
+      select: { pointsPerAnswer: true },
+    });
+
+    if (!survey) {
+      throw new NotFoundException('Survey not found');
+    }
+
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
       pointsValue:
         answers && !existingAnswer
-          ? validatedFeedback.pointsValue + 10
+          ? validatedFeedback.pointsValue + survey.pointsPerAnswer
           : undefined,
     };
 

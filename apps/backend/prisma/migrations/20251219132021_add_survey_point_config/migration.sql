@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "FeedbackSurvey" ADD COLUMN     "pointsPerAnswer" INTEGER NOT NULL DEFAULT 100,
+ADD COLUMN     "startPoints" INTEGER NOT NULL DEFAULT 100;

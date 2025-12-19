@@ -8,20 +8,17 @@ export class SurveyService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createActiveSurvey(dto: CreateActiveSurveyDto) {
-    const { name, questionIds } = dto;
+    const { name, startPoints, pointsPerAnswer, questionIds } = dto;
 
     const questions = await this.prisma.feedbackQuestion.findMany({
       where: {
         id: { in: questionIds },
-        isArchived: false,
       },
       select: { id: true },
     });
 
     if (questions.length !== questionIds.length) {
-      throw new NotFoundException(
-        'One or more questions do not exist or are archived',
-      );
+      throw new NotFoundException('One or more questions do not exist');
     }
 
     return this.prisma.$transaction(async (tx) => {
@@ -34,6 +31,8 @@ export class SurveyService {
         data: {
           name,
           isActive: true,
+          startPoints,
+          pointsPerAnswer,
         },
       });
 
@@ -65,6 +64,8 @@ export class SurveyService {
       id: survey.id,
       name: survey.name,
       isActive: survey.isActive,
+      startPoints: survey.startPoints,
+      pointsPerAnswer: survey.pointsPerAnswer,
       questions: survey.surveyQuestions.map((sq) => sq.question),
     };
   }

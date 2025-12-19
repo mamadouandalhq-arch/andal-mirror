@@ -104,7 +104,7 @@ model GiftCard {
 model FeedbackQuestion {
   id         String       @id @default(uuid())
   type       FeedbackType
-  isArchived Boolean      @default(false)
+  
   createdAt  DateTime     @default(now())
 
   options         FeedbackOption[]
@@ -198,6 +198,9 @@ model FeedbackSurvey {
   id       String  @id @default(uuid())
   name     String
   isActive Boolean @default(false)
+
+  startPoints     Int @default(100) // Base points for downloading the receipt
+  pointsPerAnswer Int @default(100) // Points for each answer to the question
 
   createdAt       DateTime         @default(now())
   feedbackResults FeedbackResult[]
