@@ -13,6 +13,8 @@ import { EmailModule } from './email/email.module';
 import { AdminModule } from './admin/admin.module';
 import { StorageModule } from './storage/storage.module';
 import { QuestionModule } from './question/question.module';
+import { SurveyService } from './survey/survey.service';
+import { SurveyModule } from './survey/survey.module';
 
 @Module({
   imports: [
@@ -31,8 +33,9 @@ import { QuestionModule } from './question/question.module';
     AdminModule,
     StorageModule,
     QuestionModule,
+    SurveyModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [SurveyService],
 })
 export class AppModule {}
