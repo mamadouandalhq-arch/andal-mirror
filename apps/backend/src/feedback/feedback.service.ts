@@ -7,6 +7,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import {
   FeedbackStatus as PrismaFeedbackStatus,
+  PrismaPromise,
   ReceiptStatus,
 } from '@prisma/client';
 import {
@@ -123,6 +124,11 @@ export class FeedbackService {
       answerKeys,
     );
 
+    // Check if feedback is being completed (last question answered)
+    // When feedback is completed, status is set to 'completed' in modifyChangeDataIfLastAnswer
+    const isFeedbackCompleted =
+      dataToChange.status === PrismaFeedbackStatus.completed;
+
     const updateFeedback = this.prisma.feedbackResult.update({
       where: {
         id: validatedFeedback.id,
@@ -131,17 +137,38 @@ export class FeedbackService {
       include: this.getCurrentQuestionIncludeFilter(language),
     });
 
+    // If feedback is completed, change receipt status from awaitingFeedback to pending
+    const updateReceiptStatus = isFeedbackCompleted
+      ? this.prisma.receipt.update({
+          where: { id: validatedFeedback.receiptId },
+          data: { status: ReceiptStatus.pending },
+        })
+      : null;
+
     if (upsertAnswer) {
-      const [updatedFeedback] = await this.prisma.$transaction([
+      const operations: PrismaPromise<unknown>[] = [
         updateFeedback,
         upsertAnswer,
-      ]);
+      ];
+      if (updateReceiptStatus) {
+        operations.push(updateReceiptStatus);
+      }
+      const [updatedFeedback] = await this.prisma.$transaction(operations);
 
+      return await this.convertFeedbackToResponse(
+        updatedFeedback as FeedbackResultWithCurrentQuestion,
+      );
+    }
+
+    if (updateReceiptStatus) {
+      const [updatedFeedback] = await this.prisma.$transaction([
+        updateFeedback,
+        updateReceiptStatus,
+      ]);
       return await this.convertFeedbackToResponse(updatedFeedback);
     }
 
     const updatedFeedback = await updateFeedback;
-
     return await this.convertFeedbackToResponse(updatedFeedback);
   }
 
@@ -149,18 +176,18 @@ export class FeedbackService {
     userId: string,
     dto: StartFeedbackDto,
   ): Promise<FeedbackStateResponse> {
-    const pendingReceipt = await this.receiptService.getFirst({
+    const awaitingFeedbackReceipt = await this.receiptService.getFirst({
       userId: userId,
-      status: ReceiptStatus.pending,
+      status: ReceiptStatus.awaitingFeedback,
     });
 
-    if (!pendingReceipt) {
-      throw new BadRequestException('No pending receipt!');
+    if (!awaitingFeedbackReceipt) {
+      throw new BadRequestException('No receipt awaiting feedback!');
     }
 
     const feedback = await this.getUnique({
       userId,
-      receiptId: pendingReceipt.id,
+      receiptId: awaitingFeedbackReceipt.id,
       language: dto.language,
     });
 
@@ -185,7 +212,7 @@ export class FeedbackService {
     const newFeedback = await this.startFeedbackService.createFeedback(
       userId,
       dto.language,
-      pendingReceipt,
+      awaitingFeedbackReceipt,
     );
 
     return await this.convertFeedbackToResponse(newFeedback);
@@ -195,12 +222,19 @@ export class FeedbackService {
     userId: string,
     language: string,
   ): Promise<FeedbackStateResponse> {
+    const awaitingFeedbackReceipt = await this.receiptService.getFirst({
+      userId: userId,
+      status: ReceiptStatus.awaitingFeedback,
+    });
+
     const pendingReceipt = await this.receiptService.getFirst({
       userId: userId,
       status: ReceiptStatus.pending,
     });
 
-    if (!pendingReceipt) {
+    const receipt = pendingReceipt || awaitingFeedbackReceipt;
+
+    if (!receipt) {
       return {
         status: 'unavailable',
         reason: 'noPendingReceipt',
@@ -209,7 +243,7 @@ export class FeedbackService {
 
     const feedback = await this.getUnique({
       userId,
-      receiptId: pendingReceipt.id,
+      receiptId: receipt.id,
       language,
     });
 

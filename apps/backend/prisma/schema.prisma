@@ -15,6 +15,7 @@ enum UserRole {
 }
 
 enum ReceiptStatus {
+  awaitingFeedback
   pending
   approved
   rejected
@@ -66,7 +67,7 @@ model ForgotPasswordToken {
 model Receipt {
   id         String        @id @default(uuid())
   receiptUrl String
-  status     ReceiptStatus @default(pending)
+  status     ReceiptStatus @default(awaitingFeedback)
 
   createdAt  DateTime  @default(now())
   approvedAt DateTime?
@@ -77,28 +78,6 @@ model Receipt {
   user   User   @relation(fields: [userId], references: [id])
 
   feedbackResult FeedbackResult?
-}
-
-model Category {
-  id          String  @id @default(uuid())
-  name        String
-  imageUrl    String
-  description String?
-
-  giftCards GiftCard[]
-}
-
-model GiftCard {
-  id        String   @id @default(uuid())
-  name      String
-  type      String?
-  amount    Int
-  giftCode  String?
-  pdfUrl    String?
-  createdAt DateTime @default(now())
-
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model FeedbackQuestion {

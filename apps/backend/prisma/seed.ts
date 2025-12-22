@@ -6,13 +6,16 @@
  * - Preserves existing active survey (won't create new active survey if one exists)
  * - Skips questions that already exist (checks by translation text)
  * - Won't create duplicates or overwrite existing data
+ * - Creates admin user from environment variables if it doesn't exist
  *
  * Usage:
  * - Development: Set RUN_SEED=true in docker-compose or .env
  * - Production: Only run manually when needed (e.g., initial setup)
  */
 
-import { FeedbackType, PrismaClient } from '@prisma/client';
+import { FeedbackType, PrismaClient, UserRole } from '@prisma/client';
+import argon from 'argon2';
+import 'dotenv/config';
 
 const prisma = new PrismaClient();
 
@@ -63,6 +66,38 @@ const QUESTIONS = [
 ];
 
 async function seed() {
+  // Create admin user from environment variables if it doesn't exist
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (adminEmail && adminPassword) {
+    const existingAdmin = await prisma.user.findUnique({
+      where: { email: adminEmail },
+    });
+
+    if (!existingAdmin) {
+      const hashedPassword = await argon.hash(adminPassword);
+      await prisma.user.create({
+        data: {
+          email: adminEmail,
+          password: hashedPassword,
+          firstName: 'Admin',
+          lastName: 'User',
+          role: UserRole.admin,
+        },
+      });
+      console.log(`Created admin user: ${adminEmail}`);
+    } else {
+      console.log(
+        `Admin user ${adminEmail} already exists. Skipping admin creation.`,
+      );
+    }
+  } else {
+    console.warn(
+      'ADMIN_EMAIL or ADMIN_PASSWORD not set in environment variables. Skipping admin user creation.',
+    );
+  }
+
   // Check if default survey already exists
   const existingSurvey = await prisma.feedbackSurvey.findFirst({
     where: {

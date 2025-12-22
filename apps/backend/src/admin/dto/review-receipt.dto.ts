@@ -23,7 +23,7 @@ export class ReviewReceiptDto {
     example: 'rejected',
   })
   @IsIn(ReviewReceiptStatuses)
-  status: Exclude<ReceiptStatus, 'pending'>;
+  status: Exclude<ReceiptStatus, 'pending' | 'awaitingFeedback'>;
 
   @ApiProperty({
     description:

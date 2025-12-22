@@ -24,4 +24,7 @@ export const validationSchema = Joi.object({
   RESEND_API_KEY: Joi.string().required(),
 
   CORS_ORIGIN: Joi.string().required(), // one or multiple urls separated by a comma
+
+  ADMIN_EMAIL: Joi.string().email().required(),
+  ADMIN_PASSWORD: Joi.string().min(8).required(),
 });

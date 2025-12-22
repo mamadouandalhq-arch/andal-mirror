@@ -45,14 +45,22 @@ export class ReceiptService {
       throw new BadRequestException('File is missing in the request');
     }
 
+    const currentAwaitingFeedbackReceipts = await this.getMany({
+      userId: userId,
+      status: ReceiptStatus.awaitingFeedback,
+    });
+
     const currentPendingReceipts = await this.getMany({
       userId: userId,
       status: ReceiptStatus.pending,
     });
 
-    if (currentPendingReceipts.length > 0) {
+    if (
+      currentAwaitingFeedbackReceipts.length > 0 ||
+      currentPendingReceipts.length > 0
+    ) {
       throw new BadRequestException(
-        "You already have pending receipt! You can't create more than one pending receipt.",
+        "You already have a receipt awaiting feedback or pending! You can't create more than one receipt in progress.",
       );
     }
 
@@ -65,6 +73,7 @@ export class ReceiptService {
       data: {
         receiptUrl: url,
         userId: userId,
+        status: ReceiptStatus.awaitingFeedback,
       },
     });
 
