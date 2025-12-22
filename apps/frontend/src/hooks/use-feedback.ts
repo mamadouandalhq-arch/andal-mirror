@@ -56,9 +56,15 @@ export function useAnswerQuestion(locale: string) {
         body,
       );
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       // Invalidate feedback state to refetch
       queryClient.invalidateQueries({ queryKey: ['feedback', 'state'] });
+      
+      // If feedback is completed, invalidate receipts to update receipt status
+      if (data.status === 'completed') {
+        queryClient.invalidateQueries({ queryKey: ['receipts'] });
+        queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+      }
     },
   });
 }

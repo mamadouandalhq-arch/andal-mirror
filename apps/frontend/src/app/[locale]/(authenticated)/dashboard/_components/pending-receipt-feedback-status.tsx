@@ -13,7 +13,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useFeedbackState, useStartFeedback } from '@/hooks/use-feedback';
 import { Progress } from '@/components/ui/progress';
-import { MessageSquare, Play, ArrowRight } from 'lucide-react';
+import {
+  MessageSquare,
+  Play,
+  ArrowRight,
+  TrendingUp,
+  CheckCircle2,
+} from 'lucide-react';
 import { useRouter } from '@/i18n';
 import { formatPoints } from '@/lib/format-utils';
 
@@ -56,6 +62,13 @@ export function PendingReceiptFeedbackStatus() {
     ? (feedbackState.answeredQuestions || 0) / feedbackState.totalQuestions
     : 0;
 
+  // Calculate remaining questions and potential points
+  const remainingQuestions = feedbackState.totalQuestions
+    ? feedbackState.totalQuestions - (feedbackState.answeredQuestions || 0)
+    : 0;
+
+  const currentPoints = feedbackState.pointsValue || 0;
+
   const handleStartFeedback = async () => {
     if (feedbackState.status === 'notStarted') {
       try {
@@ -89,33 +102,76 @@ export function PendingReceiptFeedbackStatus() {
           </Badge>
         </div>
         <CardDescription>
-          {isCompleted ? t('completedDescription') : t('inProgressDescription')}
+          {isCompleted
+            ? t('completedDescription')
+            : isInProgress && remainingQuestions > 0
+            ? remainingQuestions === 1
+              ? t('oneQuestionLeft')
+              : t('questionsLeft', { count: remainingQuestions.toString() })
+            : t('inProgressDescription')}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0 space-y-4">
         {isInProgress && feedbackState.totalQuestions && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>{t('progress')}</span>
-              <span>
-                {feedbackState.answeredQuestions} /{' '}
-                {feedbackState.totalQuestions}
-              </span>
+          <>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm items-center">
+                <span className="font-medium">{t('progress')}</span>
+                <span className="text-muted-foreground">
+                  {feedbackState.answeredQuestions} /{' '}
+                  {feedbackState.totalQuestions}{' '}
+                  {t('questionsAnswered', { defaultValue: 'questions' })}
+                </span>
+              </div>
+              <Progress value={progress * 100} className="h-3" />
             </div>
-            <Progress value={progress * 100} className="h-2" />
-          </div>
+
+            {/* Points earned section with motivation */}
+            {currentPoints > 0 && (
+              <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-medium text-muted-foreground">
+                      {t('earned')}
+                    </span>
+                  </div>
+                  <span className="text-lg font-bold text-primary">
+                    {formatPoints(currentPoints, locale)} {tCommon('points')}
+                  </span>
+                </div>
+                {remainingQuestions > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    {remainingQuestions === 1
+                      ? t('earnMorePointsOne', {
+                          defaultValue:
+                            'Complete 1 more question to earn more points!',
+                        })
+                      : t('earnMorePoints', {
+                          remaining: remainingQuestions.toString(),
+                        })}
+                  </p>
+                )}
+              </div>
+            )}
+          </>
         )}
 
-        {feedbackState.pointsValue !== undefined &&
-          feedbackState.pointsValue > 0 && (
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">{t('earned')}:</span>
-              <span className="font-semibold text-primary">
-                {formatPoints(feedbackState.pointsValue, locale)}{' '}
-                {tCommon('points')}
+        {isCompleted && currentPoints > 0 && (
+          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-900">
+                  {t('totalEarned', { defaultValue: 'Total Earned' })}
+                </span>
+              </div>
+              <span className="text-xl font-bold text-emerald-700">
+                {formatPoints(currentPoints, locale)} {tCommon('points')}
               </span>
             </div>
-          )}
+          </div>
+        )}
 
         {isInProgress && feedbackState.currentQuestion && (
           <div className="p-3 bg-muted rounded-lg">

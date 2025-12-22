@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
-import { useReceiptUpload } from '@/hooks/use-receipts';
+import { useReceiptUpload, useReceipts } from '@/hooks/use-receipts';
 import { useDashboardStats } from '@/hooks/use-dashboard-stats';
 import { Upload, Loader2 } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -10,6 +10,7 @@ import { useRef, useState } from 'react';
 export function QuickActions() {
   const t = useTranslations('dashboard.quickActions');
   const { stats } = useDashboardStats();
+  const { data: receipts } = useReceipts();
   const uploadMutation = useReceiptUpload();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -17,6 +18,12 @@ export function QuickActions() {
 
   const hasPendingReceipt = stats?.hasPendingReceipt ?? false;
   const isDisabled = hasPendingReceipt || uploadMutation.isPending;
+
+  // Determine which status the active receipt has
+  const activeReceipt = receipts?.find(
+    (r) => r.status === 'awaitingFeedback' || r.status === 'pending',
+  );
+  const activeReceiptStatus = activeReceipt?.status;
 
   // Supported MIME types matching backend validation
   const supportedMimeTypes = [
@@ -190,7 +197,9 @@ export function QuickActions() {
       </div>
       {hasPendingReceipt && (
         <p className="text-sm text-muted-foreground">
-          {t('pendingReceiptWarning')}
+          {activeReceiptStatus === 'awaitingFeedback'
+            ? t('awaitingFeedbackWarning')
+            : t('pendingReceiptWarning')}
         </p>
       )}
       {uploadError && <p className="text-sm text-destructive">{uploadError}</p>}

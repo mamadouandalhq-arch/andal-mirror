@@ -13,7 +13,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useReceipts } from '@/hooks/use-receipts';
 import { useFeedbackState, useStartFeedback } from '@/hooks/use-feedback';
-import { MessageSquare, ArrowRight, Play, CheckCircle } from 'lucide-react';
+import {
+  MessageSquare,
+  ArrowRight,
+  Play,
+  CheckCircle,
+  Info,
+} from 'lucide-react';
 import { useRouter } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
@@ -63,12 +69,16 @@ export function ReceiptList() {
     return dateB - dateA; // Descending order (newest first)
   });
 
+  const awaitingFeedbackReceipt = sortedReceipts.find(
+    (r) => r.status === 'awaitingFeedback',
+  );
   const pendingReceipt = sortedReceipts.find((r) => r.status === 'pending');
-  const isPendingReceipt = (receiptId: string) =>
+  const isActiveReceipt = (receiptId: string) =>
+    receiptId === awaitingFeedbackReceipt?.id ||
     receiptId === pendingReceipt?.id;
 
   const handleStartFeedback = async (receiptId: string) => {
-    if (isPendingReceipt(receiptId)) {
+    if (isActiveReceipt(receiptId)) {
       try {
         if (feedbackState?.status === 'notStarted') {
           await startFeedbackMutation.mutateAsync();
@@ -132,14 +142,15 @@ export function ReceiptList() {
       {sortedReceipts.map((receipt) => {
         const statusBadge = getStatusBadge(receipt.status);
         const StatusIcon = statusBadge.icon;
-        const isPending = receipt.status === 'pending';
+        const isActive =
+          receipt.status === 'awaitingFeedback' || receipt.status === 'pending';
         const showFeedback =
-          isPending && feedbackState && feedbackState.status !== 'unavailable';
+          isActive && feedbackState && feedbackState.status !== 'unavailable';
 
         return (
           <Card
             key={receipt.id}
-            className={cn('transition-all', isPending && 'border-primary/50 ')}
+            className={cn('transition-all', isActive && 'border-primary/50 ')}
           >
             <CardHeader className="p-3 sm:p-6">
               <div className="flex items-start justify-between">
@@ -168,6 +179,18 @@ export function ReceiptList() {
                 height={230}
                 showDownload={false}
               />
+
+              {/* Info message for awaiting feedback receipts */}
+              {receipt.status === 'awaitingFeedback' && (
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <Info className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
+                    <p className="text-sm text-blue-900">
+                      {t('awaitingFeedbackInfo')}
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Feedback Status for Pending Receipt */}
               {showFeedback && (

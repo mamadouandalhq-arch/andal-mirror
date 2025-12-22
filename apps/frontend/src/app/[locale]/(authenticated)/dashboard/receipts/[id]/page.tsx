@@ -14,7 +14,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import { getStatusBadge } from '@/lib/receipt-utils';
@@ -128,6 +128,18 @@ export default function ReceiptDetailsPage() {
                 </Badge>
               </div>
             </div>
+
+            {/* Info message for awaiting feedback receipts */}
+            {receipt.status === 'awaitingFeedback' && (
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm text-blue-900">
+                    {t('awaitingFeedbackInfo')}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Points earned from feedback - only for approved receipts */}
             {receipt.status === 'approved' &&

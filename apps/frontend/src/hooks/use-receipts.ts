@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 
-export type ReceiptStatus = 'pending' | 'approved' | 'rejected';
+export type ReceiptStatus = 'awaitingFeedback' | 'pending' | 'approved' | 'rejected';
 
 export interface Receipt {
   id: string;

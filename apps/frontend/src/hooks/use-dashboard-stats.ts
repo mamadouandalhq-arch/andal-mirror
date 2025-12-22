@@ -27,6 +27,7 @@ export function useDashboardStats(): {
   const stats = useMemo<DashboardStats | null>(() => {
     if (!receipts || !user) return null;
 
+    const awaitingFeedbackReceipts = receipts.filter((r) => r.status === 'awaitingFeedback');
     const pendingReceipts = receipts.filter((r) => r.status === 'pending');
     const approvedReceipts = receipts.filter((r) => r.status === 'approved');
     const rejectedReceipts = receipts.filter((r) => r.status === 'rejected');
@@ -43,7 +44,7 @@ export function useDashboardStats(): {
       approvedCount: approvedReceipts.length,
       rejectedCount: rejectedReceipts.length,
       totalPointsEarned,
-      hasPendingReceipt: pendingReceipts.length > 0,
+      hasPendingReceipt: awaitingFeedbackReceipts.length > 0 || pendingReceipts.length > 0,
     };
   }, [receipts, user]);
 

@@ -8,6 +8,7 @@
     "forTenants": "For Tenants",
     "forLandlords": "For Landlords",
     "status": {
+      "awaitingFeedback": "Awaiting Feedback",
       "pending": "Pending",
       "approved": "Approved",
       "rejected": "Rejected"
@@ -291,6 +292,8 @@
     "stats": {
       "pointsBalance": "Points Balance",
       "pointsBalanceDesc": "Total available points",
+      "awaitingFeedback": "Awaiting Feedback",
+      "awaitingFeedbackDesc": "Waiting for feedback to be provided",
       "pending": "Pending",
       "pendingDesc": "Awaiting review",
       "approved": "Approved",
@@ -303,7 +306,8 @@
       "title": "Quick Actions",
       "uploadReceipt": "Upload Receipt",
       "uploading": "Uploading...",
-      "pendingReceiptWarning": "You already have a pending receipt. Please wait for it to be processed before uploading another.",
+      "pendingReceiptWarning": "You already have a receipt awaiting review. Please wait for it to be reviewed before uploading another.",
+      "awaitingFeedbackWarning": "You already have a receipt awaiting feedback. Please provide feedback for your current receipt and wait for it to be reviewed before uploading another.",
       "uploadError": "Failed to upload receipt. Please try again.",
       "dragAndDropOrClick": "Drag and drop your receipt here, or click to browse",
       "dropFileHere": "Drop your file here",
@@ -326,6 +330,7 @@
       "continueFeedback": "Continue Feedback",
       "startFeedback": "Start Feedback",
       "viewFeedback": "View Feedback",
+      "awaitingFeedbackInfo": "This receipt is awaiting your feedback. After you submit your feedback, it will be sent for review.",
       "details": {
         "rejectionComment": "Rejection Comment",
         "loading": "Loading receipt...",
@@ -337,7 +342,8 @@
         "receiptId": "Receipt ID",
         "statusLabel": "Status",
         "pointsEarned": "Points Earned",
-        "openInNewTab": "Open in New Tab"
+        "openInNewTab": "Open in New Tab",
+        "awaitingFeedbackInfo": "This receipt is awaiting your feedback. After you submit your feedback, it will be sent for review."
       }
     }
   },
@@ -350,6 +356,12 @@
     "progress": "Progress",
     "earned": "Earned",
     "currentQuestion": "Current Question",
+    "questionsAnswered": "questions answered",
+    "oneQuestionLeft": "Just 1 question left!",
+    "questionsLeft": "Only {count} questions left!",
+    "earnMorePoints": "Complete {remaining} more questions to earn more points!",
+    "earnMorePointsOne": "Complete 1 more question to earn more points!",
+    "totalEarned": "Total Earned",
     "continue": "Continue",
     "start": "Start Feedback",
     "loading": "Loading feedback...",
