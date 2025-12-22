@@ -398,6 +398,7 @@
         "descriptionWithoutActive": "Create and publish a new survey",
         "surveyName": "Survey Name",
         "surveyNamePlaceholder": "Enter survey name",
+        "surveyNameHelper": "Date and time will be automatically appended (e.g., 'Survey Name (2025-12-19 14:30)')",
         "startPoints": "Start Points",
         "startPointsDescription": "Base points awarded when receipt is uploaded",
         "pointsPerAnswer": "Points Per Answer",

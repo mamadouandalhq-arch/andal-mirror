@@ -398,6 +398,7 @@
         "descriptionWithoutActive": "Créer et publier une nouvelle enquête",
         "surveyName": "Nom de l'enquête",
         "surveyNamePlaceholder": "Entrez le nom de l'enquête",
+        "surveyNameHelper": "La date et l'heure seront automatiquement ajoutées (par exemple, 'Nom de l'enquête (2025-12-19 14:30)')",
         "startPoints": "Points de départ",
         "startPointsDescription": "Points de base attribués lors du téléchargement du reçu",
         "pointsPerAnswer": "Points par réponse",

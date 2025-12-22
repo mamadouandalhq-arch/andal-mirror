@@ -75,12 +75,32 @@ export function SurveyBuilder() {
 
   const selectedQuestionIds = watch('questionIds');
 
+  // Function to extract the base name (without the identifier)
+  const extractBaseName = (name: string): string => {
+    // Remove the identifier in the format (YYYY-MM-DD HH:mm) from the end
+    const match = name.match(
+      /^(.+?)\s*\(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}\)\s*$/,
+    );
+    return match ? match[1].trim() : name.trim();
+  };
+
+  // Function to format the name with the identifier
+  const formatSurveyNameWithIdentifier = (name: string): string => {
+    const baseName = extractBaseName(name);
+    if (!baseName) return baseName;
+
+    // Add a new timestamp: YYYY-MM-DD HH:mm
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 16).replace('T', ' ');
+    return `${baseName} (${dateStr})`;
+  };
+
   // Sync form with active survey when it loads
   useEffect(() => {
     if (activeSurvey) {
       const questionIds = activeSurvey.questions.map((q) => q.id);
       reset({
-        name: activeSurvey.name,
+        name: extractBaseName(activeSurvey.name), // Extract the base name without the identifier
         startPoints: activeSurvey.startPoints,
         pointsPerAnswer: activeSurvey.pointsPerAnswer,
         questionIds,
@@ -107,7 +127,12 @@ export function SurveyBuilder() {
   };
 
   const onSubmit = (data: PublishSurveyFormData) => {
-    setFormDataToSubmit(data);
+    // Add a new identifier to the name
+    const dataWithIdentifier = {
+      ...data,
+      name: formatSurveyNameWithIdentifier(data.name),
+    };
+    setFormDataToSubmit(dataWithIdentifier);
     setShowConfirmDialog(true);
   };
 
@@ -176,6 +201,9 @@ export function SurveyBuilder() {
                 placeholder={t('surveyNamePlaceholder')}
                 className="mt-1"
               />
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t('surveyNameHelper')}
+              </p>
             </FormField>
 
             {/* Points Configuration */}
