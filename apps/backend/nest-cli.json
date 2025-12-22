@@ -4,6 +4,11 @@
   "sourceRoot": "apps/backend/src",
   "entryFile": "main",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "watchAssets": true
+  },
+  "watchOptions": {
+    "usePolling": true,
+    "interval": 1000
   }
 }

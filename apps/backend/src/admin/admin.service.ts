@@ -125,6 +125,8 @@ export class AdminService {
           select: {
             id: true,
             status: true,
+            totalQuestions: true,
+            answeredQuestions: true,
             pointsValue: true,
             completedAt: true,
           },

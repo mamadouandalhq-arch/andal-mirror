@@ -9,7 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "dev": "nest start --watch",
+    "dev": "nest start --watch --watchAssets",
     "debug": "nest start --debug --watch",
     "prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -22,7 +22,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
-    "prisma:studio": "prisma studio",
+    "prisma:studio": "prisma studio --hostname 0.0.0.0 --port 5556",
     "prisma:seed": "prisma db seed"
   },
   "dependencies": {
@@ -108,5 +108,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
