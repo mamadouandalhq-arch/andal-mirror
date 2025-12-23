@@ -14,6 +14,7 @@ import { AdminModule } from './admin/admin.module';
 import { StorageModule } from './storage/storage.module';
 import { QuestionModule } from './question/question.module';
 import { SurveyModule } from './survey/survey.module';
+import { RedemptionModule } from './redemption/redemption.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SurveyModule } from './survey/survey.module';
     StorageModule,
     QuestionModule,
     SurveyModule,
+    RedemptionModule,
   ],
   controllers: [],
   providers: [],
