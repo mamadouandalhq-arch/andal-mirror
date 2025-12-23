@@ -300,7 +300,48 @@
       "approvedDesc": "Traité avec succès",
       "rejected": "Rejeté",
       "rejectedDesc": "Non approuvé",
-      "error": "Échec du chargement des statistiques"
+      "error": "Échec du chargement des statistiques",
+      "clickToRedeem": "Cliquez pour échanger des points",
+      "exchangeRate": "100 points = 1,00 $"
+    },
+    "redeem": {
+      "title": "Échanger des points",
+      "description": "Convertissez vos points en argent. 100 points = 1,00 $",
+      "pageTitle": "Échanger des points",
+      "pageDescription": "Convertissez vos points en argent et suivez vos demandes de rachat",
+      "backToDashboard": "Retour au tableau de bord",
+      "balance": {
+        "available": "Disponible",
+        "pendingApproval": "En attente d'approbation",
+        "awaitingPayment": "En attente de paiement",
+        "redeemed": "Échangé",
+        "totalEarned": "Total gagné"
+      },
+      "formTitle": "Demander un rachat",
+      "pointsAmount": "Montant des points",
+      "pointsAmountPlaceholder": "Entrez le montant (minimum 100)",
+      "paypalEmail": "E-mail PayPal",
+      "paypalEmailPlaceholder": "votre.email@exemple.com",
+      "paypalEmailRequired": "L'e-mail PayPal est requis",
+      "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+      "minPoints": "Minimum {min} points requis",
+      "minPointsRequired": "Vous avez besoin d'au moins {min} points pour échanger",
+      "insufficientPoints": "Vous n'avez pas assez de points",
+      "availablePoints": "Disponible : {points} points",
+      "dollarAmount": "Vous recevrez : {amount} $",
+      "cancel": "Annuler",
+      "submit": "Soumettre la demande",
+      "submitting": "Soumission...",
+      "redemptionsList": "Historique des rachats",
+      "noRedemptions": "Aucune demande de rachat pour le moment",
+      "createdAt": "Créé",
+      "rejectionReason": "Raison du rejet",
+      "status": {
+        "pending": "En attente",
+        "approved": "Approuvé",
+        "completed": "Terminé",
+        "rejected": "Rejeté"
+      }
     },
     "quickActions": {
       "title": "Actions rapides",
@@ -516,6 +557,96 @@
       "feedbackDetails": "Détails du retour",
       "answers": "Réponses",
       "noFeedbackData": "Aucune donnée de retour disponible"
+    },
+    "redemptions": {
+      "title": "Rachats",
+      "error": "Échec du chargement des rachats",
+      "empty": "Aucun rachat trouvé",
+      "filters": {
+        "status": "Filtrer par statut",
+        "allStatuses": "Tous les statuts"
+      },
+      "columns": {
+        "user": "Utilisateur",
+        "points": "Points",
+        "amount": "Montant",
+        "paypalEmail": "E-mail PayPal",
+        "status": "Statut",
+        "createdAt": "Créé le",
+        "actions": "Actions"
+      },
+      "actions": {
+        "approve": "Approuver",
+        "complete": "Terminer",
+        "reject": "Rejeter"
+      },
+      "dialogs": {
+        "approve": {
+          "title": "Approuver le rachat",
+          "description": "Êtes-vous sûr de vouloir approuver cette demande de rachat ?",
+          "confirm": "Approuver",
+          "processing": "Traitement..."
+        },
+        "complete": {
+          "title": "Terminer le rachat",
+          "description": "Avez-vous envoyé le paiement avec succès ? Cela marquera le rachat comme terminé.",
+          "confirm": "Terminer",
+          "processing": "Traitement..."
+        },
+        "reject": {
+          "title": "Rejeter le rachat",
+          "description": "Êtes-vous sûr de vouloir rejeter ce rachat ? Les points seront retournés à l'utilisateur.",
+          "reasonPlaceholder": "Raison du rejet (optionnel)",
+          "reasonLabel": "Raison du rejet (optionnel)",
+          "confirm": "Rejeter",
+          "processing": "Traitement..."
+        }
+      },
+      "detail": {
+        "redemption": "Rachat",
+        "backToList": "Retour à la liste",
+        "error": "Échec du chargement du rachat",
+        "status": "Statut",
+        "user": "Utilisateur",
+        "email": "E-mail",
+        "points": "Points",
+        "amount": "Montant",
+        "paypalEmail": "E-mail PayPal",
+        "createdAt": "Créé le",
+        "approvedAt": "Approuvé le",
+        "completedAt": "Terminé le",
+        "rejectedAt": "Rejeté le",
+        "rejectionReason": "Raison du rejet",
+        "adminComment": "Commentaire administrateur",
+        "actions": "Actions",
+        "approve": "Approuver",
+        "complete": "Terminer",
+        "reject": "Rejeter",
+        "cancel": "Annuler",
+        "noActionsAvailable": "Aucune action disponible pour ce statut",
+        "dialogs": {
+          "approve": {
+            "title": "Approuver le rachat",
+            "description": "Êtes-vous sûr de vouloir approuver cette demande de rachat ?",
+            "confirm": "Approuver",
+            "processing": "Traitement..."
+          },
+          "complete": {
+            "title": "Terminer le rachat",
+            "description": "Avez-vous envoyé le paiement avec succès ? Cela marquera le rachat comme terminé.",
+            "confirm": "Terminer",
+            "processing": "Traitement..."
+          },
+          "reject": {
+            "title": "Rejeter le rachat",
+            "description": "Êtes-vous sûr de vouloir rejeter ce rachat ? Les points seront retournés à l'utilisateur.",
+            "reasonLabel": "Raison du rejet (optionnel)",
+            "reasonPlaceholder": "Raison du rejet (optionnel)",
+            "confirm": "Rejeter",
+            "processing": "Traitement..."
+          }
+        }
+      }
     }
   }
 }

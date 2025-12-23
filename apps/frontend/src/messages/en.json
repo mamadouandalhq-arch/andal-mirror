@@ -300,7 +300,48 @@
       "approvedDesc": "Successfully processed",
       "rejected": "Rejected",
       "rejectedDesc": "Not approved",
-      "error": "Failed to load statistics"
+      "error": "Failed to load statistics",
+      "clickToRedeem": "Click to redeem points",
+      "exchangeRate": "100 points = $1.00"
+    },
+    "redeem": {
+      "title": "Redeem Points",
+      "description": "Convert your points to cash. 100 points = $1.00",
+      "pageTitle": "Redeem Points",
+      "pageDescription": "Convert your points to cash and track your redemption requests",
+      "backToDashboard": "Back to Dashboard",
+      "balance": {
+        "available": "Available",
+        "pendingApproval": "Pending Approval",
+        "awaitingPayment": "Awaiting Payment",
+        "redeemed": "Redeemed",
+        "totalEarned": "All Time Earned"
+      },
+      "formTitle": "Request Redemption",
+      "pointsAmount": "Points Amount",
+      "pointsAmountPlaceholder": "Enter amount (minimum 100)",
+      "paypalEmail": "PayPal Email",
+      "paypalEmailPlaceholder": "your.email@example.com",
+      "paypalEmailRequired": "PayPal email is required",
+      "invalidEmail": "Please enter a valid email address",
+      "minPoints": "Minimum {min} points required",
+      "minPointsRequired": "You need at least {min} points to redeem",
+      "insufficientPoints": "You don't have enough points",
+      "availablePoints": "Available: {points} points",
+      "dollarAmount": "You will receive: ${amount}",
+      "cancel": "Cancel",
+      "submit": "Submit Request",
+      "submitting": "Submitting...",
+      "redemptionsList": "Redemption History",
+      "noRedemptions": "No redemption requests yet",
+      "createdAt": "Created",
+      "rejectionReason": "Rejection Reason",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "completed": "Completed",
+        "rejected": "Rejected"
+      }
     },
     "quickActions": {
       "title": "Quick Actions",
@@ -516,6 +557,96 @@
       "feedbackDetails": "Feedback Details",
       "answers": "Answers",
       "noFeedbackData": "No feedback data available"
+    },
+    "redemptions": {
+      "title": "Redemptions",
+      "error": "Failed to load redemptions",
+      "empty": "No redemptions found",
+      "filters": {
+        "status": "Filter by Status",
+        "allStatuses": "All Statuses"
+      },
+      "columns": {
+        "user": "User",
+        "points": "Points",
+        "amount": "Amount",
+        "paypalEmail": "PayPal Email",
+        "status": "Status",
+        "createdAt": "Created At",
+        "actions": "Actions"
+      },
+      "actions": {
+        "approve": "Approve",
+        "complete": "Complete",
+        "reject": "Reject"
+      },
+      "dialogs": {
+        "approve": {
+          "title": "Approve Redemption",
+          "description": "Are you sure you want to approve this redemption request?",
+          "confirm": "Approve",
+          "processing": "Processing..."
+        },
+        "complete": {
+          "title": "Complete Redemption",
+          "description": "Have you successfully sent the payment? This will mark the redemption as completed.",
+          "confirm": "Complete",
+          "processing": "Processing..."
+        },
+        "reject": {
+          "title": "Reject Redemption",
+          "description": "Are you sure you want to reject this redemption? Points will be returned to the user.",
+          "reasonPlaceholder": "Reason for rejection (optional)",
+          "reasonLabel": "Rejection Reason (optional)",
+          "confirm": "Reject",
+          "processing": "Processing..."
+        }
+      },
+      "detail": {
+        "redemption": "Redemption",
+        "backToList": "Back to List",
+        "error": "Failed to load redemption",
+        "status": "Status",
+        "user": "User",
+        "email": "Email",
+        "points": "Points",
+        "amount": "Amount",
+        "paypalEmail": "PayPal Email",
+        "createdAt": "Created At",
+        "approvedAt": "Approved At",
+        "completedAt": "Completed At",
+        "rejectedAt": "Rejected At",
+        "rejectionReason": "Rejection Reason",
+        "adminComment": "Admin Comment",
+        "actions": "Actions",
+        "approve": "Approve",
+        "complete": "Complete",
+        "reject": "Reject",
+        "cancel": "Cancel",
+        "noActionsAvailable": "No actions available for this status",
+        "dialogs": {
+          "approve": {
+            "title": "Approve Redemption",
+            "description": "Are you sure you want to approve this redemption request?",
+            "confirm": "Approve",
+            "processing": "Processing..."
+          },
+          "complete": {
+            "title": "Complete Redemption",
+            "description": "Have you successfully sent the payment? This will mark the redemption as completed.",
+            "confirm": "Complete",
+            "processing": "Processing..."
+          },
+          "reject": {
+            "title": "Reject Redemption",
+            "description": "Are you sure you want to reject this redemption? Points will be returned to the user.",
+            "reasonLabel": "Rejection Reason (optional)",
+            "reasonPlaceholder": "Reason for rejection (optional)",
+            "confirm": "Reject",
+            "processing": "Processing..."
+          }
+        }
+      }
     }
   }
 }
