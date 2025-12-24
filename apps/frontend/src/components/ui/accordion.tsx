@@ -1,0 +1,62 @@
+'use client';
+
+import * as React from 'react';
+import { ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface AccordionItemProps {
+  question: string;
+  answer: string | React.ReactNode;
+  defaultOpen?: boolean;
+}
+
+export function AccordionItem({
+  question,
+  answer,
+  defaultOpen = false,
+}: AccordionItemProps) {
+  const [isOpen, setIsOpen] = React.useState(defaultOpen);
+
+  return (
+    <div className="border-b border-border">
+      <button
+        className="flex w-full items-center justify-between py-4 text-left transition-colors hover:text-primary"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+      >
+        <span className="font-semibold text-base sm:text-lg pr-4">
+          {question}
+        </span>
+        <ChevronDown
+          className={cn(
+            'h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200',
+            isOpen && 'rotate-180'
+          )}
+        />
+      </button>
+      {isOpen && (
+        <div className="pb-4 text-muted-foreground leading-relaxed">
+          {typeof answer === 'string' ? (
+            <p className="whitespace-pre-line">{answer}</p>
+          ) : (
+            answer
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface AccordionProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Accordion({ children, className }: AccordionProps) {
+  return (
+    <div className={cn('w-full', className)}>
+      <div className="space-y-0">{children}</div>
+    </div>
+  );
+}
+

@@ -1,6 +1,7 @@
 {
   "common": {
-    "appName": "Andal Rewards",
+    "appName": "Andal",
+    "metaDescription": "Andal Network is infrastructure for rental buildings that improves tenant engagement, delivers embedded benefits, and increases retention. Our network connects residents to local merchants, services, and benefits while giving landlords the tools to improve retention and NOI.",
     "language": "Language",
     "welcome": "Welcome",
     "points": "points",
@@ -37,11 +38,11 @@
       "privacy": "Privacy Policy",
       "terms": "Terms of Service"
     },
-    "copyright": "© {year} Andal Rewards. All rights reserved.",
+    "copyright": "© {year} Andal. All rights reserved.",
     "rights": "All rights reserved."
   },
   "home": {
-    "title": "Andal Rewards",
+    "title": "Andal",
     "description": "Earn points by uploading receipts and redeem them for gift cards",
     "getStarted": "Get Started",
     "hero": {
@@ -123,6 +124,101 @@
       "description": "Join thousands of tenants who are already turning their rent payments into rewards.",
       "button": "Get Started Now",
       "secondaryButton": "Learn More"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about Andal",
+      "categories": {
+        "paymentMoney": {
+          "title": "Payment & Money",
+          "questions": {
+            "payThroughAndal": {
+              "question": "Do I pay my rent through Andal?",
+              "answer": "No. You continue paying rent directly to your landlord exactly as you do today, whether that's e-transfer, bank transfer, cheque, or any other method.\n\nAndal does not process rent payments, does not hold tenant funds, and does not sit between you and your landlord."
+            },
+            "whyProof": {
+              "question": "Then why do you ask for proof of rent payment?",
+              "answer": "Proof of payment is used only after you've already paid your landlord directly.\n\nWe use it to:\n• Confirm you paid on time (so we can award rewards)\n• Track participation in our early access program\n• Test whether positive incentives improve tenant experience\n\nThink of it like submitting a receipt to earn cash back: we're verifying an action that already happened, not processing the payment itself."
+            },
+            "whatProof": {
+              "question": "What kind of proof do you need?",
+              "answer": "Simple, non-invasive proof such as:\n• Screenshot of an e-transfer confirmation\n• Bank transaction confirmation showing the payment\n• Receipt from your landlord (if they provide one)\n\nWe do NOT ask for:\n• Full bank statements\n• Account passwords\n• Sensitive financial data\n\nYou control what you share. Most tenants send a quick screenshot that shows the date, amount, and recipient — nothing more."
+            },
+            "handleMoney": {
+              "question": "Does Andal handle my money?",
+              "answer": "No.\n\nAndal:\n• Does not touch your rent money\n• Does not move money between you and your landlord\n• Does not act as a payment processor\n• Never holds tenant funds\n\nAll rent payments happen directly between you and your landlord, outside our platform."
+            }
+          }
+        },
+        "privacyData": {
+          "title": "Privacy & Data",
+          "questions": {
+            "landlordSees": {
+              "question": "What does my landlord actually see?",
+              "answer": "Landlords see high-level, aggregate information only, such as:\n• \"This tenant paid on time this month\" (yes/no confirmation)\n• General trends across all tenants (e.g., \"85% of tenants paid on time\")\n• Anonymous feedback themes (e.g., \"Maintenance response time is a concern\")\n\nYour landlord does NOT see:\n• Individual payment proofs\n• Personal financial details\n• Specific feedback you submit (it's anonymized)\n• Your personal data"
+            },
+            "whatData": {
+              "question": "What data does Andal collect?",
+              "answer": "We collect only what's necessary:\n• Contact information (name, email, phone)\n• Unit/property information (for rewards delivery)\n• Payment confirmation (timing, not details)\n• Your feedback\n\nWe do NOT collect:\n• Bank account numbers or passwords\n• Credit card information\n• Full financial statements\n• Browsing history or device data"
+            },
+            "sellData": {
+              "question": "Do you sell my data?",
+              "answer": "No. Never.\n\nAndal:\n• Does not sell individual tenant data to third parties\n• Does not share your information with marketers\n• Uses data solely to operate the rewards program and improve tenant-landlord communication"
+            }
+          }
+        },
+        "participationFairness": {
+          "title": "Participation & Fairness",
+          "questions": {
+            "affectLease": {
+              "question": "Can this affect my lease or rent?",
+              "answer": "No.\n\nParticipating (or not participating) does NOT:\n• Change your lease terms\n• Affect your rent amount\n• Impact your standing as a tenant\n• Give landlords grounds to penalize you"
+            },
+            "stopParticipating": {
+              "question": "Can I stop participating at any time?",
+              "answer": "Yes.\n\nYou can:\n• Stop uploading payment proofs\n• Stop answering surveys\n• Delete your account\n\nNo penalties.\n\nAny rewards you've already earned remain yours. You simply stop earning new rewards going forward."
+            },
+            "missMonth": {
+              "question": "What if I miss uploading proof one month?",
+              "answer": "No problem.\n\nMissing one month means you won't earn rewards for that month, but:\n• You can resume the next month\n• No penalties or negative consequences\n• Your account remains active\n\nThis is a rewards program, not a requirement."
+            }
+          }
+        },
+        "aboutProgram": {
+          "title": "About the Program",
+          "questions": {
+            "finishedProduct": {
+              "question": "Is this a finished product?",
+              "answer": "No, this is an early access pilot.\n\nWe're testing whether rewards and better communication can:\n• Improve tenant experience\n• Reduce unnecessary moves\n• Help landlords address concerns earlier\n\nWhat this means for you:\n• The system is simple and limited during testing\n• We're actively listening to feedback\n• Features may change based on what works\n• You're helping us build something better for tenants.\n\nYour participation and feedback shape the final product."
+            },
+            "issuesConcerns": {
+              "question": "What if I have issues or concerns?",
+              "answer": "We're here to help.\n\nContact us at:\n• Email: test@domain.com\n• Phone: +1(438)5253145\n• Support hours: Usually within 24-72 hours"
+            }
+          }
+        },
+        "gettingStarted": {
+          "title": "Getting Started",
+          "questions": {
+            "costToJoin": {
+              "question": "Is there a cost to join?",
+              "answer": "No. Andal is 100% free for tenants.\n\nYour landlord pays for the service. You just earn rewards."
+            },
+            "landlordNotUsing": {
+              "question": "What if my landlord doesn't use Andal yet?",
+              "answer": "Currently, Andal is available only to tenants whose landlords have signed up for the program.\n\nWant your landlord to offer this?\nForward them to our website or email us at test@domain.com and we'll reach out to them."
+            }
+          }
+        }
+      }
+    },
+    "contact": {
+      "title": "Still Have Questions?",
+      "subtitle": "We're here to help.",
+      "email": "Email",
+      "phone": "Phone",
+      "responseTime": "Response Time",
+      "responseTimeValue": "Usually within 24-72 hours"
     }
   },
   "landlords": {

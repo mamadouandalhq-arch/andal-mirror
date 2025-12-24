@@ -48,39 +48,10 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="/about"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {footerT('company.about')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
+                  href="/#contact"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {footerT('company.contact')}
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <h4 className="text-sm font-semibold">{footerT('legal.title')}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {footerT('legal.privacy')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {footerT('legal.terms')}
                 </Link>
               </li>
             </ul>

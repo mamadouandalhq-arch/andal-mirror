@@ -5,6 +5,8 @@ import { FeaturesSection } from '@/components/landing/features-section';
 import { HowItWorksSection } from '@/components/landing/how-it-works-section';
 import { TestimonialsSection } from '@/components/landing/testimonials-section';
 import { CTASection } from '@/components/landing/cta-section';
+import { FAQSection } from '@/components/landing/faq-section';
+import { ContactSection } from '@/components/landing/contact-section';
 
 export default function Home() {
   return (
@@ -15,6 +17,8 @@ export default function Home() {
         <FeaturesSection />
         <HowItWorksSection />
         <TestimonialsSection />
+        <FAQSection />
+        <ContactSection />
         <CTASection />
       </main>
       <Footer />

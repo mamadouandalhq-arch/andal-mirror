@@ -1,6 +1,7 @@
 {
   "common": {
-    "appName": "Andal Rewards",
+    "appName": "Andal",
+    "metaDescription": "Andal Network est une infrastructure pour les immeubles locatifs qui améliore l'engagement des locataires, offre des avantages intégrés et augmente la rétention. Notre réseau connecte les résidents aux commerçants locaux, aux services et aux avantages tout en donnant aux propriétaires les outils pour améliorer la rétention et le NOI.",
     "language": "Langue",
     "welcome": "Bienvenue",
     "points": "points",
@@ -37,11 +38,11 @@
       "privacy": "Politique de Confidentialité",
       "terms": "Conditions d'Utilisation"
     },
-    "copyright": "© {year} Andal Rewards. Tous droits réservés.",
+    "copyright": "© {year} Andal. Tous droits réservés.",
     "rights": "Tous droits réservés."
   },
   "home": {
-    "title": "Andal Rewards",
+    "title": "Andal",
     "description": "Gagnez des points en téléchargeant des reçus et échangez-les contre des cartes-cadeaux",
     "getStarted": "Commencer",
     "hero": {
@@ -123,6 +124,101 @@
       "description": "Rejoignez des milliers de locataires qui transforment déjà leurs paiements de loyer en récompenses.",
       "button": "Commencer Maintenant",
       "secondaryButton": "En Savoir Plus"
+    },
+    "faq": {
+      "title": "Questions Fréquemment Posées",
+      "subtitle": "Tout ce que vous devez savoir sur Andal",
+      "categories": {
+        "paymentMoney": {
+          "title": "Paiement et Argent",
+          "questions": {
+            "payThroughAndal": {
+              "question": "Est-ce que je paie mon loyer par Andal ?",
+              "answer": "Non. Vous continuez à payer votre loyer directement à votre propriétaire exactement comme vous le faites aujourd'hui, que ce soit par virement électronique, virement bancaire, chèque ou toute autre méthode.\n\nAndal ne traite pas les paiements de loyer, ne détient pas les fonds des locataires et ne s'interpose pas entre vous et votre propriétaire."
+            },
+            "whyProof": {
+              "question": "Alors pourquoi demandez-vous une preuve de paiement du loyer ?",
+              "answer": "La preuve de paiement est utilisée uniquement après que vous ayez déjà payé votre propriétaire directement.\n\nNous l'utilisons pour :\n• Confirmer que vous avez payé à temps (afin de pouvoir attribuer des récompenses)\n• Suivre la participation à notre programme d'accès anticipé\n• Tester si les incitations positives améliorent l'expérience des locataires\n\nPensez-y comme soumettre un reçu pour gagner du cashback : nous vérifions une action qui s'est déjà produite, nous ne traitons pas le paiement lui-même."
+            },
+            "whatProof": {
+              "question": "Quel type de preuve avez-vous besoin ?",
+              "answer": "Des preuves simples et non invasives telles que :\n• Capture d'écran d'une confirmation de virement électronique\n• Confirmation de transaction bancaire montrant le paiement\n• Reçu de votre propriétaire (s'il en fournit un)\n\nNous ne demandons PAS :\n• Relevés bancaires complets\n• Mots de passe de compte\n• Données financières sensibles\n\nVous contrôlez ce que vous partagez. La plupart des locataires envoient une capture d'écran rapide qui montre la date, le montant et le destinataire — rien de plus."
+            },
+            "handleMoney": {
+              "question": "Est-ce qu'Andal gère mon argent ?",
+              "answer": "Non.\n\nAndal :\n• Ne touche pas à votre argent de loyer\n• Ne déplace pas d'argent entre vous et votre propriétaire\n• N'agit pas comme processeur de paiement\n• Ne détient jamais les fonds des locataires\n\nTous les paiements de loyer se font directement entre vous et votre propriétaire, en dehors de notre plateforme."
+            }
+          }
+        },
+        "privacyData": {
+          "title": "Confidentialité et Données",
+          "questions": {
+            "landlordSees": {
+              "question": "Que voit réellement mon propriétaire ?",
+              "answer": "Les propriétaires voient uniquement des informations agrégées de haut niveau, telles que :\n• \"Ce locataire a payé à temps ce mois-ci\" (confirmation oui/non)\n• Tendances générales parmi tous les locataires (par exemple, \"85% des locataires ont payé à temps\")\n• Thèmes de retour anonymes (par exemple, \"Le temps de réponse à la maintenance est une préoccupation\")\n\nVotre propriétaire ne voit PAS :\n• Les preuves de paiement individuelles\n• Les détails financiers personnels\n• Les retours spécifiques que vous soumettez (ils sont anonymisés)\n• Vos données personnelles"
+            },
+            "whatData": {
+              "question": "Quelles données Andal collecte-t-il ?",
+              "answer": "Nous collectons uniquement ce qui est nécessaire :\n• Informations de contact (nom, email, téléphone)\n• Informations sur l'unité/propriété (pour la livraison des récompenses)\n• Confirmation de paiement (timing, pas les détails)\n• Vos retours\n\nNous ne collectons PAS :\n• Numéros de compte bancaire ou mots de passe\n• Informations de carte de crédit\n• Relevés financiers complets\n• Historique de navigation ou données d'appareil"
+            },
+            "sellData": {
+              "question": "Vendez-vous mes données ?",
+              "answer": "Non. Jamais.\n\nAndal :\n• Ne vend pas les données individuelles des locataires à des tiers\n• Ne partage pas vos informations avec des marketeurs\n• Utilise les données uniquement pour faire fonctionner le programme de récompenses et améliorer la communication locataire-propriétaire"
+            }
+          }
+        },
+        "participationFairness": {
+          "title": "Participation et Équité",
+          "questions": {
+            "affectLease": {
+              "question": "Cela peut-il affecter mon bail ou mon loyer ?",
+              "answer": "Non.\n\nParticiper (ou ne pas participer) ne :\n• Change pas les termes de votre bail\n• N'affecte pas le montant de votre loyer\n• N'affecte pas votre statut de locataire\n• Ne donne pas aux propriétaires de raisons de vous pénaliser"
+            },
+            "stopParticipating": {
+              "question": "Puis-je arrêter de participer à tout moment ?",
+              "answer": "Oui.\n\nVous pouvez :\n• Arrêter de télécharger des preuves de paiement\n• Arrêter de répondre aux enquêtes\n• Supprimer votre compte\n\nAucune pénalité.\n\nToutes les récompenses que vous avez déjà gagnées restent à vous. Vous arrêtez simplement de gagner de nouvelles récompenses à l'avenir."
+            },
+            "missMonth": {
+              "question": "Que se passe-t-il si je manque de télécharger une preuve un mois ?",
+              "answer": "Aucun problème.\n\nManquer un mois signifie que vous ne gagnerez pas de récompenses pour ce mois, mais :\n• Vous pouvez reprendre le mois suivant\n• Aucune pénalité ou conséquence négative\n• Votre compte reste actif\n\nC'est un programme de récompenses, pas une exigence."
+            }
+          }
+        },
+        "aboutProgram": {
+          "title": "À Propos du Programme",
+          "questions": {
+            "finishedProduct": {
+              "question": "Est-ce un produit fini ?",
+              "answer": "Non, c'est un pilote d'accès anticipé.\n\nNous testons si les récompenses et une meilleure communication peuvent :\n• Améliorer l'expérience des locataires\n• Réduire les déménagements inutiles\n• Aider les propriétaires à résoudre les préoccupations plus tôt\n\nCe que cela signifie pour vous :\n• Le système est simple et limité pendant les tests\n• Nous écoutons activement les retours\n• Les fonctionnalités peuvent changer en fonction de ce qui fonctionne\n• Vous nous aidez à construire quelque chose de mieux pour les locataires.\n\nVotre participation et vos retours façonnent le produit final."
+            },
+            "issuesConcerns": {
+              "question": "Que faire si j'ai des problèmes ou des préoccupations ?",
+              "answer": "Nous sommes là pour vous aider.\n\nContactez-nous à :\n• Email : test@domain.com\n• Téléphone : +1(438)5253145\n• Heures de support : Généralement dans les 24-72 heures"
+            }
+          }
+        },
+        "gettingStarted": {
+          "title": "Pour Commencer",
+          "questions": {
+            "costToJoin": {
+              "question": "Y a-t-il des frais pour s'inscrire ?",
+              "answer": "Non. Andal est 100% gratuit pour les locataires.\n\nVotre propriétaire paie pour le service. Vous gagnez simplement des récompenses."
+            },
+            "landlordNotUsing": {
+              "question": "Que faire si mon propriétaire n'utilise pas encore Andal ?",
+              "answer": "Actuellement, Andal est disponible uniquement aux locataires dont les propriétaires se sont inscrits au programme.\n\nVous voulez que votre propriétaire offre cela ?\nTransmettez-leur notre site web ou envoyez-nous un email à test@domain.com et nous les contacterons."
+            }
+          }
+        }
+      }
+    },
+    "contact": {
+      "title": "Vous Avez Encore des Questions ?",
+      "subtitle": "Nous sommes là pour vous aider.",
+      "email": "Email",
+      "phone": "Téléphone",
+      "responseTime": "Temps de Réponse",
+      "responseTimeValue": "Généralement dans les 24-72 heures"
     }
   },
   "landlords": {
