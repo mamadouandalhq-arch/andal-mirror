@@ -3,7 +3,9 @@ import { z } from 'zod';
 export const updateProfileSchema = z.object({
   firstName: z.string().min(1, 'validation.firstNameRequired'),
   lastName: z.string().min(1, 'validation.lastNameRequired'),
-  address: z.string().optional(),
+  city: z.string().optional(),
+  street: z.string().optional(),
+  apartment: z.string().optional(),
 });
 
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;

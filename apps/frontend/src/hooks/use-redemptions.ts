@@ -10,7 +10,7 @@ export interface Redemption {
   userId: string;
   pointsAmount: number;
   dollarAmount: number;
-  paypalEmail: string;
+  paymentEmail: string;
   status: RedemptionStatus;
   createdAt: string;
   approvedAt: string | null;
@@ -43,7 +43,7 @@ export function useCreateRedemption() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { pointsAmount: number; paypalEmail: string }) =>
+    mutationFn: (data: { pointsAmount: number; paymentEmail: string }) =>
       apiClient.post<Redemption>('/redemption', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['redemptions'] });

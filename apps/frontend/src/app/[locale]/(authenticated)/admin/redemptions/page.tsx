@@ -134,7 +134,7 @@ export default function RedemptionsPage() {
                             ${Number(redemption.dollarAmount).toFixed(2)}
                           </td>
                           <td className="px-4 py-3 text-muted-foreground">
-                            {redemption.paypalEmail}
+                            {redemption.paymentEmail}
                           </td>
                           <td className="px-4 py-3">
                             <Badge className={statusBadge.badgeClass}>

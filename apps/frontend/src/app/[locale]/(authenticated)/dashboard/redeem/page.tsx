@@ -57,10 +57,10 @@ export default function RedeemPage() {
   const createRedemption = useCreateRedemption();
 
   const [pointsAmount, setPointsAmount] = useState('');
-  const [paypalEmail, setPaypalEmail] = useState('');
+  const [paymentEmail, setPaymentEmail] = useState('');
   const [errors, setErrors] = useState<{
     pointsAmount?: string;
-    paypalEmail?: string;
+    paymentEmail?: string;
   }>({});
 
   const availablePoints = user?.pointsBalance || 0;
@@ -113,10 +113,10 @@ export default function RedeemPage() {
       newErrors.pointsAmount = t('insufficientPoints');
     }
 
-    if (!paypalEmail) {
-      newErrors.paypalEmail = t('paypalEmailRequired');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail)) {
-      newErrors.paypalEmail = t('invalidEmail');
+    if (!paymentEmail) {
+      newErrors.paymentEmail = t('paypalEmailRequired');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentEmail)) {
+      newErrors.paymentEmail = t('invalidEmail');
     }
 
     setErrors(newErrors);
@@ -133,10 +133,10 @@ export default function RedeemPage() {
     try {
       await createRedemption.mutateAsync({
         pointsAmount: pointsValue,
-        paypalEmail,
+        paymentEmail,
       });
       setPointsAmount('');
-      setPaypalEmail('');
+      setPaymentEmail('');
       setErrors({});
     } catch (error) {
       // Error handling is done by the mutation
@@ -261,26 +261,26 @@ export default function RedeemPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="paypalEmail">{t('paypalEmail')}</Label>
+                  <Label htmlFor="paymentEmail">{t('paypalEmail')}</Label>
                   <Input
-                    id="paypalEmail"
+                    id="paymentEmail"
                     type="email"
-                    value={paypalEmail}
+                    value={paymentEmail}
                     onChange={(e) => {
-                      setPaypalEmail(e.target.value);
-                      if (errors.paypalEmail) {
+                      setPaymentEmail(e.target.value);
+                      if (errors.paymentEmail) {
                         setErrors((prev) => ({
                           ...prev,
-                          paypalEmail: undefined,
+                          paymentEmail: undefined,
                         }));
                       }
                     }}
                     placeholder={t('paypalEmailPlaceholder')}
                     disabled={createRedemption.isPending}
                   />
-                  {errors.paypalEmail && (
+                  {errors.paymentEmail && (
                     <p className="text-sm text-destructive">
-                      {errors.paypalEmail}
+                      {errors.paymentEmail}
                     </p>
                   )}
                 </div>
@@ -349,7 +349,7 @@ export default function RedeemPage() {
                         </div>
                         <div className="text-xs text-muted-foreground">
                           <p>
-                            {t('paypalEmail')}: {redemption.paypalEmail}
+                            {t('paypalEmail')}: {redemption.paymentEmail}
                           </p>
                           <p>
                             {t('createdAt')}:{' '}

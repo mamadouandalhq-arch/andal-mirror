@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { FormField } from '@/components/ui/form-field';
 import { FormError } from '@/components/ui/form-error';
 import { Avatar, getInitials } from '@/components/ui/avatar';
@@ -47,9 +46,11 @@ export default function AdminProfilePage() {
     () => ({
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
-      address: user?.address || '',
+      city: user?.city || '',
+      street: user?.street || '',
+      apartment: user?.apartment || '',
     }),
-    [user?.firstName, user?.lastName, user?.address],
+    [user?.firstName, user?.lastName, user?.city, user?.street, user?.apartment],
   );
 
   // Track values saved to server (only updated on successful save)
@@ -80,7 +81,9 @@ export default function AdminProfilePage() {
     return (
       watchedValues.firstName !== initialValues.firstName ||
       watchedValues.lastName !== initialValues.lastName ||
-      watchedValues.address !== initialValues.address
+      watchedValues.city !== initialValues.city ||
+      watchedValues.street !== initialValues.street ||
+      watchedValues.apartment !== initialValues.apartment
     );
   }, [watchedValues, initialValues]);
 
@@ -100,7 +103,9 @@ export default function AdminProfilePage() {
       const updateData: UpdateProfileFormData = {
         firstName: data.firstName,
         lastName: data.lastName,
-        address: data.address || undefined,
+        city: data.city || undefined,
+        street: data.street || undefined,
+        apartment: data.apartment || undefined,
       };
 
       await updateProfile.mutateAsync(updateData);
@@ -108,7 +113,9 @@ export default function AdminProfilePage() {
       const newInitialValues = {
         firstName: data.firstName,
         lastName: data.lastName,
-        address: data.address || '',
+        city: data.city || '',
+        street: data.street || '',
+        apartment: data.apartment || '',
       };
       setSavedValues(newInitialValues);
       setSuccess(true);
@@ -301,25 +308,66 @@ export default function AdminProfilePage() {
                   />
                 </div>
               </FormField>
-            </div>
-
-            <FormField
-              label={t('address')}
-              htmlFor="address"
-              error={errors.address?.message}
-              t={tAuth}
-            >
-              <div className="relative">
-                <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Textarea
-                  id="address"
-                  {...register('address')}
-                  className="pl-10 mt-1"
-                  rows={3}
-                  placeholder={t('addressPlaceholder')}
-                />
               </div>
-            </FormField>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <FormField
+                label={t('city')}
+                htmlFor="city"
+                error={errors.city?.message}
+                t={tAuth}
+              >
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="city"
+                    type="text"
+                    autoComplete="address-level2"
+                    {...register('city')}
+                    className="pl-10 mt-1"
+                    placeholder={t('cityPlaceholder')}
+                  />
+                </div>
+              </FormField>
+
+              <FormField
+                label={t('street')}
+                htmlFor="street"
+                error={errors.street?.message}
+                t={tAuth}
+              >
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="street"
+                    type="text"
+                    autoComplete="street-address"
+                    {...register('street')}
+                    className="pl-10 mt-1"
+                    placeholder={t('streetPlaceholder')}
+                  />
+                </div>
+              </FormField>
+
+              <FormField
+                label={t('apartment')}
+                htmlFor="apartment"
+                error={errors.apartment?.message}
+                t={tAuth}
+              >
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="apartment"
+                    type="text"
+                    autoComplete="address-line2"
+                    {...register('apartment')}
+                    className="pl-10 mt-1"
+                    placeholder={t('apartmentPlaceholder')}
+                  />
+                </div>
+              </FormField>
+            </div>
 
             <FormError message={error || ''} t={tAuth} />
 

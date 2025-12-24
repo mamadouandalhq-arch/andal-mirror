@@ -20,7 +20,9 @@ interface User {
   email: string;
   firstName?: string;
   lastName?: string;
-  address?: string | null;
+  city?: string | null;
+  street?: string | null;
+  apartment?: string | null;
   avatarUrl?: string | null;
   role: string;
   pointsBalance?: number;

@@ -206,7 +206,7 @@ export default function AdminRedemptionDetailPage() {
                 <span className="text-muted-foreground">
                   {t('paypalEmail')}:
                 </span>
-                <span>{data.paypalEmail}</span>
+                <span>{data.paymentEmail}</span>
               </div>
 
               <div className="flex items-center gap-2">
