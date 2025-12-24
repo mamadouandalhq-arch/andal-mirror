@@ -13,11 +13,11 @@ export class CreateRedemptionDto {
   pointsAmount: number;
 
   @ApiProperty({
-    description: 'PayPal email address for payment',
+    description: 'Email address for payment',
     example: 'user@example.com',
   })
   @IsNotEmpty()
   @IsEmail()
-  paypalEmail: string;
+  paymentEmail: string;
 }
 

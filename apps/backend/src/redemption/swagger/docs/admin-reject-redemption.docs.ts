@@ -38,7 +38,7 @@ Business rules:
             ...redemptionExample,
             status: 'rejected',
             rejectedAt: '2025-12-11T12:00:00.000Z',
-            rejectionReason: 'Invalid PayPal email',
+            rejectionReason: 'Invalid email',
           },
         },
       },

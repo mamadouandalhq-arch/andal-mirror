@@ -46,9 +46,9 @@ Business rules:
               ),
             },
             invalidEmail: {
-              summary: 'Invalid PayPal email',
+              summary: 'Invalid email',
               value: getBadRequestDocExample(
-                'paypalEmail must be an email',
+                'paymentEmail must be an email',
               ),
             },
           },

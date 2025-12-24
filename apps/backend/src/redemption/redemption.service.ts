@@ -39,7 +39,7 @@ export class RedemptionService {
           userId,
           pointsAmount: dto.pointsAmount,
           dollarAmount,
-          paypalEmail: dto.paypalEmail,
+          paymentEmail: dto.paymentEmail,
           status: RedemptionStatus.pending,
         },
       });

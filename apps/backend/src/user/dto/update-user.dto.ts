@@ -39,11 +39,29 @@ export class UpdateUserDto {
   avatarUrl?: string;
 
   @ApiProperty({
-    description: 'address',
-    example: 'New York, 221B Baker Street',
+    description: 'city',
+    example: 'New York',
     required: false,
   })
   @IsString()
   @IsOptional()
-  address?: string;
+  city?: string;
+
+  @ApiProperty({
+    description: 'street',
+    example: '221B Baker Street',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  street?: string;
+
+  @ApiProperty({
+    description: 'apartment',
+    example: 'Apt 5B',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  apartment?: string;
 }

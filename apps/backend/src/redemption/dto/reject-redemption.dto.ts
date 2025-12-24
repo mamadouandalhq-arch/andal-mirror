@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class RejectRedemptionDto {
   @ApiProperty({
     description: 'Reason for rejection',
-    example: 'Invalid PayPal email',
+    example: 'Invalid email',
     required: false,
   })
   @IsOptional()

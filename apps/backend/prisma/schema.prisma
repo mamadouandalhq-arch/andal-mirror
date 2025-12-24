@@ -45,7 +45,9 @@ model User {
 
   email     String  @unique
   password  String?
-  address   String?
+  city      String?
+  street    String?
+  apartment String?
   avatarUrl String?
 
   role          UserRole @default(user)
@@ -221,7 +223,7 @@ model Redemption {
 
   pointsAmount Int
   dollarAmount Decimal        @db.Decimal(10, 2)
-  paypalEmail  String
+  paymentEmail  String
 
   status          RedemptionStatus @default(pending)
   createdAt       DateTime         @default(now())
