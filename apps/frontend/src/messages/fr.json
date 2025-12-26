@@ -360,6 +360,8 @@
     "cityPlaceholder": "Entrez votre ville",
     "street": "Rue",
     "streetPlaceholder": "Entrez votre rue",
+    "building": "Bâtiment",
+    "buildingPlaceholder": "Entrez le numéro du bâtiment",
     "apartment": "Appartement",
     "apartmentPlaceholder": "Entrez votre numéro d'appartement",
     "clickToChangeAvatar": "Cliquez pour changer l'avatar",
@@ -534,6 +536,7 @@
       "surveyManagement": "Gestion des enquêtes",
       "receipts": "Reçus",
       "redemptions": "Rachats",
+      "users": "Utilisateurs",
       "giftCards": "Cartes cadeaux"
     },
     "surveyManagement": {
@@ -587,8 +590,8 @@
         "option": "Option",
         "key": "Clé",
         "keyPlaceholder": "option1",
-        "score": "Score (optionnel)",
-        "scorePlaceholder": "Optionnel",
+        "score": "Score",
+        "selectScore": "Sélectionner le score",
         "optionLabels": "Libellés des options",
         "optionLabelPlaceholder": "Entrez le libellé en {language}",
         "create": "Créer la question",
@@ -746,6 +749,72 @@
             "processing": "Traitement..."
           }
         }
+      }
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "error": "Échec du chargement des utilisateurs",
+      "empty": "Aucun utilisateur trouvé",
+      "searchPlaceholder": "Rechercher par nom ou e-mail",
+      "filters": {
+        "risk": "Niveau de risque",
+        "allRisks": "Tous les niveaux de risque",
+        "highRisk": "Risque élevé",
+        "mediumRisk": "Risque moyen",
+        "lowRisk": "Risque faible"
+      },
+      "sortBy": "Trier par",
+      "sort": {
+        "createdAt": "Date d'inscription",
+        "name": "Nom",
+        "email": "E-mail",
+        "riskLevel": "Niveau de risque",
+        "direction": "Sens",
+        "asc": "Plus anciens d'abord",
+        "desc": "Plus récents d'abord",
+        "ascText": "A-Z",
+        "descText": "Z-A"
+      },
+      "columns": {
+        "name": "Nom",
+        "email": "E-mail",
+        "pointsBalance": "Solde de points",
+        "receipts": "Reçus",
+        "redemptions": "Rachats",
+        "riskLevel": "Niveau de risque",
+        "createdAt": "Inscrit"
+      },
+      "detail": {
+        "error": "Échec du chargement de l'utilisateur",
+        "backToList": "Retour à la liste",
+        "basicInfo": "Informations de base",
+        "name": "Nom",
+        "email": "E-mail",
+        "city": "Ville",
+        "street": "Rue",
+        "building": "Bâtiment",
+        "apartment": "Appartement",
+        "pointsBalance": "Solde de points",
+        "createdAt": "Inscrit",
+        "riskAssessment": "Évaluation des risques",
+        "riskLevel": "Niveau de risque",
+        "averagePercentage": "Pourcentage moyen",
+        "completedSurveys": "Enquêtes complétées",
+        "totalScore": "Score total",
+        "maxPossibleScore": "Score maximum possible",
+        "receipts": "Reçus",
+        "redemptions": "Rachats",
+        "noReceipts": "Aucun reçu trouvé",
+        "noRedemptions": "Aucun rachat trouvé",
+        "columns": {
+          "id": "ID",
+          "status": "Statut",
+          "points": "Points",
+          "amount": "Montant",
+          "createdAt": "Créé le",
+          "actions": "Actions"
+        },
+        "view": "Voir"
       }
     }
   }

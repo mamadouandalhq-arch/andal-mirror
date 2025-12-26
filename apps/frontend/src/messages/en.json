@@ -360,6 +360,8 @@
     "cityPlaceholder": "Enter your city",
     "street": "Street",
     "streetPlaceholder": "Enter your street",
+    "building": "Building",
+    "buildingPlaceholder": "Enter building number",
     "apartment": "Apartment",
     "apartmentPlaceholder": "Enter your apartment number",
     "clickToChangeAvatar": "Click to change avatar",
@@ -534,6 +536,7 @@
       "surveyManagement": "Survey Management",
       "receipts": "Receipts",
       "redemptions": "Redemptions",
+      "users": "Users",
       "giftCards": "Gift Cards"
     },
     "surveyManagement": {
@@ -587,8 +590,8 @@
         "option": "Option",
         "key": "Key",
         "keyPlaceholder": "option1",
-        "score": "Score (optional)",
-        "scorePlaceholder": "Optional",
+        "score": "Score",
+        "selectScore": "Select score",
         "optionLabels": "Option Labels",
         "optionLabelPlaceholder": "Enter label in {language}",
         "create": "Create Question",
@@ -746,6 +749,72 @@
             "processing": "Processing..."
           }
         }
+      }
+    },
+    "users": {
+      "title": "Users",
+      "error": "Failed to load users",
+      "empty": "No users found",
+      "searchPlaceholder": "Search by name or email",
+      "filters": {
+        "risk": "Risk Level",
+        "allRisks": "All Risk Levels",
+        "highRisk": "High Risk",
+        "mediumRisk": "Medium Risk",
+        "lowRisk": "Low Risk"
+      },
+      "sortBy": "Sort by",
+      "sort": {
+        "createdAt": "Registration date",
+        "name": "Name",
+        "email": "Email",
+        "riskLevel": "Risk Level",
+        "direction": "Direction",
+        "asc": "Oldest first",
+        "desc": "Newest first",
+        "ascText": "A-Z",
+        "descText": "Z-A"
+      },
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "pointsBalance": "Points Balance",
+        "receipts": "Receipts",
+        "redemptions": "Redemptions",
+        "riskLevel": "Risk Level",
+        "createdAt": "Registered"
+      },
+      "detail": {
+        "error": "Failed to load user",
+        "backToList": "Back to List",
+        "basicInfo": "Basic Information",
+        "name": "Name",
+        "email": "Email",
+        "city": "City",
+        "street": "Street",
+        "building": "Building",
+        "apartment": "Apartment",
+        "pointsBalance": "Points Balance",
+        "createdAt": "Registered",
+        "riskAssessment": "Risk Assessment",
+        "riskLevel": "Risk Level",
+        "averagePercentage": "Average Percentage",
+        "completedSurveys": "Completed Surveys",
+        "totalScore": "Total Score",
+        "maxPossibleScore": "Max Possible Score",
+        "receipts": "Receipts",
+        "redemptions": "Redemptions",
+        "noReceipts": "No receipts found",
+        "noRedemptions": "No redemptions found",
+        "columns": {
+          "id": "ID",
+          "status": "Status",
+          "points": "Points",
+          "amount": "Amount",
+          "createdAt": "Created At",
+          "actions": "Actions"
+        },
+        "view": "View"
       }
     }
   }

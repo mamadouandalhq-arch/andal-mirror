@@ -48,9 +48,10 @@ export default function ProfilePage() {
       lastName: user?.lastName || '',
       city: user?.city || '',
       street: user?.street || '',
+      building: user?.building || '',
       apartment: user?.apartment || '',
     }),
-    [user?.firstName, user?.lastName, user?.city, user?.street, user?.apartment],
+    [user?.firstName, user?.lastName, user?.city, user?.street, user?.building, user?.apartment],
   );
 
   // Track values saved to server (only updated on successful save)
@@ -83,6 +84,7 @@ export default function ProfilePage() {
       watchedValues.lastName !== initialValues.lastName ||
       watchedValues.city !== initialValues.city ||
       watchedValues.street !== initialValues.street ||
+      watchedValues.building !== initialValues.building ||
       watchedValues.apartment !== initialValues.apartment
     );
   }, [watchedValues, initialValues]);
@@ -105,6 +107,7 @@ export default function ProfilePage() {
         lastName: data.lastName,
         city: data.city || undefined,
         street: data.street || undefined,
+        building: data.building || undefined,
         apartment: data.apartment || undefined,
       };
 
@@ -115,6 +118,7 @@ export default function ProfilePage() {
         lastName: data.lastName,
         city: data.city || '',
         street: data.street || '',
+        building: data.building || '',
         apartment: data.apartment || '',
       };
       setSavedValues(newInitialValues);
@@ -316,7 +320,7 @@ export default function ProfilePage() {
                 </FormField>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <FormField
                   label={t('city')}
                   htmlFor="city"
@@ -351,6 +355,25 @@ export default function ProfilePage() {
                       {...register('street')}
                       className="pl-10 mt-1"
                       placeholder={t('streetPlaceholder')}
+                    />
+                  </div>
+                </FormField>
+
+                <FormField
+                  label={t('building')}
+                  htmlFor="building"
+                  error={errors.building?.message}
+                  t={tAuth}
+                >
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="building"
+                      type="text"
+                      autoComplete="address-line1"
+                      {...register('building')}
+                      className="pl-10 mt-1"
+                      placeholder={t('buildingPlaceholder')}
                     />
                   </div>
                 </FormField>

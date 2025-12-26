@@ -5,6 +5,7 @@ export const updateProfileSchema = z.object({
   lastName: z.string().min(1, 'validation.lastNameRequired'),
   city: z.string().optional(),
   street: z.string().optional(),
+  building: z.string().optional(),
   apartment: z.string().optional(),
 });
 

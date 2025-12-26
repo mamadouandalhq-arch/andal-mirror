@@ -12,6 +12,7 @@ import {
   CreditCard,
   ChevronLeft,
   ChevronRight,
+  Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -30,6 +31,11 @@ const menuItems = [
     href: '/admin/redemptions',
     icon: CreditCard,
     translationKey: 'redemptions',
+  },
+  {
+    href: '/admin/users',
+    icon: Users,
+    translationKey: 'users',
   },
   {
     href: '/admin/gift-cards',

@@ -36,7 +36,7 @@ const optionTranslationSchema = z.object({
 const optionSchema = z.object({
   key: z.string().min(1, 'Key is required'),
   order: z.number().int().min(1),
-  score: z.number().int().nullable().optional(),
+  score: z.number().int().min(0),
   translations: z
     .array(optionTranslationSchema)
     .min(1, 'At least one translation is required'),
@@ -81,7 +81,7 @@ export function QuestionBuilder() {
         {
           key: 'option1',
           order: 1,
-          score: null,
+          score: 0,
           translations: locales.map((lang) => ({
             language: lang,
             label: '',
@@ -90,7 +90,7 @@ export function QuestionBuilder() {
         {
           key: 'option2',
           order: 2,
-          score: null,
+          score: 1,
           translations: locales.map((lang) => ({
             language: lang,
             label: '',
@@ -109,7 +109,7 @@ export function QuestionBuilder() {
     const newOption = {
       key: `option${currentOptions.length + 1}`,
       order: currentOptions.length + 1,
-      score: null,
+      score: currentOptions.length, // New options get score = index (0, 1, 2, ...)
       translations: locales.map((lang) => ({
         language: lang,
         label: '',
@@ -122,9 +122,10 @@ export function QuestionBuilder() {
     const currentOptions = watchedOptions || [];
     if (currentOptions.length <= 2) return; // Must have at least 2 options
     const newOptions = currentOptions.filter((_, i) => i !== index);
-    // Reorder
+    // Reorder order and score
     newOptions.forEach((opt, i) => {
       opt.order = i + 1;
+      opt.score = i; // Renumber score from 0 to n-1
     });
     setValue('options', newOptions);
   };
@@ -275,16 +276,42 @@ export function QuestionBuilder() {
                           htmlFor={`option-${optionIndex}-score`}
                           error={errors.options?.[optionIndex]?.score?.message}
                         >
-                          <Input
-                            id={`option-${optionIndex}-score`}
-                            type="number"
-                            {...register(`options.${optionIndex}.score`, {
-                              valueAsNumber: true,
-                              setValueAs: (v) => (v === '' ? null : Number(v)),
-                            })}
-                            placeholder={t('scorePlaceholder')}
-                            className="mt-1"
-                          />
+                          <Select
+                            value={
+                              option.score !== undefined &&
+                              option.score !== null
+                                ? String(option.score)
+                                : '0'
+                            }
+                            onValueChange={(value) =>
+                              setValue(
+                                `options.${optionIndex}.score`,
+                                Number(value),
+                              )
+                            }
+                          >
+                            <SelectTrigger
+                              id={`option-${optionIndex}-score`}
+                              className="mt-1"
+                            >
+                              <SelectValue placeholder={t('selectScore')}>
+                                {option.score !== undefined &&
+                                option.score !== null
+                                  ? option.score
+                                  : 0}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Array.from(
+                                { length: watchedOptions.length },
+                                (_, i) => (
+                                  <SelectItem key={i} value={String(i)}>
+                                    {i}
+                                  </SelectItem>
+                                ),
+                              )}
+                            </SelectContent>
+                          </Select>
                         </FormField>
                       </div>
 

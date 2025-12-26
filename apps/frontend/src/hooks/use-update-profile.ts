@@ -9,6 +9,7 @@ export interface UpdateProfileResponse {
   lastName: string;
   city?: string | null;
   street?: string | null;
+  building?: string | null;
   apartment?: string | null;
   avatarUrl?: string | null;
   role: string;

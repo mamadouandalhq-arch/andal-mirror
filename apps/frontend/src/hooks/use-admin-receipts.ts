@@ -6,6 +6,7 @@ import { apiClient } from '@/lib/api-client';
 export type AdminReceiptStatus = 'pending' | 'approved' | 'rejected';
 
 export interface AdminReceiptUser {
+  id: string;
   firstName: string | null;
   lastName: string | null;
   email: string;

@@ -38,23 +38,23 @@ function getStatusBadge(status: string) {
   switch (status) {
     case 'pending':
       return {
-        badgeClass: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+        badgeClass: 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:!bg-yellow-200',
       };
     case 'approved':
       return {
-        badgeClass: 'bg-blue-100 text-blue-800 border-blue-200',
+        badgeClass: 'bg-blue-100 text-blue-800 border-blue-200 hover:!bg-blue-200',
       };
     case 'completed':
       return {
-        badgeClass: 'bg-green-100 text-green-800 border-green-200',
+        badgeClass: 'bg-green-100 text-green-800 border-green-200 hover:!bg-green-200',
       };
     case 'rejected':
       return {
-        badgeClass: 'bg-red-100 text-red-800 border-red-200',
+        badgeClass: 'bg-red-100 text-red-800 border-red-200 hover:!bg-red-200',
       };
     default:
       return {
-        badgeClass: 'bg-gray-100 text-gray-800 border-gray-200',
+        badgeClass: 'bg-gray-100 text-gray-800 border-gray-200 hover:!bg-gray-200',
       };
   }
 }
@@ -84,8 +84,7 @@ export default function AdminRedemptionDetailPage() {
 
   const canApprove = data?.status === 'pending';
   const canComplete = data?.status === 'approved';
-  const canReject =
-    data?.status === 'pending' || data?.status === 'approved';
+  const canReject = data?.status === 'pending';
 
   if (isLoading) {
     return (
@@ -178,14 +177,22 @@ export default function AdminRedemptionDetailPage() {
 
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">{t('user')}:</span>
-                <span>
+                <button
+                  onClick={() => router.push(`/admin/users/${data.user.id}`)}
+                  className="hover:underline text-primary cursor-pointer"
+                >
                   {data.user.firstName} {data.user.lastName}
-                </span>
+                </button>
               </div>
 
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">{t('email')}:</span>
-                <span className="text-primary">{data.user.email}</span>
+                <button
+                  onClick={() => router.push(`/admin/users/${data.user.id}`)}
+                  className="hover:underline text-primary cursor-pointer"
+                >
+                  {data.user.email}
+                </button>
               </div>
 
               <div className="flex items-center gap-2">

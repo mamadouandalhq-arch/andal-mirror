@@ -177,8 +177,19 @@ export default function AdminReceiptDetailPage() {
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">{t('user')}:</span>
                 <span>
-                  {data.user?.firstName} {data.user?.lastName} ·{' '}
-                  <span className="text-primary">{data.user?.email}</span>
+                  <button
+                    onClick={() => router.push(`/admin/users/${data.user?.id}`)}
+                    className="hover:underline text-primary cursor-pointer"
+                  >
+                    {data.user?.firstName} {data.user?.lastName}
+                  </button>
+                  {' · '}
+                  <button
+                    onClick={() => router.push(`/admin/users/${data.user?.id}`)}
+                    className="hover:underline text-primary cursor-pointer"
+                  >
+                    {data.user?.email}
+                  </button>
                 </span>
               </div>
               {data.comment && (
