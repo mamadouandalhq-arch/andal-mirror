@@ -16,6 +16,8 @@ import {
   AdminGetFeedbackDocs,
   AdminGetReceiptDocs,
   AdminGetReceiptsDocs,
+  AdminGetUserDocs,
+  AdminGetUsersDocs,
   ReviewReceiptDocs,
 } from './swagger/docs';
 
@@ -51,5 +53,17 @@ export class AdminController {
   @Get('/receipts/:id')
   async getReceipt(@Param('id') id: string) {
     return await this.adminService.getReceipt(id);
+  }
+
+  @AdminGetUsersDocs()
+  @Get('/users')
+  async getAllUsers() {
+    return await this.adminService.getAllUsers();
+  }
+
+  @AdminGetUserDocs()
+  @Get('/users/:id')
+  async getUserById(@Param('id') id: string) {
+    return await this.adminService.getUserById(id);
   }
 }

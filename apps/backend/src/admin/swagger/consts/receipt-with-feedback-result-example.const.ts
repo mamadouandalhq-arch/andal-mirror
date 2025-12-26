@@ -6,6 +6,7 @@ export const receiptWithFeedbackAndUserExample = {
   approvedAt: null,
   userId: '157f77af-ae79-41f3-b9f8-edc1599bf215',
   user: {
+    id: '157f77af-ae79-41f3-b9f8-edc1599bf215',
     email: 'john.smith@gmail.com',
     firstName: 'John',
     lastName: 'Smith',

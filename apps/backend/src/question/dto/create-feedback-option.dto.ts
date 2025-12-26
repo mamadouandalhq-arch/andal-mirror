@@ -31,13 +31,13 @@ export class CreateFeedbackOptionDto {
   order: number;
 
   @ApiProperty({
-    example: 5,
-    required: false,
-    description: 'Optional score for this option',
+    example: 0,
+    minimum: 0,
+    description: 'Score for this option (0 to n-1 where n is the number of options)',
   })
-  @IsOptional()
   @IsInt()
-  score?: number;
+  @Min(0)
+  score: number;
 
   @ApiProperty({
     type: [CreateFeedbackOptionTranslationDto],

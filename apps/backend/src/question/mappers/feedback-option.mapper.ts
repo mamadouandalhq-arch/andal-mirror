@@ -9,7 +9,7 @@ export function mapFeedbackOptions(
     create: options.map((o) => ({
       key: o.key,
       order: o.order,
-      score: o.score,
+      score: o.score ?? 0, // Ensure score is always a number
       translations: mapOptionTranslations(o.translations),
     })),
   };

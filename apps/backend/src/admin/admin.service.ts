@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetReceiptsQueryDto, ReviewReceiptDto } from './dto';
-import { ReceiptStatus } from '@prisma/client';
+import { ReceiptStatus, FeedbackStatus } from '@prisma/client';
 import { mapFeedbackAnswers } from './mappers';
 
 @Injectable()
@@ -97,6 +97,7 @@ export class AdminService {
       include: {
         user: {
           select: {
+            id: true,
             email: true,
             firstName: true,
             lastName: true,
@@ -133,6 +134,7 @@ export class AdminService {
         },
         user: {
           select: {
+            id: true,
             email: true,
             firstName: true,
             lastName: true,
@@ -147,6 +149,228 @@ export class AdminService {
     }
 
     return receipt;
+  }
+
+  async getAllUsers() {
+    const users = await this.prisma.user.findMany({
+      where: {
+        role: 'user',
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        pointsBalance: true,
+        createdAt: true,
+        _count: {
+          select: {
+            receipts: true,
+            redemptions: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    const usersWithRisk = await Promise.all(
+      users.map(async (user) => {
+        const riskAssessment = await this.calculateUserRisk(user.id);
+        return {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          pointsBalance: user.pointsBalance,
+          createdAt: user.createdAt,
+          receiptsCount: user._count.receipts,
+          redemptionsCount: user._count.redemptions,
+          riskLevel: riskAssessment.level,
+          riskAssessment: {
+            averagePercentage: riskAssessment.averagePercentage,
+            completedSurveys: riskAssessment.completedSurveys,
+          },
+        };
+      }),
+    );
+
+    return usersWithRisk;
+  }
+
+  async getUserById(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        city: true,
+        street: true,
+        building: true,
+        apartment: true,
+        avatarUrl: true,
+        pointsBalance: true,
+        createdAt: true,
+        receipts: {
+          select: {
+            id: true,
+            status: true,
+            createdAt: true,
+            receiptUrl: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+        redemptions: {
+          select: {
+            id: true,
+            status: true,
+            pointsAmount: true,
+            dollarAmount: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const riskAssessment = await this.calculateUserRisk(userId);
+
+    return {
+      ...user,
+      riskAssessment,
+    };
+  }
+
+  async calculateUserRisk(userId: string): Promise<{
+    level: 'high' | 'medium' | 'low';
+    averagePercentage: number;
+    totalScore: number;
+    maxPossibleScore: number;
+    completedSurveys: number;
+  }> {
+    // Get all completed FeedbackResult for the user
+    const completedFeedbackResults = await this.prisma.feedbackResult.findMany({
+      where: {
+        userId,
+        status: FeedbackStatus.completed,
+      },
+      include: {
+        survey: {
+          include: {
+            surveyQuestions: {
+              include: {
+                question: {
+                  include: {
+                    options: true,
+                  },
+                },
+              },
+              orderBy: {
+                order: 'asc',
+              },
+            },
+          },
+        },
+        answers: {
+          include: {
+            question: {
+              include: {
+                options: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (completedFeedbackResults.length === 0) {
+      // No completed surveys - return medium risk as default
+      return {
+        level: 'medium',
+        averagePercentage: 0,
+        totalScore: 0,
+        maxPossibleScore: 0,
+        completedSurveys: 0,
+      };
+    }
+
+    const surveyPercentages: number[] = [];
+    let totalScore = 0;
+    let maxPossibleScore = 0;
+
+    for (const feedbackResult of completedFeedbackResults) {
+      const survey = feedbackResult.survey;
+      const surveyQuestions = survey.surveyQuestions;
+
+      // Calculate maximum possible score for this survey
+      let surveyMaxScore = 0;
+      for (const surveyQuestion of surveyQuestions) {
+        const question = surveyQuestion.question;
+        if (question.options.length > 0) {
+          const maxOptionScore = Math.max(
+            ...question.options.map((opt) => opt.score),
+          );
+          surveyMaxScore += maxOptionScore;
+        }
+      }
+
+      // Calculate actual user score for this survey
+      let userScore = 0;
+      for (const answer of feedbackResult.answers) {
+        const question = answer.question;
+        for (const answerKey of answer.answerKeys) {
+          const option = question.options.find((opt) => opt.key === answerKey);
+          if (option) {
+            userScore += option.score;
+          }
+        }
+      }
+
+      totalScore += userScore;
+      maxPossibleScore += surveyMaxScore;
+
+      // Calculate percentage from maximum for this survey
+      if (surveyMaxScore > 0) {
+        const percentage = (userScore / surveyMaxScore) * 100;
+        surveyPercentages.push(percentage);
+      }
+    }
+
+    // Calculate average percentage across all surveys
+    const averagePercentage =
+      surveyPercentages.length > 0
+        ? surveyPercentages.reduce((sum, p) => sum + p, 0) /
+          surveyPercentages.length
+        : 0;
+
+    // Determine risk category
+    let level: 'high' | 'medium' | 'low';
+    if (averagePercentage < 50) {
+      level = 'high';
+    } else if (averagePercentage < 70) {
+      level = 'medium';
+    } else {
+      level = 'low';
+    }
+
+    return {
+      level,
+      averagePercentage: Math.round(averagePercentage * 100) / 100,
+      totalScore,
+      maxPossibleScore,
+      completedSurveys: completedFeedbackResults.length,
+    };
   }
 
   private getFeedbackWithAnswersInclude(language: string) {

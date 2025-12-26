@@ -49,7 +49,7 @@ export class UpdateUserDto {
 
   @ApiProperty({
     description: 'street',
-    example: '221B Baker Street',
+    example: 'Baker Street',
     required: false,
   })
   @IsString()
@@ -57,8 +57,17 @@ export class UpdateUserDto {
   street?: string;
 
   @ApiProperty({
+    description: 'building',
+    example: '25',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  building?: string;
+
+  @ApiProperty({
     description: 'apartment',
-    example: 'Apt 5B',
+    example: '42',
     required: false,
   })
   @IsString()

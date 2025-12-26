@@ -47,6 +47,7 @@ model User {
   password  String?
   city      String?
   street    String?
+  building  String?
   apartment String?
   avatarUrl String?
 
@@ -160,7 +161,7 @@ model FeedbackOption {
   id        String   @id @default(uuid())
   key       String
   order     Int
-  score     Int?
+  score     Int
   createdAt DateTime @default(now())
 
   questionId String
