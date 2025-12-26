@@ -13,7 +13,9 @@ export function AdminGetUserDocs() {
     ApiOperation({
       summary: 'Get user by id',
       description:
-        'Returns detailed information about a user including basic info, receipts, redemptions, and risk assessment. Admin only.',
+        'Returns detailed information about a user including basic info, receipts, redemptions, and risk assessment. ' +
+        'Risk assessment uses exponential decay weighting to prioritize recent surveys and detects declining trends. ' +
+        'Use GET /admin/users/:id/survey-results to get survey data for chart visualization (limited to last 30 surveys). Admin only.',
     }),
 
     ApiParam({

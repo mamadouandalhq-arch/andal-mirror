@@ -305,11 +305,25 @@ export class AdminService {
       };
     }
 
-    const surveyPercentages: number[] = [];
+    const sortedSurveys = completedFeedbackResults.sort((a, b) => {
+      const dateA = a.completedAt?.getTime() ?? a.createdAt.getTime();
+      const dateB = b.completedAt?.getTime() ?? b.createdAt.getTime();
+      return dateB - dateA;
+    });
+
+    const DECAY_FACTOR = 0.85;
+    const surveyData: Array<{
+      percentage: number;
+      weight: number;
+      userScore: number;
+      maxScore: number;
+    }> = [];
+
     let totalScore = 0;
     let maxPossibleScore = 0;
 
-    for (const feedbackResult of completedFeedbackResults) {
+    for (let i = 0; i < sortedSurveys.length; i++) {
+      const feedbackResult = sortedSurveys[i];
       const survey = feedbackResult.survey;
       const surveyQuestions = survey.surveyQuestions;
 
@@ -340,21 +354,126 @@ export class AdminService {
       totalScore += userScore;
       maxPossibleScore += surveyMaxScore;
 
-      // Calculate percentage from maximum for this survey
       if (surveyMaxScore > 0) {
         const percentage = (userScore / surveyMaxScore) * 100;
-        surveyPercentages.push(percentage);
+        const weight = Math.pow(DECAY_FACTOR, i);
+        surveyData.push({
+          percentage,
+          weight,
+          userScore,
+          maxScore: surveyMaxScore,
+        });
       }
     }
 
-    // Calculate average percentage across all surveys
-    const averagePercentage =
-      surveyPercentages.length > 0
-        ? surveyPercentages.reduce((sum, p) => sum + p, 0) /
-          surveyPercentages.length
+    const totalWeight = surveyData.reduce((sum, item) => sum + item.weight, 0);
+    const weightedSum = surveyData.reduce(
+      (sum, item) => sum + item.percentage * item.weight,
+      0,
+    );
+    let averagePercentage = totalWeight > 0 ? weightedSum / totalWeight : 0;
+
+    const recentSurveysCount = Math.min(3, sortedSurveys.length);
+    const recentSurveys = sortedSurveys.slice(0, recentSurveysCount);
+    const recentPercentages: number[] = [];
+
+    for (const feedbackResult of recentSurveys) {
+      const survey = feedbackResult.survey;
+      const surveyQuestions = survey.surveyQuestions;
+
+      let surveyMaxScore = 0;
+      for (const surveyQuestion of surveyQuestions) {
+        const question = surveyQuestion.question;
+        if (question.options.length > 0) {
+          const maxOptionScore = Math.max(
+            ...question.options.map((opt) => opt.score),
+          );
+          surveyMaxScore += maxOptionScore;
+        }
+      }
+
+      let userScore = 0;
+      for (const answer of feedbackResult.answers) {
+        const question = answer.question;
+        for (const answerKey of answer.answerKeys) {
+          const option = question.options.find((opt) => opt.key === answerKey);
+          if (option) {
+            userScore += option.score;
+          }
+        }
+      }
+
+      if (surveyMaxScore > 0) {
+        const percentage = (userScore / surveyMaxScore) * 100;
+        recentPercentages.push(percentage);
+      }
+    }
+
+    const recentAverage =
+      recentPercentages.length > 0
+        ? recentPercentages.reduce((sum, p) => sum + p, 0) /
+          recentPercentages.length
         : 0;
 
-    // Determine risk category
+    if (recentAverage < 50 && averagePercentage >= 50) {
+      averagePercentage = Math.min(averagePercentage, recentAverage + 10);
+    }
+
+    let hasDecliningTrend = false;
+    if (sortedSurveys.length >= 6) {
+      const previousSurveysCount = Math.min(3, sortedSurveys.length - 3);
+      const previousSurveys = sortedSurveys.slice(
+        recentSurveysCount,
+        recentSurveysCount + previousSurveysCount,
+      );
+      const previousPercentages: number[] = [];
+
+      for (const feedbackResult of previousSurveys) {
+        const survey = feedbackResult.survey;
+        const surveyQuestions = survey.surveyQuestions;
+
+        let surveyMaxScore = 0;
+        for (const surveyQuestion of surveyQuestions) {
+          const question = surveyQuestion.question;
+          if (question.options.length > 0) {
+            const maxOptionScore = Math.max(
+              ...question.options.map((opt) => opt.score),
+            );
+            surveyMaxScore += maxOptionScore;
+          }
+        }
+
+        let userScore = 0;
+        for (const answer of feedbackResult.answers) {
+          const question = answer.question;
+          for (const answerKey of answer.answerKeys) {
+            const option = question.options.find(
+              (opt) => opt.key === answerKey,
+            );
+            if (option) {
+              userScore += option.score;
+            }
+          }
+        }
+
+        if (surveyMaxScore > 0) {
+          const percentage = (userScore / surveyMaxScore) * 100;
+          previousPercentages.push(percentage);
+        }
+      }
+
+      const previousAverage =
+        previousPercentages.length > 0
+          ? previousPercentages.reduce((sum, p) => sum + p, 0) /
+            previousPercentages.length
+          : 0;
+
+      const trendDifference = previousAverage - recentAverage;
+      if (trendDifference >= 15 && recentAverage < 70) {
+        hasDecliningTrend = true;
+      }
+    }
+
     let level: 'high' | 'medium' | 'low';
     if (averagePercentage < 50) {
       level = 'high';
@@ -364,6 +483,14 @@ export class AdminService {
       level = 'low';
     }
 
+    if (hasDecliningTrend) {
+      if (level === 'low') {
+        level = 'medium';
+      } else if (level === 'medium') {
+        level = 'high';
+      }
+    }
+
     return {
       level,
       averagePercentage: Math.round(averagePercentage * 100) / 100,
@@ -371,6 +498,101 @@ export class AdminService {
       maxPossibleScore,
       completedSurveys: completedFeedbackResults.length,
     };
+  }
+
+  async getUserSurveyResults(userId: string): Promise<
+    Array<{
+      date: string;
+      percentage: number;
+      completedAt: string | null;
+      answeredQuestions: number;
+      totalQuestions: number;
+    }>
+  > {
+    const MAX_SURVEYS = 30;
+
+    const completedFeedbackResults = await this.prisma.feedbackResult.findMany({
+      where: {
+        userId,
+        status: FeedbackStatus.completed,
+      },
+      include: {
+        survey: {
+          include: {
+            surveyQuestions: {
+              include: {
+                question: {
+                  include: {
+                    options: true,
+                  },
+                },
+              },
+              orderBy: {
+                order: 'asc',
+              },
+            },
+          },
+        },
+        answers: {
+          include: {
+            question: {
+              include: {
+                options: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        completedAt: 'desc',
+      },
+      take: MAX_SURVEYS,
+    });
+
+    const sortedResults = completedFeedbackResults.reverse();
+
+    const results = sortedResults.map((feedbackResult) => {
+      const survey = feedbackResult.survey;
+      const surveyQuestions = survey.surveyQuestions;
+
+      let surveyMaxScore = 0;
+      for (const surveyQuestion of surveyQuestions) {
+        const question = surveyQuestion.question;
+        if (question.options.length > 0) {
+          const maxOptionScore = Math.max(
+            ...question.options.map((opt) => opt.score),
+          );
+          surveyMaxScore += maxOptionScore;
+        }
+      }
+
+      let userScore = 0;
+      for (const answer of feedbackResult.answers) {
+        const question = answer.question;
+        for (const answerKey of answer.answerKeys) {
+          const option = question.options.find((opt) => opt.key === answerKey);
+          if (option) {
+            userScore += option.score;
+          }
+        }
+      }
+
+      const percentage =
+        surveyMaxScore > 0 ? (userScore / surveyMaxScore) * 100 : 0;
+      const date =
+        feedbackResult.completedAt?.toISOString() ??
+        feedbackResult.createdAt.toISOString();
+
+      return {
+        date,
+        percentage: Math.round(percentage * 100) / 100,
+        completedAt: feedbackResult.completedAt?.toISOString() ?? null,
+        answeredQuestions: feedbackResult.answeredQuestions,
+        totalQuestions: feedbackResult.totalQuestions,
+      };
+    });
+
+    return results;
   }
 
   private getFeedbackWithAnswersInclude(language: string) {
