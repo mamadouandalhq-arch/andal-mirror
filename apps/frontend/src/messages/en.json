@@ -802,6 +802,35 @@
         "completedSurveys": "Completed Surveys",
         "totalScore": "Total Score",
         "maxPossibleScore": "Max Possible Score",
+        "totalAnsweredQuestions": "Total Answered Questions",
+        "totalQuestions": "Total Questions",
+        "answeredQuestions": "Answered Questions",
+        "questions": "Questions",
+        "lastNSurveys": "Last 30 surveys",
+        "surveyResultsTrend": "Survey Results Trend",
+        "riskBadgeTooltip": {
+          "high": {
+            "title": "High Risk",
+            "description": "Average satisfaction below 50%. Recent surveys show low satisfaction levels.",
+            "method": "Risk assessment uses exponential decay weighting to prioritize recent surveys and detects declining trends."
+          },
+          "medium": {
+            "title": "Medium Risk",
+            "description": "Average satisfaction between 50-70%. Moderate satisfaction with potential concerns.",
+            "method": "Risk assessment uses exponential decay weighting to prioritize recent surveys and detects declining trends."
+          },
+          "low": {
+            "title": "Low Risk",
+            "description": "Average satisfaction above 70%. High satisfaction levels indicate low risk.",
+            "method": "Risk assessment uses exponential decay weighting to prioritize recent surveys and detects declining trends."
+          }
+        },
+        "chartTooltip": {
+          "date": "Date",
+          "satisfaction": "Satisfaction",
+          "answeredQuestions": "Answered Questions",
+          "totalQuestions": "Total Questions"
+        },
         "receipts": "Receipts",
         "redemptions": "Redemptions",
         "noReceipts": "No receipts found",

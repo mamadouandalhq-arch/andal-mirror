@@ -68,3 +68,22 @@ export function useAdminUser(userId: string) {
   });
 }
 
+export interface SurveyResult {
+  date: string;
+  percentage: number;
+  completedAt: string | null;
+  answeredQuestions: number;
+  totalQuestions: number;
+}
+
+export function useAdminUserSurveyResults(userId: string) {
+  return useQuery({
+    queryKey: ['admin-user-survey-results', userId],
+    queryFn: () =>
+      apiClient.get<SurveyResult[]>(`/admin/users/${userId}/survey-results`),
+    enabled: !!userId,
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
+  });
+}
+

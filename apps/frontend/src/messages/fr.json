@@ -802,6 +802,35 @@
         "completedSurveys": "Enquêtes complétées",
         "totalScore": "Score total",
         "maxPossibleScore": "Score maximum possible",
+        "totalAnsweredQuestions": "Total des questions répondues",
+        "totalQuestions": "Total des questions",
+        "answeredQuestions": "Questions répondues",
+        "questions": "Questions",
+        "lastNSurveys": "30 dernières enquêtes",
+        "surveyResultsTrend": "Tendance des résultats d'enquête",
+        "riskBadgeTooltip": {
+          "high": {
+            "title": "Risque élevé",
+            "description": "Satisfaction moyenne inférieure à 50%. Les enquêtes récentes montrent de faibles niveaux de satisfaction.",
+            "method": "L'évaluation des risques utilise une pondération à décroissance exponentielle pour prioriser les enquêtes récentes et détecte les tendances à la baisse."
+          },
+          "medium": {
+            "title": "Risque moyen",
+            "description": "Satisfaction moyenne entre 50-70%. Satisfaction modérée avec des préoccupations potentielles.",
+            "method": "L'évaluation des risques utilise une pondération à décroissance exponentielle pour prioriser les enquêtes récentes et détecte les tendances à la baisse."
+          },
+          "low": {
+            "title": "Risque faible",
+            "description": "Satisfaction moyenne supérieure à 70%. Des niveaux de satisfaction élevés indiquent un faible risque.",
+            "method": "L'évaluation des risques utilise une pondération à décroissance exponentielle pour prioriser les enquêtes récentes et détecte les tendances à la baisse."
+          }
+        },
+        "chartTooltip": {
+          "date": "Date",
+          "satisfaction": "Satisfaction",
+          "answeredQuestions": "Questions répondues",
+          "totalQuestions": "Total des questions"
+        },
         "receipts": "Reçus",
         "redemptions": "Rachats",
         "noReceipts": "Aucun reçu trouvé",

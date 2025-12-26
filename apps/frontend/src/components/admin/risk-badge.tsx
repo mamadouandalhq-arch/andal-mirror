@@ -1,15 +1,29 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { RiskLevel } from '@/hooks/use-admin-users';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface RiskBadgeProps {
   level: RiskLevel;
   className?: string;
+  showTooltip?: boolean;
 }
 
-export function RiskBadge({ level, className }: RiskBadgeProps) {
+export function RiskBadge({
+  level,
+  className,
+  showTooltip = true,
+}: RiskBadgeProps) {
+  const t = useTranslations('admin.users.detail.riskBadgeTooltip');
+
   const getBadgeStyles = () => {
     switch (level) {
       case 'high':
@@ -36,13 +50,65 @@ export function RiskBadge({ level, className }: RiskBadgeProps) {
     }
   };
 
-  return (
+  const getTooltipContent = () => {
+    switch (level) {
+      case 'high':
+        return {
+          title: t('high.title'),
+          description: t('high.description'),
+          method: t('high.method'),
+        };
+      case 'medium':
+        return {
+          title: t('medium.title'),
+          description: t('medium.description'),
+          method: t('medium.method'),
+        };
+      case 'low':
+        return {
+          title: t('low.title'),
+          description: t('low.description'),
+          method: t('low.method'),
+        };
+      default:
+        return {
+          title: 'Unknown',
+          description: '',
+          method: '',
+        };
+    }
+  };
+
+  const badge = (
     <Badge
       variant="outline"
       className={cn(getBadgeStyles(), className)}
     >
       {getLabel()}
     </Badge>
+  );
+
+  if (!showTooltip) {
+    return badge;
+  }
+
+  const tooltipContent = getTooltipContent();
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{badge}</TooltipTrigger>
+        <TooltipContent className="max-w-xs">
+          <p className="font-medium mb-1">{tooltipContent.title}</p>
+          <p className="text-xs text-muted-foreground">
+            {tooltipContent.description}
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">
+            {tooltipContent.method}
+          </p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 

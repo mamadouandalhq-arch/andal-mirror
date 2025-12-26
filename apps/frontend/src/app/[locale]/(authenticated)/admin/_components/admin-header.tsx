@@ -25,10 +25,7 @@ export function AdminHeader({ onMenuClick }: { onMenuClick?: () => void }) {
             >
               <Menu className="h-5 w-5" />
             </Button>
-            <Link
-              href="/admin"
-              className="flex flex-col items-center space-x-2"
-            >
+            <Link href="/admin" className="flex flex-col items-center">
               <span className="text-xl font-bold text-primary">
                 {t('appName')}
               </span>

@@ -1,17 +1,22 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { useReceiptUpload, useReceipts } from '@/hooks/use-receipts';
 import { useDashboardStats } from '@/hooks/use-dashboard-stats';
+import { useStartFeedback } from '@/hooks/use-feedback';
+import { useRouter } from '@/i18n';
 import { Upload, Loader2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 export function QuickActions() {
   const t = useTranslations('dashboard.quickActions');
+  const locale = useLocale();
+  const router = useRouter();
   const { stats } = useDashboardStats();
   const { data: receipts } = useReceipts();
   const uploadMutation = useReceiptUpload();
+  const startFeedbackMutation = useStartFeedback(locale);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -73,6 +78,15 @@ export function QuickActions() {
       // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
+      }
+      // Automatically start feedback session after successful upload
+      try {
+        await startFeedbackMutation.mutateAsync();
+        // Redirect to feedback page after starting the session
+        router.push('/dashboard/feedback');
+      } catch (feedbackError) {
+        // Log error but don't show it to user as receipt upload was successful
+        console.error('Failed to start feedback session:', feedbackError);
       }
     } catch (error) {
       const errorMessage =
