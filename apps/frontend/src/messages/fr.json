@@ -22,7 +22,7 @@
     "goBack": "Retour"
   },
   "footer": {
-    "description": "Transformez vos paiements de loyer en récompenses. Gagnez des points, donnez votre avis et échangez des cartes-cadeaux ou de l'argent.",
+    "description": "Transformez vos paiements de loyer en récompenses. Gagnez des points, donnez votre avis et échangez de l'argent.",
     "product": {
       "title": "Produit",
       "howItWorks": "Comment Ça Marche",
@@ -43,11 +43,11 @@
   },
   "home": {
     "title": "Andal",
-    "description": "Gagnez des points en téléchargeant des reçus et échangez-les contre des cartes-cadeaux",
+    "description": "Gagnez des points en téléchargeant des reçus et échangez-les contre de l'argent",
     "getStarted": "Commencer",
     "hero": {
       "headline": "Transformez Vos Paiements de Loyer en Récompenses",
-      "subheadline": "Inscrivez-vous en tant que locataire, téléchargez vos reçus de loyer, donnez votre avis et gagnez de l'argent ou des cartes-cadeaux pour vos paiements ponctuels et vos précieux retours.",
+      "subheadline": "Inscrivez-vous en tant que locataire, téléchargez vos reçus de loyer, donnez votre avis et gagnez de l'argent pour vos paiements ponctuels et vos précieux retours.",
       "cta": "Commencer à Gagner",
       "learnMore": "En Savoir Plus"
     },
@@ -97,7 +97,7 @@
       },
       "step5": {
         "title": "Échanger les Récompenses",
-        "description": "Choisissez entre espèces ou cartes-cadeaux de divers détaillants. Échangez vos points quand vous êtes prêt."
+        "description": "Convertissez vos points en argent. Échangez vos points quand vous êtes prêt."
       }
     },
     "testimonials": {
@@ -106,7 +106,7 @@
       "testimonial1": {
         "name": "Sarah Johnson",
         "role": "Locataire",
-        "text": "J'ai gagné plus de 200 $ en cartes-cadeaux rien qu'en téléchargeant mes reçus et en payant à temps. C'est si facile !"
+        "text": "J'ai gagné plus de 200 $ en argent rien qu'en téléchargeant mes reçus et en payant à temps. C'est si facile !"
       },
       "testimonial2": {
         "name": "Michael Chen",
@@ -116,7 +116,7 @@
       "testimonial3": {
         "name": "Emily Rodriguez",
         "role": "Locataire",
-        "text": "Le meilleur, c'est la flexibilité - je peux choisir entre espèces ou cartes-cadeaux. Cette plateforme a rendu les paiements de loyer gratifiants !"
+        "text": "Le meilleur, c'est que je peux convertir mes points en argent. Cette plateforme a rendu les paiements de loyer gratifiants !"
       }
     },
     "cta": {
@@ -374,12 +374,6 @@
     "updating": "Mise à jour...",
     "updateSuccess": "Profil mis à jour avec succès !"
   },
-  "giftCards": {
-    "title": "Cartes-cadeaux",
-    "categories": "Catégories",
-    "redeem": "Échanger",
-    "pointsRequired": "Points requis"
-  },
   "dashboard": {
     "title": "Tableau de bord",
     "welcome": "Bienvenue sur votre tableau de bord",
@@ -536,8 +530,7 @@
       "surveyManagement": "Gestion des enquêtes",
       "receipts": "Reçus",
       "redemptions": "Rachats",
-      "users": "Utilisateurs",
-      "giftCards": "Cartes cadeaux"
+      "users": "Utilisateurs"
     },
     "surveyManagement": {
       "title": "Gestion des enquêtes",

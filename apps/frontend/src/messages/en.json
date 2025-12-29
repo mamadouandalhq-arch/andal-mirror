@@ -22,7 +22,7 @@
     "goBack": "Go Back"
   },
   "footer": {
-    "description": "Transform your rent payments into rewards. Earn points, provide feedback, and redeem gift cards or cash.",
+    "description": "Transform your rent payments into rewards. Earn points, provide feedback, and redeem cash.",
     "product": {
       "title": "Product",
       "howItWorks": "How It Works",
@@ -43,11 +43,11 @@
   },
   "home": {
     "title": "Andal",
-    "description": "Earn points by uploading receipts and redeem them for gift cards",
+    "description": "Earn points by uploading receipts and redeem them for cash",
     "getStarted": "Get Started",
     "hero": {
       "headline": "Turn Your Rent Payments Into Rewards",
-      "subheadline": "Register as a tenant, upload your rent receipts, provide feedback, and earn money or gift cards for timely payments and valuable insights.",
+      "subheadline": "Register as a tenant, upload your rent receipts, provide feedback, and earn money for timely payments and valuable insights.",
       "cta": "Start Earning Rewards",
       "learnMore": "Learn More"
     },
@@ -97,7 +97,7 @@
       },
       "step5": {
         "title": "Redeem Rewards",
-        "description": "Choose cash or gift cards from various retailers. Redeem your points whenever you're ready."
+        "description": "Convert your points to cash. Redeem your points whenever you're ready."
       }
     },
     "testimonials": {
@@ -106,7 +106,7 @@
       "testimonial1": {
         "name": "Sarah Johnson",
         "role": "Tenant",
-        "text": "I've earned over $200 in gift cards just by uploading my receipts and paying on time. It's so easy!"
+        "text": "I've earned over $200 in cash just by uploading my receipts and paying on time. It's so easy!"
       },
       "testimonial2": {
         "name": "Michael Chen",
@@ -116,7 +116,7 @@
       "testimonial3": {
         "name": "Emily Rodriguez",
         "role": "Tenant",
-        "text": "Best part is the flexibility - I can choose cash or gift cards. This platform has made rent payments rewarding!"
+        "text": "Best part is I can convert my points to cash. This platform has made rent payments rewarding!"
       }
     },
     "cta": {
@@ -374,12 +374,6 @@
     "updating": "Updating...",
     "updateSuccess": "Profile updated successfully!"
   },
-  "giftCards": {
-    "title": "Gift Cards",
-    "categories": "Categories",
-    "redeem": "Redeem",
-    "pointsRequired": "Points Required"
-  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome to the dashboard",
@@ -536,8 +530,7 @@
       "surveyManagement": "Survey Management",
       "receipts": "Receipts",
       "redemptions": "Redemptions",
-      "users": "Users",
-      "giftCards": "Gift Cards"
+      "users": "Users"
     },
     "surveyManagement": {
       "title": "Survey Management",

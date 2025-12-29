@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import {
   ClipboardList,
   Receipt,
-  Gift,
   CreditCard,
   ChevronLeft,
   ChevronRight,
@@ -36,11 +35,6 @@ const menuItems = [
     href: '/admin/users',
     icon: Users,
     translationKey: 'users',
-  },
-  {
-    href: '/admin/gift-cards',
-    icon: Gift,
-    translationKey: 'giftCards',
   },
 ];
 
