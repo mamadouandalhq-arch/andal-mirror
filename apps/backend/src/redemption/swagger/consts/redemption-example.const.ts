@@ -34,4 +34,3 @@ export const redemptionWithUserExample = {
     avatarUrl: null,
   },
 };
-

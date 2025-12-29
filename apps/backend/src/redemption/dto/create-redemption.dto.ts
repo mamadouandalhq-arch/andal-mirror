@@ -20,4 +20,3 @@ export class CreateRedemptionDto {
   @IsEmail()
   paymentEmail: string;
 }
-

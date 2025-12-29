@@ -5,4 +5,3 @@ export * from './admin-get-redemption.docs';
 export * from './admin-approve-redemption.docs';
 export * from './admin-complete-redemption.docs';
 export * from './admin-reject-redemption.docs';
-

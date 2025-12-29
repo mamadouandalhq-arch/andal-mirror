@@ -25,6 +25,8 @@ export const validationSchema = Joi.object({
 
   CORS_ORIGIN: Joi.string().required(), // one or multiple urls separated by a comma
 
+  PORT: Joi.number().integer().positive().optional().default(3000),
+
   ADMIN_EMAIL: Joi.string().email().required(),
   ADMIN_PASSWORD: Joi.string().min(8).required(),
 });

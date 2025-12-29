@@ -4,7 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateRedemptionDto, GetRedemptionsQueryDto, RejectRedemptionDto } from './dto';
+import {
+  CreateRedemptionDto,
+  GetRedemptionsQueryDto,
+  RejectRedemptionDto,
+} from './dto';
 import { RedemptionStatus } from '@prisma/client';
 import { POINTS_PER_DOLLAR } from './redemption.consts';
 import { Decimal } from '@prisma/client/runtime/library';
@@ -66,7 +70,10 @@ export class RedemptionService {
   }
 
   async getAllRedemptions(query: GetRedemptionsQueryDto) {
-    const where: any = {};
+    const where: {
+      status?: RedemptionStatus;
+      userId?: string;
+    } = {};
 
     if (query.status) {
       where.status = query.status;
@@ -211,4 +218,3 @@ export class RedemptionService {
     });
   }
 }
-

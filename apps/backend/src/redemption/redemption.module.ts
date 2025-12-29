@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { RedemptionService } from './redemption.service';
-import { RedemptionController, AdminRedemptionController } from './redemption.controller';
+import {
+  RedemptionController,
+  AdminRedemptionController,
+} from './redemption.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
@@ -10,4 +13,3 @@ import { PrismaModule } from '../prisma/prisma.module';
   exports: [RedemptionService],
 })
 export class RedemptionModule {}
-

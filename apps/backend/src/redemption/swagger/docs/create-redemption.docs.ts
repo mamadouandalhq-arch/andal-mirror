@@ -47,9 +47,7 @@ Business rules:
             },
             invalidEmail: {
               summary: 'Invalid email',
-              value: getBadRequestDocExample(
-                'paymentEmail must be an email',
-              ),
+              value: getBadRequestDocExample('paymentEmail must be an email'),
             },
           },
         },
@@ -68,4 +66,3 @@ Business rules:
     }),
   );
 }
-

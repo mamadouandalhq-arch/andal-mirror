@@ -3,7 +3,6 @@ import {
   IsArray,
   IsInt,
   IsNotEmpty,
-  IsOptional,
   IsString,
   Min,
   ValidateNested,
@@ -33,7 +32,8 @@ export class CreateFeedbackOptionDto {
   @ApiProperty({
     example: 0,
     minimum: 0,
-    description: 'Score for this option (0 to n-1 where n is the number of options)',
+    description:
+      'Score for this option (0 to n-1 where n is the number of options)',
   })
   @IsInt()
   @Min(0)

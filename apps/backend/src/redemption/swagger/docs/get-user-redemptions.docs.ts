@@ -10,7 +10,8 @@ export function GetUserRedemptionsDocs() {
   return applyDecorators(
     ApiOperation({
       summary: 'Get all redemption requests for the authenticated user',
-      description: 'Returns a list of all redemption requests created by the authenticated user, ordered by creation date (newest first).',
+      description:
+        'Returns a list of all redemption requests created by the authenticated user, ordered by creation date (newest first).',
     }),
     ApiOkResponse({
       description: 'List of redemption requests retrieved successfully',
@@ -33,4 +34,3 @@ export function GetUserRedemptionsDocs() {
     }),
   );
 }
-

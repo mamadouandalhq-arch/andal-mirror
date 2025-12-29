@@ -30,17 +30,20 @@ async function bootstrap() {
     }),
   );
 
-  const config = new DocumentBuilder()
-    .setTitle('Buy purchasing powers')
-    .setDescription('Buy purchasing powers API description')
-    .setVersion('0.0.1')
-    .addTag('Buy purchasing powers')
-    .addBearerAuth()
-    .addCookieAuth()
-    .build();
+  // Only enable Swagger in development
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('Buy purchasing powers')
+      .setDescription('Buy purchasing powers API description')
+      .setVersion('0.0.1')
+      .addTag('Buy purchasing powers')
+      .addBearerAuth()
+      .addCookieAuth()
+      .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, documentFactory);
+    const documentFactory = () => SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, documentFactory);
+  }
 
   await app.listen(process.env.PORT ?? 3000);
 }
