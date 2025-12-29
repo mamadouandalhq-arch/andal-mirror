@@ -8,6 +8,7 @@ import { useStartFeedback } from '@/hooks/use-feedback';
 import { useRouter } from '@/i18n';
 import { Upload, Loader2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 export function QuickActions() {
   const t = useTranslations('dashboard.quickActions');
@@ -86,7 +87,7 @@ export function QuickActions() {
         router.push('/dashboard/feedback');
       } catch (feedbackError) {
         // Log error but don't show it to user as receipt upload was successful
-        console.error('Failed to start feedback session:', feedbackError);
+        logger.error('Failed to start feedback session:', feedbackError);
       }
     } catch (error) {
       const errorMessage =

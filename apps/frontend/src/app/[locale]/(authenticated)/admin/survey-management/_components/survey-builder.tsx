@@ -20,6 +20,7 @@ import { useActiveSurvey, useCreateActiveSurvey } from '@/hooks/use-survey';
 import { useQuestions } from '@/hooks/use-questions';
 import { Loader2, Plus, Trash2, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -144,7 +145,7 @@ export function SurveyBuilder() {
       setShowConfirmDialog(false);
       setFormDataToSubmit(null);
     } catch (error) {
-      console.error('Failed to publish survey:', error);
+      logger.error('Failed to publish survey:', error);
       setShowConfirmDialog(false);
     }
   };

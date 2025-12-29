@@ -27,6 +27,7 @@ import { FormField } from '@/components/ui/form-field';
 import { useCreateQuestion } from '@/hooks/use-questions';
 import { Loader2, Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { locales } from '@/i18n/config';
+import { logger } from '@/lib/logger';
 
 const optionTranslationSchema = z.object({
   language: z.string(),
@@ -135,7 +136,7 @@ export function QuestionBuilder() {
       await createQuestion.mutateAsync(data);
       reset();
     } catch (error) {
-      console.error('Failed to create question:', error);
+      logger.error('Failed to create question:', error);
     }
   };
 

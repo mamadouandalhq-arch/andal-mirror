@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import { authStorage } from '@/lib/auth-storage';
 import { apiClient } from '@/lib/api-client';
 import { decodeJWT, isTokenExpired } from '@/lib/jwt-utils';
+import { logger } from '@/lib/logger';
 
 interface User {
   id: string;
@@ -164,7 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Silently handle refresh failures - they're expected when not logged in
         // Only log unexpected errors
         if (error.message !== 'Failed to refresh') {
-          console.error('Unexpected error during token refresh:', error);
+          logger.error('Unexpected error during token refresh:', error);
         }
         // Clear invalid token on any error
         authStorage.clearAccessToken();

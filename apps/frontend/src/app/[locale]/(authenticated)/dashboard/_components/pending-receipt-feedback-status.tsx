@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/i18n';
 import { formatPoints } from '@/lib/format-utils';
+import { logger } from '@/lib/logger';
 
 export function PendingReceiptFeedbackStatus() {
   const t = useTranslations('feedback');
@@ -75,7 +76,7 @@ export function PendingReceiptFeedbackStatus() {
         await startFeedbackMutation.mutateAsync();
         router.push('/dashboard/feedback');
       } catch (error) {
-        console.error('Failed to start feedback:', error);
+        logger.error('Failed to start feedback:', error);
       }
     } else if (isInProgress) {
       router.push('/dashboard/feedback');

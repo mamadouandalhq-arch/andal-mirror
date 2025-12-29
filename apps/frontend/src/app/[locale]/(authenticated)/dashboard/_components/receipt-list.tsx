@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import { getStatusBadge } from '@/lib/receipt-utils';
 import { formatDate, formatPoints } from '@/lib/format-utils';
+import { logger } from '@/lib/logger';
 
 export function ReceiptList() {
   const t = useTranslations('dashboard.receipts');
@@ -85,7 +86,7 @@ export function ReceiptList() {
         }
         router.push('/dashboard/feedback');
       } catch (error) {
-        console.error('Failed to start feedback:', error);
+        logger.error('Failed to start feedback:', error);
       }
     }
   };

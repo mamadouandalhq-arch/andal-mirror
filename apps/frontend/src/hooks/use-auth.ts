@@ -5,6 +5,7 @@ import { apiClient } from '@/lib/api-client';
 import { authStorage } from '@/lib/auth-storage';
 import { locales, defaultLocale } from '@/i18n/config';
 import { getRedirectPathForRole } from '@/lib/jwt-utils';
+import { logger } from '@/lib/logger';
 
 export interface LoginCredentials {
   email: string;
@@ -48,7 +49,7 @@ export function useGoogleLogin() {
 
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
       if (!API_BASE_URL) {
-        console.error('NEXT_PUBLIC_API_URL is not set');
+        logger.error('NEXT_PUBLIC_API_URL is not set');
         setIsLoading(false);
         return;
       }
@@ -168,7 +169,7 @@ export function useLogout() {
         await apiClient.post('/auth/logout', {});
       } catch (error) {
         // Even if logout API fails, we should still clear local auth state
-        console.error('Logout API error:', error);
+        logger.error('Logout API error:', error);
       }
       // Always clear accessToken, regardless of API response
       authStorage.clearAccessToken();

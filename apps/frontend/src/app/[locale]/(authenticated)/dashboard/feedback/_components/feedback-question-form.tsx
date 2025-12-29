@@ -15,6 +15,7 @@ import { useAnswerQuestion, useReturnBack } from '@/hooks/use-feedback';
 import { FeedbackQuestionDto, FeedbackOptionDto } from '@shared/feedback';
 import { Loader2, CheckCircle2, ChevronLeft, SkipForward } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface FeedbackQuestionFormProps {
   question: FeedbackQuestionDto;
@@ -76,7 +77,7 @@ export function FeedbackQuestionForm({
       // Don't clear selectedAnswerKeys here - let the backend response update it
       onAnswerSubmitted();
     } catch (error) {
-      console.error('Failed to submit answer:', error);
+      logger.error('Failed to submit answer:', error);
     }
   };
 
@@ -86,7 +87,7 @@ export function FeedbackQuestionForm({
       // Don't clear selectedAnswers - backend will preserve existing answer
       onAnswerSubmitted();
     } catch (error) {
-      console.error('Failed to skip question:', error);
+      logger.error('Failed to skip question:', error);
     }
   };
 
@@ -98,7 +99,7 @@ export function FeedbackQuestionForm({
       // Don't clear selectedAnswers - backend will return the answer for previous question
       onAnswerSubmitted();
     } catch (error) {
-      console.error('Failed to go back:', error);
+      logger.error('Failed to go back:', error);
     }
   };
 
