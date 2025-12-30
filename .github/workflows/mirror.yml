@@ -1,9 +1,8 @@
-name: Mirror to personal repo
+name: Mirror to personal repo (SSH)
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -11,17 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout org repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Push to personal repo
-        env:
-          TOKEN: ${{ secrets.MIRROR_TOKEN }}
+      - name: Setup SSH
         run: |
-          git config --global user.name "mirror-bot"
-          git config --global user.email "mirror@github.com"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.MIRROR_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-          git remote add mirror https://$TOKEN@github.com/mamadouandalhq-arch/andal-mirror.git
+      - name: Push mirror
+        run: |
+          git config user.name "mirror-bot"
+          git config user.email "mirror@github.com"
+
+          git remote add mirror git@github.com:mamadouandalhq-arch/andal-mirror.git
           git push mirror main --force
