@@ -224,7 +224,7 @@
   "landlords": {
     "comingSoon": "Bientôt Disponible",
     "title": "Nous Aidons les Propriétaires à Gagner, Que les Locataires Restent ou Partent",
-    "subtitle": "Réduisez les coûts de rotation, améliorez la satisfaction des locataires et construisez votre réputation",
+    "subtitle": "Andal Network est une infrastructure pour les immeubles locatifs qui améliore l'engagement des locataires, offre des avantages intégrés et augmente la rétention. Notre réseau connecte les résidents aux commerçants locaux, aux services et aux avantages tout en donnant aux propriétaires les outils pour améliorer la rétention et le NOI.",
     "keepTenants": {
       "title": "Scénario 1 : Garder les Bons Locataires Plus Longtemps",
       "description": "Engagez les locataires mensuellement et prévoyez les départs avant qu'ils ne se produisent",
@@ -585,6 +585,7 @@
         "keyPlaceholder": "option1",
         "score": "Score",
         "selectScore": "Sélectionner le score",
+        "scoreDescription": "Les scores plus élevés indiquent des réponses plus positives. Le score sélectionné est utilisé pour calculer le pourcentage d'évaluation des risques : (scoreUtilisateur / scoreMax) × 100. Les pourcentages plus élevés entraînent des niveaux de risque plus faibles.",
         "optionLabels": "Libellés des options",
         "optionLabelPlaceholder": "Entrez le libellé en {language}",
         "create": "Créer la question",

@@ -224,7 +224,7 @@
   "landlords": {
     "comingSoon": "Coming Soon",
     "title": "We Help Landlords Win Whether Tenants Stay or Leave",
-    "subtitle": "Reduce turnover costs, improve tenant satisfaction, and build your reputation",
+    "subtitle": "Andal Network is infrastructure for rental buildings that improves tenant engagement, delivers embedded benefits, and increases retention. Our network connects residents to local merchants, services, and benefits while giving landlords the tools to improve retention and NOI.",
     "keepTenants": {
       "title": "Scenario 1: Keep Good Tenants Longer",
       "description": "Engage tenants monthly and predict churn before it happens",
@@ -585,6 +585,7 @@
         "keyPlaceholder": "option1",
         "score": "Score",
         "selectScore": "Select score",
+        "scoreDescription": "Higher scores indicate more positive responses. The selected score is used to calculate the risk assessment percentage: (userScore / maxScore) × 100. Higher percentages result in lower risk levels.",
         "optionLabels": "Option Labels",
         "optionLabelPlaceholder": "Enter label in {language}",
         "create": "Create Question",

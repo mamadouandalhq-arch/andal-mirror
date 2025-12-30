@@ -29,10 +29,10 @@ export function ContactSection() {
                   </div>
                   <h3 className="mb-2 font-semibold text-lg">{t('email')}</h3>
                   <a
-                    href="mailto:test@domain.com"
+                    href="mailto:mamadou@andalhq.com"
                     className="text-muted-foreground hover:text-primary transition-colors break-all"
                   >
-                    test@domain.com
+                    mamadou@andalhq.com
                   </a>
                 </div>
                 <div className="flex flex-col items-center text-center">

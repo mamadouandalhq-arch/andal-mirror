@@ -1,5 +1,6 @@
 import { LandlordsSection } from '@/components/landing/landlords/landlords-section';
 import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 
 export default function ForLandlordsPage() {
   return (
@@ -8,6 +9,7 @@ export default function ForLandlordsPage() {
       <main className="flex-1">
         <LandlordsSection />
       </main>
+      <Footer />
     </div>
   );
 }

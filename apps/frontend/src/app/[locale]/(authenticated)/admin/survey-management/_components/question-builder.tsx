@@ -49,7 +49,7 @@ const questionTranslationSchema = z.object({
 });
 
 const createQuestionSchema = z.object({
-  type: z.enum(['single', 'multiple']),
+  type: z.literal('single'),
   translations: z
     .array(questionTranslationSchema)
     .min(1, 'At least one translation is required'),
@@ -101,7 +101,6 @@ export function QuestionBuilder() {
     },
   });
 
-  const watchedType = watch('type');
   const watchedTranslations = watch('translations');
   const watchedOptions = watch('options');
 
@@ -166,30 +165,6 @@ export function QuestionBuilder() {
       {isExpanded && (
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Question Type */}
-            <FormField
-              label={t('questionType')}
-              htmlFor="type"
-              error={errors.type?.message}
-            >
-              <Select
-                value={watchedType}
-                onValueChange={(value: 'single' | 'multiple') =>
-                  setValue('type', value)
-                }
-              >
-                <SelectTrigger id="type" className="mt-1">
-                  <SelectValue placeholder={t('selectQuestionType')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="single">{t('singleChoice')}</SelectItem>
-                  <SelectItem value="multiple">
-                    {t('multipleChoice')}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </FormField>
-
             {/* Question Translations */}
             <div>
               <Label className="mb-2 block">{t('questionText')}</Label>
@@ -269,6 +244,7 @@ export function QuestionBuilder() {
                             {...register(`options.${optionIndex}.key`)}
                             placeholder={t('keyPlaceholder')}
                             className="mt-1"
+                            disabled={true}
                           />
                         </FormField>
 
@@ -313,6 +289,9 @@ export function QuestionBuilder() {
                               )}
                             </SelectContent>
                           </Select>
+                          <p className="mt-1.5 text-xs text-muted-foreground">
+                            {t('scoreDescription')}
+                          </p>
                         </FormField>
                       </div>
 
