@@ -1,0 +1,27 @@
+name: Mirror to personal repo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout org repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to personal repo
+        env:
+          TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          git config --global user.name "mirror-bot"
+          git config --global user.email "mirror@github.com"
+
+          git remote add mirror https://$TOKEN@github.com/mamadouandalhq-arch/andal-mirror.git
+          git push mirror main --force
