@@ -3,7 +3,9 @@ import { BadRequestException } from '@nestjs/common';
 export function mapFeedbackAnswers(
   answers: Array<{
     answerKeys: string[];
+    answerText?: string | null;
     question: {
+      type: string;
       translations: { text: string }[];
       options: {
         key: string;
@@ -19,6 +21,15 @@ export function mapFeedbackAnswers(
       throw new BadRequestException('Question translation not found');
     }
 
+    // Handle text-type questions
+    if (answerItem.question.type === 'text') {
+      return {
+        question: questionText,
+        answer: answerItem.answerText || '',
+      };
+    }
+
+    // Handle single/multiple-type questions
     const labels = answerItem.answerKeys.map((key) => {
       const option = answerItem.question.options.find((o) => o.key === key);
 

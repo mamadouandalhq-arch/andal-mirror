@@ -5,9 +5,10 @@ import {
   AdminRedemptionController,
 } from './redemption.controller';
 import { PrismaModule } from '../prisma/prisma.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, EmailModule],
   controllers: [RedemptionController, AdminRedemptionController],
   providers: [RedemptionService],
   exports: [RedemptionService],

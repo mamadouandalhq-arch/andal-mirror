@@ -24,7 +24,37 @@ export class AnswerQuestionService {
     feedback: FeedbackResultWithCurrentQuestion,
     currentQuestion: FeedbackQuestion,
     answerKeys?: string[],
+    answerText?: string,
   ) {
+    // Handle text-type questions
+    if (currentQuestion.type === 'text') {
+      // For text questions, we save answer even if it's empty string
+      // (user explicitly answered, even if with empty text)
+      if (answerText === undefined) {
+        return;
+      }
+
+      return this.prisma.feedbackAnswer.upsert({
+        where: {
+          feedbackResultId_questionId: {
+            feedbackResultId: feedback.id,
+            questionId: currentQuestion.id,
+          },
+        },
+        update: {
+          answerText: answerText || null,
+          answerKeys: [], // empty array for text questions
+        },
+        create: {
+          feedbackResultId: feedback.id,
+          questionId: currentQuestion.id,
+          answerText: answerText || null,
+          answerKeys: [], // empty array for text questions
+        },
+      });
+    }
+
+    // Handle single/multiple-type questions
     if (!answerKeys) return;
 
     return this.prisma.feedbackAnswer.upsert({
@@ -36,11 +66,13 @@ export class AnswerQuestionService {
       },
       update: {
         answerKeys,
+        answerText: null, // clear answerText for non-text questions
       },
       create: {
         feedbackResultId: feedback.id,
         questionId: currentQuestion.id,
         answerKeys,
+        answerText: null,
       },
     });
   }
@@ -50,6 +82,7 @@ export class AnswerQuestionService {
     currentQuestion: FeedbackQuestion,
     existingAnswer: FeedbackAnswer | null,
     answers?: string[],
+    answerText?: string,
   ) {
     const currentSurveyQuestion = await this.surveyQuestionService.getUnique({
       questionId_surveyId: {
@@ -79,9 +112,13 @@ export class AnswerQuestionService {
       throw new NotFoundException('Survey not found');
     }
 
+    // Check if we have an answer (either answerKeys for single/multiple or answerText for text)
+    const hasAnswer =
+      (answers && answers.length > 0) || answerText !== undefined;
+
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
       pointsValue:
-        answers && !existingAnswer
+        hasAnswer && !existingAnswer
           ? validatedFeedback.pointsValue + survey.pointsPerAnswer
           : undefined,
     };
@@ -94,7 +131,7 @@ export class AnswerQuestionService {
       this.modifyChangeDataIfLastAnswer(dataToChange);
     }
 
-    if (answers && !existingAnswer) {
+    if (hasAnswer && !existingAnswer) {
       dataToChange.answeredQuestions = validatedFeedback.answeredQuestions + 1;
     }
 
@@ -110,6 +147,7 @@ export class AnswerQuestionService {
   validateAnswerOrThrow(
     feedback: FeedbackResultWithCurrentQuestion | null,
     answerKeys?: string[],
+    answerText?: string,
   ) {
     if (!feedback || !feedback.currentQuestion) {
       throw new BadRequestException(
@@ -126,7 +164,25 @@ export class AnswerQuestionService {
       );
     }
 
+    // Handle text-type questions
+    if (currentQuestion.type === 'text') {
+      if (answerKeys && answerKeys.length > 0) {
+        throw new BadRequestException(
+          'Text questions should not have answerKeys',
+        );
+      }
+      // answerText is optional - can be empty string or undefined
+      return { feedback, currentQuestion };
+    }
+
+    // Handle single/multiple-type questions
     const optionKeys = currentQuestion.options.map((o) => o.key);
+
+    if (answerText) {
+      throw new BadRequestException(
+        'Single/multiple questions should not have answerText',
+      );
+    }
 
     if (!answerKeys) return { feedback, currentQuestion };
 

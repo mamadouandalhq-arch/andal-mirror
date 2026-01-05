@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
@@ -73,4 +73,16 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   apartment?: string;
+
+  @ApiProperty({
+    description: 'phoneNumber (Canadian format)',
+    example: '+14161234567',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  @Matches(/^\+1[2-9]\d{2}[2-9]\d{2}\d{4}$/, {
+    message: 'Phone number must be in Canadian format (+1XXXXXXXXXX)',
+  })
+  phoneNumber?: string;
 }

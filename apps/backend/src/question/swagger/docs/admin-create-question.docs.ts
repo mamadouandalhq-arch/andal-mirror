@@ -31,7 +31,7 @@ export function AdminCreateQuestionDocs() {
       content: {
         'application/json': {
           example: getBadRequestDocExample([
-            'type must be one of the following values: single, multiple',
+            'type must be one of the following values: single, multiple, text',
             'translations must be an array',
             'options must be an array',
           ]),

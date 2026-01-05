@@ -86,7 +86,7 @@ export class FeedbackService {
 
   async answerQuestion(
     userId: string,
-    { answerKeys, language }: AnswerQuestionDto,
+    { answerKeys, answerText, language }: AnswerQuestionDto,
   ): Promise<FeedbackStateResponse> {
     const currentFeedback = await this.prisma.feedbackResult.findFirst({
       where: {
@@ -100,6 +100,7 @@ export class FeedbackService {
       this.answerQuestionService.validateAnswerOrThrow(
         currentFeedback,
         answerKeys,
+        answerText,
       );
 
     const existingAnswer = await this.prisma.feedbackAnswer.findUnique({
@@ -116,12 +117,14 @@ export class FeedbackService {
       currentQuestion,
       existingAnswer,
       answerKeys,
+      answerText,
     );
 
     const upsertAnswer = this.answerQuestionService.upsertAnswerIfAnswers(
       validatedFeedback,
       currentQuestion,
       answerKeys,
+      answerText,
     );
 
     // Check if feedback is being completed (last question answered)
@@ -339,10 +342,15 @@ export class FeedbackService {
       };
 
       if (existingAnswer) {
-        response.currentQuestion.currentAnswerKeys =
-          existingAnswer.answerKeys.map((key) =>
-            mapAnswerKeysFromQuestion(currentQuestion, key),
-          );
+        if (currentQuestion.type === 'text') {
+          response.currentQuestion.currentAnswerText =
+            existingAnswer.answerText || '';
+        } else {
+          response.currentQuestion.currentAnswerKeys =
+            existingAnswer.answerKeys.map((key) =>
+              mapAnswerKeysFromQuestion(currentQuestion, key),
+            );
+        }
       }
     }
 

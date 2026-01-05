@@ -20,6 +20,16 @@ export class AnswerQuestionDto {
   @IsString({ each: true })
   answerKeys?: string[];
 
+  @ApiProperty({
+    description:
+      'Text answer for text-type questions. Max 280 characters (enforced on frontend).',
+    example: 'My comment here...',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  answerText?: string;
+
   @ApiProperty({ description: 'Language code', example: 'fr' })
   @IsString()
   @IsNotEmpty()

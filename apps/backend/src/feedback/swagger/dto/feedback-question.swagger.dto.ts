@@ -14,9 +14,20 @@ export class FeedbackQuestionSwaggerDto extends FeedbackQuestionDto {
   @ApiProperty({ example: '...' })
   declare text: string;
 
-  @ApiProperty({ enum: ['single', 'multiple'] })
-  declare type: 'single' | 'multiple';
+  @ApiProperty({ enum: ['single', 'multiple', 'text'] })
+  declare type: 'single' | 'multiple' | 'text';
 
   @ApiProperty({ type: [String], example: ['1', '2', '3'] })
   declare options: FeedbackOptionDto[];
+
+  @ApiProperty({ type: [String], required: false, example: ['option1'] })
+  declare currentAnswerKeys?: string[];
+
+  @ApiProperty({
+    type: String,
+    required: false,
+    example: 'My answer text...',
+    maxLength: 280,
+  })
+  declare currentAnswerText?: string;
 }

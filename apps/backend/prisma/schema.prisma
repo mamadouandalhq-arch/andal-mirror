@@ -24,6 +24,7 @@ enum ReceiptStatus {
 enum FeedbackType {
   single
   multiple
+  text
 }
 
 enum FeedbackStatus {
@@ -43,13 +44,14 @@ model User {
   firstName String
   lastName  String
 
-  email     String  @unique
-  password  String?
-  city      String?
-  street    String?
-  building  String?
-  apartment String?
-  avatarUrl String?
+  email       String  @unique
+  password    String?
+  city        String?
+  street      String?
+  building    String?
+  apartment   String?
+  avatarUrl   String?
+  phoneNumber String?
 
   role          UserRole @default(user)
   pointsBalance Int      @default(0)
@@ -92,10 +94,10 @@ model Receipt {
 }
 
 model FeedbackQuestion {
-  id         String       @id @default(uuid())
-  type       FeedbackType
-  
-  createdAt  DateTime     @default(now())
+  id   String       @id @default(uuid())
+  type FeedbackType
+
+  createdAt DateTime @default(now())
 
   options         FeedbackOption[]
   translations    FeedbackQuestionTranslation[]
@@ -149,6 +151,7 @@ model FeedbackAnswer {
   feedbackResultId String
   questionId       String
   answerKeys       String[]
+  answerText       String?
   createdAt        DateTime @default(now())
 
   feedbackResult FeedbackResult   @relation(fields: [feedbackResultId], references: [id])
@@ -218,13 +221,15 @@ model SurveyQuestion {
 }
 
 model Redemption {
-  id        String           @id @default(uuid())
-  userId    String
-  user      User             @relation(fields: [userId], references: [id])
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-  pointsAmount Int
-  dollarAmount Decimal        @db.Decimal(10, 2)
-  paymentEmail  String
+  pointsAmount  Int
+  dollarAmount  Decimal @db.Decimal(10, 2)
+  paymentMethod String // 'email' or 'phone'
+  paymentEmail  String?
+  paymentPhone  String?
 
   status          RedemptionStatus @default(pending)
   createdAt       DateTime         @default(now())
