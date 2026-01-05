@@ -1,15 +1,16 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Mail, Phone } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
+import { Switch } from '@/components/ui/switch';
 import { useCreateRedemption, useRedemptions } from '@/hooks/use-redemptions';
 import { useAuth } from '@/contexts/auth-context';
 import { formatPoints, formatDate } from '@/lib/format-utils';
@@ -57,11 +58,26 @@ export default function RedeemPage() {
   const createRedemption = useCreateRedemption();
 
   const [pointsAmount, setPointsAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'email' | 'phone'>('email');
   const [paymentEmail, setPaymentEmail] = useState('');
+  const [paymentPhone, setPaymentPhone] = useState('');
   const [errors, setErrors] = useState<{
     pointsAmount?: string;
     paymentEmail?: string;
+    paymentPhone?: string;
   }>({});
+
+  // Set default values from user profile
+  useEffect(() => {
+    if (user) {
+      if (paymentMethod === 'email' && user.email && !paymentEmail) {
+        setPaymentEmail(user.email);
+      }
+      if (paymentMethod === 'phone' && user.phoneNumber && !paymentPhone) {
+        setPaymentPhone(user.phoneNumber);
+      }
+    }
+  }, [user, paymentMethod]);
 
   const availablePoints = user?.pointsBalance || 0;
   const pointsValue = parseInt(pointsAmount) || 0;
@@ -113,10 +129,20 @@ export default function RedeemPage() {
       newErrors.pointsAmount = t('insufficientPoints');
     }
 
-    if (!paymentEmail) {
-      newErrors.paymentEmail = t('paypalEmailRequired');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentEmail)) {
-      newErrors.paymentEmail = t('invalidEmail');
+    if (paymentMethod === 'email') {
+      const emailToValidate = paymentEmail || user?.email || '';
+      if (!emailToValidate) {
+        newErrors.paymentEmail = t('paypalEmailRequired');
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailToValidate)) {
+        newErrors.paymentEmail = t('invalidEmail');
+      }
+    } else {
+      const phoneToValidate = paymentPhone || user?.phoneNumber || '';
+      if (!phoneToValidate) {
+        newErrors.paymentPhone = t('phoneRequired');
+      } else if (!/^\+1[2-9]\d{2}[2-9]\d{2}\d{4}$/.test(phoneToValidate)) {
+        newErrors.paymentPhone = t('invalidPhone');
+      }
     }
 
     setErrors(newErrors);
@@ -131,12 +157,22 @@ export default function RedeemPage() {
     }
 
     try {
+      const emailToUse = paymentMethod === 'email' 
+        ? (paymentEmail || user?.email || '')
+        : undefined;
+      const phoneToUse = paymentMethod === 'phone'
+        ? (paymentPhone || user?.phoneNumber || '')
+        : undefined;
+
       await createRedemption.mutateAsync({
         pointsAmount: pointsValue,
-        paymentEmail,
+        paymentMethod,
+        ...(emailToUse && { paymentEmail: emailToUse }),
+        ...(phoneToUse && { paymentPhone: phoneToUse }),
       });
       setPointsAmount('');
       setPaymentEmail('');
+      setPaymentPhone('');
       setErrors({});
     } catch (error) {
       // Error handling is done by the mutation
@@ -260,28 +296,83 @@ export default function RedeemPage() {
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="paymentEmail">{t('paypalEmail')}</Label>
-                  <Input
-                    id="paymentEmail"
-                    type="email"
-                    value={paymentEmail}
-                    onChange={(e) => {
-                      setPaymentEmail(e.target.value);
-                      if (errors.paymentEmail) {
-                        setErrors((prev) => ({
-                          ...prev,
-                          paymentEmail: undefined,
-                        }));
-                      }
-                    }}
-                    placeholder={t('paypalEmailPlaceholder')}
-                    disabled={createRedemption.isPending}
-                  />
-                  {errors.paymentEmail && (
-                    <p className="text-sm text-destructive">
-                      {errors.paymentEmail}
-                    </p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="paymentMethod">{t('paymentMethod')}</Label>
+                    <div className="flex items-center gap-3">
+                      <span className={`text-sm ${paymentMethod === 'email' ? 'font-medium' : 'text-muted-foreground'}`}>
+                        <Mail className="inline h-4 w-4 mr-1" />
+                        {t('email')}
+                      </span>
+                      <Switch
+                        id="paymentMethod"
+                        checked={paymentMethod === 'phone'}
+                        onCheckedChange={(checked) => {
+                          setPaymentMethod(checked ? 'phone' : 'email');
+                          setErrors({});
+                        }}
+                        disabled={createRedemption.isPending}
+                      />
+                      <span className={`text-sm ${paymentMethod === 'phone' ? 'font-medium' : 'text-muted-foreground'}`}>
+                        <Phone className="inline h-4 w-4 mr-1" />
+                        {t('phone')}
+                      </span>
+                    </div>
+                  </div>
+
+                  {paymentMethod === 'email' ? (
+                    <div className="space-y-2">
+                      <Label htmlFor="paymentEmail">{t('paypalEmail')}</Label>
+                      <Input
+                        id="paymentEmail"
+                        type="email"
+                        value={paymentEmail}
+                        onChange={(e) => {
+                          setPaymentEmail(e.target.value);
+                          if (errors.paymentEmail) {
+                            setErrors((prev) => ({
+                              ...prev,
+                              paymentEmail: undefined,
+                            }));
+                          }
+                        }}
+                        placeholder={user?.email || t('paypalEmailPlaceholder')}
+                        disabled={createRedemption.isPending}
+                      />
+                      {errors.paymentEmail && (
+                        <p className="text-sm text-destructive">
+                          {errors.paymentEmail}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Label htmlFor="paymentPhone">{t('phoneNumber')}</Label>
+                      <Input
+                        id="paymentPhone"
+                        type="tel"
+                        value={paymentPhone}
+                        onChange={(e) => {
+                          setPaymentPhone(e.target.value);
+                          if (errors.paymentPhone) {
+                            setErrors((prev) => ({
+                              ...prev,
+                              paymentPhone: undefined,
+                            }));
+                          }
+                        }}
+                        placeholder={user?.phoneNumber || '+14161234567'}
+                        disabled={createRedemption.isPending}
+                      />
+                      {errors.paymentPhone && (
+                        <p className="text-sm text-destructive">
+                          {errors.paymentPhone}
+                        </p>
+                      )}
+                      <p className="text-xs text-muted-foreground">
+                        {t('phoneNumberHint')}
+                      </p>
+                    </div>
                   )}
                 </div>
 
@@ -349,7 +440,15 @@ export default function RedeemPage() {
                         </div>
                         <div className="text-xs text-muted-foreground">
                           <p>
-                            {t('paypalEmail')}: {redemption.paymentEmail}
+                            {redemption.paymentMethod === 'email' ? (
+                              <>
+                                {t('paypalEmail')}: {redemption.paymentEmail || 'N/A'}
+                              </>
+                            ) : (
+                              <>
+                                {t('phoneNumber')}: {redemption.paymentPhone || 'N/A'}
+                              </>
+                            )}
                           </p>
                           <p>
                             {t('createdAt')}:{' '}

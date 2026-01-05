@@ -24,7 +24,7 @@ import {
   updateProfileSchema,
   type UpdateProfileFormData,
 } from '@/lib/validations/profile';
-import { User, Mail, MapPin, Camera, ArrowLeft } from 'lucide-react';
+import { User, Mail, MapPin, Camera, ArrowLeft, Phone } from 'lucide-react';
 import { Spinner } from '@/components/ui/spinner';
 
 export default function ProfilePage() {
@@ -50,8 +50,9 @@ export default function ProfilePage() {
       street: user?.street || '',
       building: user?.building || '',
       apartment: user?.apartment || '',
+      phoneNumber: user?.phoneNumber || '',
     }),
-    [user?.firstName, user?.lastName, user?.city, user?.street, user?.building, user?.apartment],
+    [user?.firstName, user?.lastName, user?.city, user?.street, user?.building, user?.apartment, user?.phoneNumber],
   );
 
   // Track values saved to server (only updated on successful save)
@@ -85,7 +86,8 @@ export default function ProfilePage() {
       watchedValues.city !== initialValues.city ||
       watchedValues.street !== initialValues.street ||
       watchedValues.building !== initialValues.building ||
-      watchedValues.apartment !== initialValues.apartment
+      watchedValues.apartment !== initialValues.apartment ||
+      watchedValues.phoneNumber !== initialValues.phoneNumber
     );
   }, [watchedValues, initialValues]);
 
@@ -109,6 +111,7 @@ export default function ProfilePage() {
         street: data.street || undefined,
         building: data.building || undefined,
         apartment: data.apartment || undefined,
+        phoneNumber: data.phoneNumber || undefined,
       };
 
       await updateProfile.mutateAsync(updateData);
@@ -120,6 +123,7 @@ export default function ProfilePage() {
         street: data.street || '',
         building: data.building || '',
         apartment: data.apartment || '',
+        phoneNumber: data.phoneNumber || '',
       };
       setSavedValues(newInitialValues);
       setSuccess(true);
@@ -397,6 +401,28 @@ export default function ProfilePage() {
                   </div>
                 </FormField>
               </div>
+
+              <FormField
+                label={t('phoneNumber')}
+                htmlFor="phoneNumber"
+                error={errors.phoneNumber?.message}
+                t={tAuth}
+              >
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="phoneNumber"
+                    type="tel"
+                    autoComplete="tel"
+                    {...register('phoneNumber')}
+                    className="pl-10 mt-1"
+                    placeholder="+14161234567"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {t('phoneNumberHint')}
+                </p>
+              </FormField>
 
               <FormError message={error || ''} t={tAuth} />
 

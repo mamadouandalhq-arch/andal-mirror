@@ -48,13 +48,26 @@ const questionTranslationSchema = z.object({
   text: z.string().min(1, 'Question text is required'),
 });
 
-const createQuestionSchema = z.object({
-  type: z.literal('single'),
-  translations: z
-    .array(questionTranslationSchema)
-    .min(1, 'At least one translation is required'),
-  options: z.array(optionSchema).min(2, 'At least two options are required'),
-});
+const createQuestionSchema = z
+  .object({
+    type: z.enum(['single', 'multiple', 'text']),
+    translations: z
+      .array(questionTranslationSchema)
+      .min(1, 'At least one translation is required'),
+    options: z.array(optionSchema),
+  })
+  .refine(
+    (data) => {
+      if (data.type === 'text') {
+        return true; // No options required for text questions
+      }
+      return data.options.length >= 2; // At least 2 options for single
+    },
+    {
+      message: 'At least two options are required for single choice questions',
+      path: ['options'],
+    },
+  );
 
 type CreateQuestionFormData = z.infer<typeof createQuestionSchema>;
 
@@ -103,6 +116,7 @@ export function QuestionBuilder() {
 
   const watchedTranslations = watch('translations');
   const watchedOptions = watch('options');
+  const watchedType = watch('type');
 
   const addOption = () => {
     const currentOptions = watchedOptions || [];
@@ -132,7 +146,12 @@ export function QuestionBuilder() {
 
   const onSubmit = async (data: CreateQuestionFormData) => {
     try {
-      await createQuestion.mutateAsync(data);
+      // For text questions, send empty options array
+      const submitData = {
+        ...data,
+        options: data.type === 'text' ? [] : data.options,
+      };
+      await createQuestion.mutateAsync(submitData);
       reset();
     } catch (error) {
       logger.error('Failed to create question:', error);
@@ -165,6 +184,51 @@ export function QuestionBuilder() {
       {isExpanded && (
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Question Type */}
+            <div>
+              <Label className="mb-2 block">{t('questionType')}</Label>
+              <Select
+                value={watchedType || 'single'}
+                onValueChange={(value: 'single' | 'text') => {
+                  setValue('type', value);
+                  // Clear options if switching to text type
+                  if (value === 'text') {
+                    setValue('options', []);
+                  } else if (watchedOptions.length === 0) {
+                    // Initialize options if switching from text to single
+                    setValue('options', [
+                      {
+                        key: 'option1',
+                        order: 1,
+                        score: 0,
+                        translations: locales.map((lang) => ({
+                          language: lang,
+                          label: '',
+                        })),
+                      },
+                      {
+                        key: 'option2',
+                        order: 2,
+                        score: 1,
+                        translations: locales.map((lang) => ({
+                          language: lang,
+                          label: '',
+                        })),
+                      },
+                    ]);
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="single">{t('typeSingle')}</SelectItem>
+                  <SelectItem value="text">{t('typeText')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Question Translations */}
             <div>
               <Label className="mb-2 block">{t('questionText')}</Label>
@@ -200,20 +264,21 @@ export function QuestionBuilder() {
               )}
             </div>
 
-            {/* Options */}
-            <div>
-              <div className="mb-3 flex items-center justify-between">
-                <Label>{t('options')}</Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={addOption}
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  {t('addOption')}
-                </Button>
-              </div>
+            {/* Options - Only show for single choice questions */}
+            {watchedType !== 'text' && (
+              <div>
+                <div className="mb-3 flex items-center justify-between">
+                  <Label>{t('options')}</Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addOption}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    {t('addOption')}
+                  </Button>
+                </div>
               <div className="space-y-4">
                 {watchedOptions?.map((option, optionIndex) => (
                   <Card key={optionIndex}>
@@ -340,12 +405,13 @@ export function QuestionBuilder() {
                   </Card>
                 ))}
               </div>
-              {errors.options && (
-                <p className="mt-2 text-sm text-destructive">
-                  {errors.options.message}
-                </p>
-              )}
-            </div>
+                {errors.options && (
+                  <p className="mt-2 text-sm text-destructive">
+                    {errors.options.message}
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Submit Button */}
             <div className="flex justify-end">

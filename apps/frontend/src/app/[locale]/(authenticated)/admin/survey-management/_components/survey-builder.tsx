@@ -270,8 +270,13 @@ export function SurveyBuilder() {
                             {currentLocaleTranslation?.text || t('untitled')}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {t('type')}: {question.type} | {t('options')}:{' '}
-                            {question.options.length}
+                            {t('type')}: {question.type}
+                            {question.type !== 'text' && (
+                              <>
+                                {' '}
+                                | {t('options')}: {question.options.length}
+                              </>
+                            )}
                           </p>
                         </div>
                         <div className="flex gap-2">
@@ -346,8 +351,13 @@ export function SurveyBuilder() {
                             {currentLocaleTranslation?.text || t('untitled')}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {t('type')}: {question.type} | {t('options')}:{' '}
-                            {question.options.length}
+                            {t('type')}: {question.type}
+                            {question.type !== 'text' && (
+                              <>
+                                {' '}
+                                | {t('options')}: {question.options.length}
+                              </>
+                            )}
                           </p>
                         </div>
                         <Button

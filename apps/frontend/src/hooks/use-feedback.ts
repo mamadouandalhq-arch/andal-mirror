@@ -4,6 +4,7 @@ import { FeedbackStateResponse } from '@shared/feedback';
 
 export interface AnswerQuestionDto {
   answerKeys?: string[];
+  answerText?: string;
   language: string;
 }
 
@@ -43,13 +44,21 @@ export function useAnswerQuestion(locale: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (dto: { answerKeys?: string[] }) => {
-      const body: { answerKeys?: string[]; language: string } = {
+    mutationFn: (dto: { answerKeys?: string[]; answerText?: string }) => {
+      const body: {
+        answerKeys?: string[];
+        answerText?: string;
+        language: string;
+      } = {
         language: locale,
       };
       // Include answerKeys if it's explicitly provided (even if empty array)
       if (dto.answerKeys !== undefined) {
         body.answerKeys = dto.answerKeys;
+      }
+      // Include answerText if it's explicitly provided
+      if (dto.answerText !== undefined) {
+        body.answerText = dto.answerText;
       }
       return apiClient.post<FeedbackStateResponse>(
         '/feedback/answer-question',

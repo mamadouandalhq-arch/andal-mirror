@@ -331,7 +331,8 @@
       "passwordMaxLength": "Password must be at most 20 characters",
       "confirmPasswordRequired": "Please confirm your password",
       "passwordsDoNotMatch": "Passwords do not match",
-      "invalidUrl": "Please enter a valid URL"
+      "invalidUrl": "Please enter a valid URL",
+      "invalidCanadianPhone": "Phone number must be in Canadian format (+1XXXXXXXXXX)"
     },
     "errors": {
       "invalidCredentials": "Invalid credentials",
@@ -372,7 +373,9 @@
     "saveChanges": "Save Changes",
     "cancel": "Cancel",
     "updating": "Updating...",
-    "updateSuccess": "Profile updated successfully!"
+    "updateSuccess": "Profile updated successfully!",
+    "phoneNumber": "Phone Number",
+    "phoneNumberHint": "Canadian format: +1XXXXXXXXXX (e.g., +14161234567)"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -416,10 +419,17 @@
       "formTitle": "Request Redemption",
       "pointsAmount": "Points Amount",
       "pointsAmountPlaceholder": "Enter amount (minimum 100)",
+      "paymentMethod": "Payment Method",
+      "email": "Email",
+      "phone": "Phone",
       "paypalEmail": "Email for Payment",
       "paypalEmailPlaceholder": "your.email@example.com",
       "paypalEmailRequired": "Email for payment is required",
       "invalidEmail": "Please enter a valid email address",
+      "phoneNumber": "Phone Number",
+      "phoneRequired": "Phone number is required",
+      "invalidPhone": "Please enter a valid Canadian phone number (+1XXXXXXXXXX)",
+      "phoneNumberHint": "Canadian format: +1XXXXXXXXXX (e.g., +14161234567)",
       "minPoints": "Minimum {min} points required",
       "minPointsRequired": "You need at least {min} points to redeem",
       "insufficientPoints": "You don't have enough points",
@@ -506,6 +516,7 @@
     "submitAnswer": "Submit Answer",
     "submitting": "Submitting...",
     "completeFeedback": "Complete Feedback",
+    "textAnswerPlaceholder": "Type your answer here...",
     "previous": "Previous",
     "skip": "Skip",
     "backToDashboard": "Back to Dashboard",
@@ -574,6 +585,9 @@
         "description": "Create a new question that can be used in surveys",
         "questionType": "Question Type",
         "selectQuestionType": "Select question type",
+        "typeSingle": "Single Choice",
+        "typeMultiple": "Multiple Choice",
+        "typeText": "Text Input",
         "singleChoice": "Single Choice",
         "multipleChoice": "Multiple Choice",
         "questionText": "Question Text (Translations)",

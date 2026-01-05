@@ -26,6 +26,7 @@ interface User {
   building?: string | null;
   apartment?: string | null;
   avatarUrl?: string | null;
+  phoneNumber?: string | null;
   role: string;
   pointsBalance?: number;
   createdAt?: string;

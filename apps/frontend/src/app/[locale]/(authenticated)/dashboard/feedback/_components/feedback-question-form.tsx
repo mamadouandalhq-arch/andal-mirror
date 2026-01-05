@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Textarea } from '@/components/ui/textarea';
 import { useAnswerQuestion, useReturnBack } from '@/hooks/use-feedback';
 import { FeedbackQuestionDto, FeedbackOptionDto } from '@shared/feedback';
 import { Loader2, CheckCircle2, ChevronLeft, SkipForward } from 'lucide-react';
@@ -40,18 +41,26 @@ export function FeedbackQuestionForm({
     question.currentAnswerKeys || [],
   );
 
-  // Update selected answer keys when question changes (e.g., when navigating back)
+  // Initialize with answer text from backend if available
+  const [answerText, setAnswerText] = useState<string>(
+    question.currentAnswerText || '',
+  );
+
+  // Update selected answer keys/text when question changes (e.g., when navigating back)
   useEffect(() => {
     startTransition(() => {
       setSelectedAnswerKeys(question.currentAnswerKeys || []);
+      setAnswerText(question.currentAnswerText || '');
     });
-  }, [question.id, question.currentAnswerKeys]);
+  }, [question.id, question.currentAnswerKeys, question.currentAnswerText]);
 
   const isSingleChoice = question.type === 'single';
+  const isTextQuestion = question.type === 'text';
   const progress = totalQuestions > 0 ? answeredQuestions / totalQuestions : 0;
   const isFirstQuestion = question.serialNumber === 1;
   const isLastQuestion = question.serialNumber === totalQuestions;
   const isLoading = answerMutation.isPending || returnBackMutation.isPending;
+  const MAX_TEXT_LENGTH = 280;
 
   const handleOptionToggle = (optionKey: string) => {
     if (isSingleChoice) {
@@ -67,14 +76,29 @@ export function FeedbackQuestionForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Allow submit without answer only on last question (to complete feedback)
-    if (selectedAnswerKeys.length === 0 && !isLastQuestion) return;
+    // For text questions, allow submit with empty text (user can skip)
+    // For single/multiple questions, allow submit without answer only on last question (to complete feedback)
+    if (
+      !isTextQuestion &&
+      selectedAnswerKeys.length === 0 &&
+      !isLastQuestion
+    ) {
+      return;
+    }
 
     try {
-      await answerMutation.mutateAsync(
-        selectedAnswerKeys.length > 0 ? { answerKeys: selectedAnswerKeys } : {},
-      );
-      // Don't clear selectedAnswerKeys here - let the backend response update it
+      if (isTextQuestion) {
+        await answerMutation.mutateAsync({
+          answerText: answerText.trim(),
+        });
+      } else {
+        await answerMutation.mutateAsync(
+          selectedAnswerKeys.length > 0
+            ? { answerKeys: selectedAnswerKeys }
+            : {},
+        );
+      }
+      // Don't clear selectedAnswerKeys/answerText here - let the backend response update it
       onAnswerSubmitted();
     } catch (error) {
       logger.error('Failed to submit answer:', error);
@@ -127,48 +151,73 @@ export function FeedbackQuestionForm({
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            {question.options.map((option: FeedbackOptionDto) => {
-              const isSelected = selectedAnswerKeys.includes(option.key);
-              return (
-                <button
-                  key={option.key}
-                  type="button"
-                  onClick={() => handleOptionToggle(option.key)}
+            {isTextQuestion ? (
+              <div className="space-y-2">
+                <Textarea
+                  value={answerText}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= MAX_TEXT_LENGTH) {
+                      setAnswerText(value);
+                    }
+                  }}
                   disabled={isLoading}
-                  className={cn(
-                    'w-full text-left p-4 rounded-lg border-2 transition-all min-h-[44px]',
-                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                    isSelected
-                      ? 'border-primary bg-primary/10'
-                      : 'border-input bg-background hover:bg-accent',
-                    isLoading && 'opacity-50 cursor-not-allowed',
-                  )}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={cn(
-                        'shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center',
-                        isSelected
-                          ? 'border-primary bg-primary'
-                          : 'border-muted-foreground',
-                      )}
-                    >
-                      {isSelected && (
-                        <CheckCircle2 className="h-3 w-3 text-primary-foreground" />
-                      )}
+                  placeholder={t('textAnswerPlaceholder')}
+                  className="min-h-[120px] resize-none"
+                  maxLength={MAX_TEXT_LENGTH}
+                />
+                <div className="flex justify-end text-sm text-muted-foreground">
+                  {answerText.length} / {MAX_TEXT_LENGTH}
+                </div>
+              </div>
+            ) : (
+              question.options.map((option: FeedbackOptionDto) => {
+                const isSelected = selectedAnswerKeys.includes(option.key);
+                return (
+                  <button
+                    key={option.key}
+                    type="button"
+                    onClick={() => handleOptionToggle(option.key)}
+                    disabled={isLoading}
+                    className={cn(
+                      'w-full text-left p-4 rounded-lg border-2 transition-all min-h-[44px]',
+                      'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+                      isSelected
+                        ? 'border-primary bg-primary/10'
+                        : 'border-input bg-background hover:bg-accent',
+                      isLoading && 'opacity-50 cursor-not-allowed',
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={cn(
+                          'shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center',
+                          isSelected
+                            ? 'border-primary bg-primary'
+                            : 'border-muted-foreground',
+                        )}
+                      >
+                        {isSelected && (
+                          <CheckCircle2 className="h-3 w-3 text-primary-foreground" />
+                        )}
+                      </div>
+                      <span className="text-sm sm:text-base">
+                        {option.label}
+                      </span>
                     </div>
-                    <span className="text-sm sm:text-base">{option.label}</span>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })
+            )}
           </div>
 
           <div className="flex flex-col gap-3">
             <Button
               type="submit"
               disabled={
-                (selectedAnswerKeys.length === 0 && !isLastQuestion) ||
+                (!isTextQuestion &&
+                  selectedAnswerKeys.length === 0 &&
+                  !isLastQuestion) ||
                 isLoading
               }
               className="w-full min-h-[44px]"
@@ -179,7 +228,9 @@ export function FeedbackQuestionForm({
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                   {t('submitting')}
                 </>
-              ) : isLastQuestion && selectedAnswerKeys.length === 0 ? (
+              ) : isLastQuestion &&
+                ((!isTextQuestion && selectedAnswerKeys.length === 0) ||
+                  (isTextQuestion && answerText.trim().length === 0)) ? (
                 t('completeFeedback')
               ) : (
                 t('submitAnswer')
@@ -202,7 +253,7 @@ export function FeedbackQuestionForm({
                 type="button"
                 variant="outline"
                 onClick={handleSkip}
-                disabled={isLastQuestion || isLoading}
+                disabled={isLastQuestion || isLoading || isTextQuestion}
                 className="flex-1"
               >
                 <SkipForward className="h-4 w-4 mr-2" />

@@ -331,7 +331,8 @@
       "passwordMaxLength": "Le mot de passe doit contenir au maximum 20 caractères",
       "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
       "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
-      "invalidUrl": "Veuillez entrer une URL valide"
+      "invalidUrl": "Veuillez entrer une URL valide",
+      "invalidCanadianPhone": "Le numéro de téléphone doit être au format canadien (+1XXXXXXXXXX)"
     },
     "errors": {
       "invalidCredentials": "Identifiants invalides",
@@ -372,7 +373,9 @@
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler",
     "updating": "Mise à jour...",
-    "updateSuccess": "Profil mis à jour avec succès !"
+    "updateSuccess": "Profil mis à jour avec succès !",
+    "phoneNumber": "Numéro de téléphone",
+    "phoneNumberHint": "Format canadien : +1XXXXXXXXXX (ex. : +14161234567)"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -416,10 +419,17 @@
       "formTitle": "Demander un rachat",
       "pointsAmount": "Montant des points",
       "pointsAmountPlaceholder": "Entrez le montant (minimum 100)",
+      "paymentMethod": "Méthode de paiement",
+      "email": "E-mail",
+      "phone": "Téléphone",
       "paypalEmail": "E-mail pour le paiement",
       "paypalEmailPlaceholder": "votre.email@exemple.com",
       "paypalEmailRequired": "L'e-mail pour le paiement est requis",
       "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+      "phoneNumber": "Numéro de téléphone",
+      "phoneRequired": "Le numéro de téléphone est requis",
+      "invalidPhone": "Veuillez entrer un numéro de téléphone canadien valide (+1XXXXXXXXXX)",
+      "phoneNumberHint": "Format canadien : +1XXXXXXXXXX (ex. : +14161234567)",
       "minPoints": "Minimum {min} points requis",
       "minPointsRequired": "Vous avez besoin d'au moins {min} points pour échanger",
       "insufficientPoints": "Vous n'avez pas assez de points",
@@ -506,6 +516,7 @@
     "submitAnswer": "Soumettre la réponse",
     "submitting": "Soumission...",
     "completeFeedback": "Terminer le retour",
+    "textAnswerPlaceholder": "Tapez votre réponse ici...",
     "previous": "Précédent",
     "skip": "Passer",
     "backToDashboard": "Retour au tableau de bord",
@@ -574,6 +585,9 @@
         "description": "Créer une nouvelle question qui peut être utilisée dans les enquêtes",
         "questionType": "Type de question",
         "selectQuestionType": "Sélectionnez le type de question",
+        "typeSingle": "Choix unique",
+        "typeMultiple": "Choix multiple",
+        "typeText": "Saisie de texte",
         "singleChoice": "Choix unique",
         "multipleChoice": "Choix multiple",
         "questionText": "Texte de la question (Traductions)",
