@@ -24,14 +24,14 @@ export interface FeedbackOption {
 
 export interface FeedbackQuestion {
   id: string;
-  type: 'single' | 'multiple';
+  type: 'single' | 'multiple' | 'text';
   createdAt: string;
   translations: FeedbackQuestionTranslation[];
   options: FeedbackOption[];
 }
 
 export interface CreateFeedbackQuestionData {
-  type: 'single' | 'multiple';
+  type: 'single' | 'multiple' | 'text';
   translations: FeedbackQuestionTranslation[];
   options: Array<{
     key: string;
