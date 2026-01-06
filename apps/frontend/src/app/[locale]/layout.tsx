@@ -30,6 +30,15 @@ export async function generateMetadata({
   return {
     title: t('appName'),
     description: t('metaDescription'),
+    openGraph: {
+      images: ['Andal_OG.png'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('appName'),
+      description: t('metaDescription'),
+      images: ['Andal_OG.png'],
+    },
   };
 }
 
