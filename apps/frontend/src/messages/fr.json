@@ -375,7 +375,19 @@
     "updating": "Mise à jour...",
     "updateSuccess": "Profil mis à jour avec succès !",
     "phoneNumber": "Numéro de téléphone",
+    "phoneNumberPlaceholder": "Entrez votre numéro de téléphone",
     "phoneNumberHint": "Format canadien : +1XXXXXXXXXX (ex. : +14161234567)"
+  },
+  "profileCompletion": {
+    "title": "Complétez votre profil",
+    "description": "Veuillez fournir vos informations d'adresse pour continuer",
+    "formTitle": "Informations d'adresse",
+    "formDescription": "Nous avons besoin de vos informations d'adresse pour vous offrir la meilleure expérience.",
+    "confirmLeaseMessage": "Veuillez confirmer que ces informations correspondent à votre bail.",
+    "completeButton": "Compléter le profil",
+    "completing": "Complétion...",
+    "isPrivateHouse": "C'est une maison privée",
+    "privateHouseNote": "Non requis pour les maisons privées"
   },
   "dashboard": {
     "title": "Tableau de bord",

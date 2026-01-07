@@ -6,6 +6,7 @@ import { authStorage } from '@/lib/auth-storage';
 import { locales, defaultLocale } from '@/i18n/config';
 import { getRedirectPathForRole } from '@/lib/jwt-utils';
 import { logger } from '@/lib/logger';
+import { isProfileIncomplete } from '@/lib/profile-utils';
 
 export interface LoginCredentials {
   email: string;
@@ -97,8 +98,34 @@ export function useLogin() {
       authStorage.setAccessToken(response.accessToken);
       return response;
     },
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      
+      // Wait for user data to be fetched, then check profile completeness
+      try {
+        // Fetch user data explicitly to ensure it's available
+        const user = await queryClient.fetchQuery<{
+          city?: string | null;
+          street?: string | null;
+          building?: string | null;
+          apartment?: string | null;
+        }>({
+          queryKey: ['user'],
+          queryFn: () => apiClient.get('/user/me'),
+          staleTime: 0, // Force fresh fetch
+        });
+
+        // Check if profile is incomplete
+        if (isProfileIncomplete(user)) {
+          router.push('/complete-profile');
+          return;
+        }
+      } catch (error) {
+        // If fetching user fails, proceed with normal redirect
+        // The dashboard layout will handle the redirect if needed
+        logger.error('Failed to fetch user data after login:', error);
+      }
+
       const redirectPath = getRedirectPathForRole(response.accessToken);
       router.push(redirectPath);
     },
@@ -119,8 +146,34 @@ export function useRegister() {
       authStorage.setAccessToken(response.accessToken);
       return response;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      
+      // Wait for user data to be fetched, then check profile completeness
+      try {
+        // Fetch user data explicitly to ensure it's available
+        const user = await queryClient.fetchQuery<{
+          city?: string | null;
+          street?: string | null;
+          building?: string | null;
+          apartment?: string | null;
+        }>({
+          queryKey: ['user'],
+          queryFn: () => apiClient.get('/user/me'),
+          staleTime: 0, // Force fresh fetch
+        });
+
+        // Check if profile is incomplete
+        if (isProfileIncomplete(user)) {
+          router.push('/complete-profile');
+          return;
+        }
+      } catch (error) {
+        // If fetching user fails, proceed with normal redirect
+        // The dashboard layout will handle the redirect if needed
+        logger.error('Failed to fetch user data after registration:', error);
+      }
+
       router.push('/dashboard');
     },
   });

@@ -52,7 +52,15 @@ export default function ProfilePage() {
       apartment: user?.apartment || '',
       phoneNumber: user?.phoneNumber || '',
     }),
-    [user?.firstName, user?.lastName, user?.city, user?.street, user?.building, user?.apartment, user?.phoneNumber],
+    [
+      user?.firstName,
+      user?.lastName,
+      user?.city,
+      user?.street,
+      user?.building,
+      user?.apartment,
+      user?.phoneNumber,
+    ],
   );
 
   // Track values saved to server (only updated on successful save)
@@ -416,7 +424,7 @@ export default function ProfilePage() {
                     autoComplete="tel"
                     {...register('phoneNumber')}
                     className="pl-10 mt-1"
-                    placeholder="+14161234567"
+                    placeholder={t('phoneNumberPlaceholder')}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">

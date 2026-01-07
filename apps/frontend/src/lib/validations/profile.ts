@@ -20,3 +20,35 @@ export const updateProfileSchema = z.object({
 });
 
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
+
+// Schema for profile completion - requires address fields
+export const completeProfileSchema = z.object({
+  firstName: z.string().min(1, 'validation.firstNameRequired'),
+  lastName: z.string().min(1, 'validation.lastNameRequired'),
+  city: z.string().min(1, 'City is required'),
+  street: z.string().min(1, 'Street is required'),
+  building: z.string().min(1, 'Building is required'),
+  isPrivateHouse: z.boolean(),
+  apartment: z.string().optional(),
+  phoneNumber: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || canadianPhoneRegex.test(val),
+      'validation.invalidCanadianPhone',
+    ),
+}).refine(
+  (data) => {
+    // If it's NOT a private house, apartment is required
+    if (!data.isPrivateHouse && (!data.apartment || data.apartment.trim() === '')) {
+      return false;
+    }
+    return true;
+  },
+  {
+    message: 'Apartment number is required for apartments',
+    path: ['apartment'],
+  }
+);
+
+export type CompleteProfileFormData = z.infer<typeof completeProfileSchema>;

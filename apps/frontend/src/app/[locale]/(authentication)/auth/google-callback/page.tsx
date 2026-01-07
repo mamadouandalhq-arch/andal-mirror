@@ -9,11 +9,14 @@ import { apiClient } from '@/lib/api-client';
 import type { AuthResponse } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { getRedirectPathForRole } from '@/lib/jwt-utils';
+import { isProfileIncomplete } from '@/lib/profile-utils';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function GoogleCallbackPage() {
   const t = useTranslations('auth');
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,6 +39,34 @@ export default function GoogleCallbackPage() {
           authStorage.setAccessToken(accessToken);
         }
 
+        // Invalidate user query to ensure fresh data
+        queryClient.invalidateQueries({ queryKey: ['user'] });
+
+        // Wait for user data to be fetched, then check profile completeness
+        try {
+          // Fetch user data explicitly to ensure it's available
+          const user = await queryClient.fetchQuery<{
+            city?: string | null;
+            street?: string | null;
+            building?: string | null;
+            apartment?: string | null;
+          }>({
+            queryKey: ['user'],
+            queryFn: () => apiClient.get('/user/me'),
+            staleTime: 0, // Force fresh fetch
+          });
+
+          // Check if profile is incomplete
+          if (isProfileIncomplete(user)) {
+            router.push('/complete-profile');
+            return;
+          }
+        } catch (err) {
+          // If fetching user fails, proceed with normal redirect
+          // The dashboard layout will handle the redirect if needed
+          console.error('Failed to fetch user data after Google login:', err);
+        }
+
         const redirectPath = getRedirectPathForRole(accessToken);
         router.push(redirectPath);
       } catch (err) {
@@ -44,7 +75,7 @@ export default function GoogleCallbackPage() {
     };
 
     void finalizeLogin();
-  }, [router, searchParams, t]);
+  }, [router, searchParams, t, queryClient]);
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">

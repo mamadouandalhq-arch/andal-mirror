@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 type TranslationFunction = ReturnType<typeof useTranslations>;
 
 interface FormFieldProps {
-  label: string;
+  label: string | React.ReactNode;
   htmlFor: string;
   error?: string;
   children: React.ReactNode;
