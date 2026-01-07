@@ -78,11 +78,7 @@ export function FeedbackQuestionForm({
     e.preventDefault();
     // For text questions, allow submit with empty text (user can skip)
     // For single/multiple questions, allow submit without answer only on last question (to complete feedback)
-    if (
-      !isTextQuestion &&
-      selectedAnswerKeys.length === 0 &&
-      !isLastQuestion
-    ) {
+    if (!isTextQuestion && selectedAnswerKeys.length === 0 && !isLastQuestion) {
       return;
     }
 
@@ -253,7 +249,7 @@ export function FeedbackQuestionForm({
                 type="button"
                 variant="outline"
                 onClick={handleSkip}
-                disabled={isLastQuestion || isLoading || isTextQuestion}
+                disabled={isLastQuestion || isLoading}
                 className="flex-1"
               >
                 <SkipForward className="h-4 w-4 mr-2" />

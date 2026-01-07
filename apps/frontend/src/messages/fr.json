@@ -193,7 +193,7 @@
             },
             "issuesConcerns": {
               "question": "Que faire si j'ai des problèmes ou des préoccupations ?",
-              "answer": "Nous sommes là pour vous aider.\n\nContactez-nous à :\n• Email : test@domain.com\n• Téléphone : +1(438)5253145\n• Heures de support : Généralement dans les 24-72 heures"
+              "answer": "Nous sommes là pour vous aider.\n\nContactez-nous à :\n• Email : mamadou@andalhq.com\n• Téléphone : +1(438)5253145\n• Heures de support : Généralement dans les 24-72 heures"
             }
           }
         },
@@ -206,7 +206,7 @@
             },
             "landlordNotUsing": {
               "question": "Que faire si mon propriétaire n'utilise pas encore Andal ?",
-              "answer": "Actuellement, Andal est disponible uniquement aux locataires dont les propriétaires se sont inscrits au programme.\n\nVous voulez que votre propriétaire offre cela ?\nTransmettez-leur notre site web ou envoyez-nous un email à test@domain.com et nous les contacterons."
+              "answer": "Actuellement, Andal est disponible uniquement aux locataires dont les propriétaires se sont inscrits au programme.\n\nVous voulez que votre propriétaire offre cela ?\nTransmettez-leur notre site web ou envoyez-nous un email à mamadou@andalhq.com et nous les contacterons."
             }
           }
         }
@@ -502,7 +502,13 @@
         "statusLabel": "Statut",
         "pointsEarned": "Points gagnés",
         "openInNewTab": "Ouvrir dans un nouvel onglet",
-        "awaitingFeedbackInfo": "Ce reçu attend votre retour. Après avoir soumis votre retour, il sera envoyé pour examen."
+        "awaitingFeedbackInfo": "Ce reçu attend votre retour. Après avoir soumis votre retour, il sera envoyé pour examen.",
+        "changePhoto": "Changer le fichier du reçu",
+        "uploadingNewPhoto": "Téléchargement du nouveau fichier...",
+        "photoUpdated": "Fichier du reçu mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du fichier du reçu",
+        "invalidFileType": "Type de fichier invalide. Veuillez télécharger JPEG, PNG, WEBP ou PDF.",
+        "fileTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo."
       }
     }
   },

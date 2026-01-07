@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n';
 import { useParams } from 'next/navigation';
-import { useReceipt } from '@/hooks/use-receipts';
+import { useReceipt, useReceiptUpdate } from '@/hooks/use-receipts';
 import {
   Card,
   CardContent,
@@ -14,11 +14,12 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { ArrowLeft, ExternalLink, Info } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Info, Upload, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import { getStatusBadge } from '@/lib/receipt-utils';
 import { formatDate, formatPoints } from '@/lib/format-utils';
+import { useRef, useState } from 'react';
 
 export default function ReceiptDetailsPage() {
   const t = useTranslations('dashboard.receipts.details');
@@ -27,6 +28,79 @@ export default function ReceiptDetailsPage() {
   const router = useRouter();
   const receiptId = params.id as string;
   const { data: receipt, isLoading, error } = useReceipt(receiptId);
+  const updateMutation = useReceiptUpdate(receiptId);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+
+  // Supported MIME types matching backend validation
+  const supportedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'application/pdf',
+  ];
+  const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+  const validateFile = (file: File): string | null => {
+    // Validate file type
+    if (!supportedMimeTypes.includes(file.type)) {
+      return t('invalidFileType');
+    }
+
+    // Validate file size
+    if (file.size > maxFileSize) {
+      return t('fileTooLarge');
+    }
+
+    return null;
+  };
+
+  const handleChangePhotoClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUpdateError(null);
+    setUpdateSuccess(false);
+
+    // Validate file before upload
+    const validationError = validateFile(file);
+    if (validationError) {
+      setUpdateError(validationError);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+
+    try {
+      await updateMutation.mutateAsync(file);
+      setUpdateSuccess(true);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      // Clear success message after 3 seconds
+      setTimeout(() => setUpdateSuccess(false), 3000);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : t('updateError');
+      setUpdateError(errorMessage);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   if (isLoading) {
     return (
@@ -101,12 +175,51 @@ export default function ReceiptDetailsPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Receipt Viewer - handles both images and PDFs */}
-            <ReceiptViewer
-              receiptUrl={receipt.receiptUrl}
-              alt={`Receipt ${receipt.id}`}
-              height={300}
-              showDownload={true}
-            />
+            <div className="space-y-2">
+              <ReceiptViewer
+                receiptUrl={receipt.receiptUrl}
+                alt={`Receipt ${receipt.id}`}
+                height={300}
+                showDownload={true}
+              />
+              {/* Change Photo Button - only for awaitingFeedback status */}
+              {receipt.status === 'awaitingFeedback' && (
+                <>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,application/pdf"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    disabled={updateMutation.isPending}
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={handleChangePhotoClick}
+                    disabled={updateMutation.isPending}
+                    className="w-full"
+                  >
+                    {updateMutation.isPending ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        {t('uploadingNewPhoto')}
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        {t('changePhoto')}
+                      </>
+                    )}
+                  </Button>
+                </>
+              )}
+              {updateSuccess && (
+                <p className="text-sm text-green-600">{t('photoUpdated')}</p>
+              )}
+              {updateError && (
+                <p className="text-sm text-destructive">{updateError}</p>
+              )}
+            </div>
 
             {/* Receipt Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

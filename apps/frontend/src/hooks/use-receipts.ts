@@ -61,3 +61,24 @@ export function useReceiptUpload() {
     },
   });
 }
+
+export function useReceiptUpdate(receiptId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      return apiClient.put<UploadReceiptResponse>(
+        `/receipt/${receiptId}`,
+        formData,
+      );
+    },
+    onSuccess: () => {
+      // Invalidate receipts queries to refetch the list and specific receipt
+      queryClient.invalidateQueries({ queryKey: ['receipts'] });
+      queryClient.invalidateQueries({ queryKey: ['receipts', receiptId] });
+    },
+  });
+}

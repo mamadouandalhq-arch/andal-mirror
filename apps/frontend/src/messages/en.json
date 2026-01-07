@@ -193,7 +193,7 @@
             },
             "issuesConcerns": {
               "question": "What if I have issues or concerns?",
-              "answer": "We're here to help.\n\nContact us at:\n• Email: test@domain.com\n• Phone: +1(438)5253145\n• Support hours: Usually within 24-72 hours"
+              "answer": "We're here to help.\n\nContact us at:\n• Email: mamadou@andalhq.com\n• Phone: +1(438)5253145\n• Support hours: Usually within 24-72 hours"
             }
           }
         },
@@ -206,7 +206,7 @@
             },
             "landlordNotUsing": {
               "question": "What if my landlord doesn't use Andal yet?",
-              "answer": "Currently, Andal is available only to tenants whose landlords have signed up for the program.\n\nWant your landlord to offer this?\nForward them to our website or email us at test@domain.com and we'll reach out to them."
+              "answer": "Currently, Andal is available only to tenants whose landlords have signed up for the program.\n\nWant your landlord to offer this?\nForward them to our website or email us at mamadou@andalhq.com and we'll reach out to them."
             }
           }
         }
@@ -502,7 +502,13 @@
         "statusLabel": "Status",
         "pointsEarned": "Points Earned",
         "openInNewTab": "Open in New Tab",
-        "awaitingFeedbackInfo": "This receipt is awaiting your feedback. After you submit your feedback, it will be sent for review."
+        "awaitingFeedbackInfo": "This receipt is awaiting your feedback. After you submit your feedback, it will be sent for review.",
+        "changePhoto": "Change Receipt File",
+        "uploadingNewPhoto": "Uploading new file...",
+        "photoUpdated": "Receipt file updated successfully",
+        "updateError": "Failed to update receipt file",
+        "invalidFileType": "Invalid file type. Please upload JPEG, PNG, WEBP, or PDF.",
+        "fileTooLarge": "File is too large. Maximum size is 5MB."
       }
     }
   },
