@@ -5,13 +5,15 @@ services:
     build:
       context: .
       dockerfile: ./apps/backend/Dockerfile
+    mem_limit: 512m
+    memswap_limit: 1g
     env_file:
       - apps/backend/.env
     environment:
       # Override DATABASE_URL for Docker (use service name instead of localhost)
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
       # Seed database only on first deployment (set to false after initial setup)
-      RUN_SEED: 'true'
+      RUN_SEED: 'false'
       NODE_ENV: production
     ports:
       - '3000:3000'
