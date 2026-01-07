@@ -3,6 +3,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -15,6 +16,7 @@ import { User } from '../user/decorators';
 import {
   GetReceiptDocs,
   GetReceiptListDocs,
+  UpdateReceiptDocs,
   UploadReceiptDocs,
 } from './swagger';
 import { supportedMimeTypes } from './consts';
@@ -51,5 +53,27 @@ export class ReceiptController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return await this.receiptService.saveAndUpload(user.sub, file);
+  }
+
+  @UpdateReceiptDocs()
+  @Put('/:id')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: createMimeTypeFilter(supportedMimeTypes),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+      },
+    }),
+  )
+  async updateReceiptFile(
+    @Param('id') receiptId: string,
+    @User() user: UserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.receiptService.updateReceiptFile(
+      receiptId,
+      user.sub,
+      file,
+    );
   }
 }

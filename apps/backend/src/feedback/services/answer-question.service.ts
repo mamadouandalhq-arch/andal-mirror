@@ -113,8 +113,10 @@ export class AnswerQuestionService {
     }
 
     // Check if we have an answer (either answerKeys for single/multiple or answerText for text)
+    // For text questions, empty string should not count as an answer (no points awarded)
     const hasAnswer =
-      (answers && answers.length > 0) || answerText !== undefined;
+      (answers && answers.length > 0) ||
+      (answerText !== undefined && answerText.trim().length > 0);
 
     const dataToChange: Prisma.FeedbackResultUpdateInput = {
       pointsValue:

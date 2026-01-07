@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -86,6 +87,57 @@ export class ReceiptService {
 
   async getMany(where: Prisma.ReceiptWhereInput) {
     return await this.prisma.receipt.findMany({ where });
+  }
+
+  async updateReceiptFile(
+    receiptId: string,
+    userId: string,
+    file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new BadRequestException('File is missing in the request');
+    }
+
+    // Get receipt and verify ownership
+    const receipt = await this.prisma.receipt.findUnique({
+      where: { id: receiptId },
+    });
+
+    if (!receipt) {
+      throw new NotFoundException('Receipt could not be found');
+    }
+
+    if (receipt.userId !== userId) {
+      throw new ForbiddenException(
+        'You do not have permission to update this receipt',
+      );
+    }
+
+    // Verify receipt status is awaitingFeedback (before feedback completion)
+    if (receipt.status !== ReceiptStatus.awaitingFeedback) {
+      throw new BadRequestException(
+        'Receipt can only be updated before feedback is completed',
+      );
+    }
+
+    // Upload new file
+    const newUrl = await this.storageService.uploadFile({
+      fileName: `receipts/${userId}-${ulid()}`,
+      file,
+    });
+
+    // Delete old file (non-blocking)
+    if (receipt.receiptUrl) {
+      await this.storageService.deleteFile(receipt.receiptUrl);
+    }
+
+    // Update receipt URL in database
+    await this.prisma.receipt.update({
+      where: { id: receiptId },
+      data: { receiptUrl: newUrl },
+    });
+
+    return { url: newUrl };
   }
 
   private getReceiptFeedbackResultInclude() {

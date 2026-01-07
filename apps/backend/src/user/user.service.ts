@@ -82,11 +82,13 @@ export class UserService {
     });
   }
 
-  async getOrCreateGoogleUser(dto: GoogleProfileDto) {
+  async getOrCreateGoogleUser(
+    dto: GoogleProfileDto,
+  ): Promise<{ user: User; wasCreated: boolean }> {
     const user = await this.getUniqueByEmail(dto.email);
 
     if (user) {
-      await this.prisma.user.update({
+      const updatedUser = await this.prisma.user.update({
         where: {
           email: user.email,
         },
@@ -95,10 +97,11 @@ export class UserService {
         },
       });
 
-      return user;
+      return { user: updatedUser, wasCreated: false };
     }
 
-    return await this.createGoogleUser(dto);
+    const newUser = await this.createGoogleUser(dto);
+    return { user: newUser, wasCreated: true };
   }
 
   async changePasswordOrThrow(userId: string, password: string) {

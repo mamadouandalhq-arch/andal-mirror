@@ -4,6 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import {
+  DeleteObjectCommand,
   PutObjectCommand,
   PutObjectCommandInput,
   S3Client,
@@ -53,6 +54,26 @@ export class StorageService {
       throw new InternalServerErrorException(
         'Failed to upload file. Please, try again later.',
       );
+    }
+  }
+
+  async deleteFile(fileUrl: string): Promise<void> {
+    try {
+      // Extract the key from the S3 URL
+      // URL format: https://bucket-name.s3.region.amazonaws.com/key
+      const url = new URL(fileUrl);
+      const key = url.pathname.substring(1); // Remove leading slash
+
+      const command = new DeleteObjectCommand({
+        Bucket: this.bucketName,
+        Key: key,
+      });
+
+      await this.s3.send(command);
+    } catch (err) {
+      // Log error but don't throw - file might already be deleted or not exist
+      // This prevents blocking receipt updates if old file deletion fails
+      this.logger.warn(`Failed to delete file ${fileUrl}:`, err);
     }
   }
 }
